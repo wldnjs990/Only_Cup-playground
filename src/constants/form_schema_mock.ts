@@ -1,0 +1,349 @@
+// src/schemas/form-schema-mock.ts
+import type { EvaluationRootSchema } from '../hooks/useFormResult';
+import { FORMATTED } from './now_date';
+
+export const FORM_SCHEMA_MOCK: EvaluationRootSchema = {
+  version: 1,
+  sca_info: {
+    title: '기본 정보를 입력해주세요.',
+    name: { type: 'text', label: '이름', value: '' },
+    purpose: { type: 'text', label: '커핑 목적', value: '' },
+    created_at: FORMATTED,
+    sample_no: { type: 'text', label: '샘플 번호', value: '' },
+  },
+
+  evaluation_schemas: [
+    {
+      id: 1,
+      title: '향 평가',
+      explanation: '커피를 만드는 과정에서 느낀점들을 평가해주세요.',
+      single_selections: [
+        { id: 1, sort: 10, type: 'slider', label: '프레그런스', min: 1, max: 3, selected: 1 },
+        { id: 2, sort: 20, type: 'slider', label: '아로마', min: 1, max: 3, selected: 1 },
+      ],
+      multiple_selections: [
+        {
+          id: 1,
+          sort: 10,
+          type: 'multi_select',
+          title: '해당되는 기술어',
+          limit: 5,
+          items: [
+            // 최상위
+            { id: 101, parentId: null, label: '꽃', selected: false, sort: 10 },
+            { id: 201, parentId: null, label: '과일', selected: false, sort: 20 },
+            { id: 301, parentId: null, label: '신/발효된', selected: false, sort: 30 },
+            { id: 401, parentId: null, label: '녹색채소/식물성', selected: false, sort: 40 },
+            { id: 501, parentId: null, label: '기타', selected: false, sort: 50 },
+            { id: 601, parentId: null, label: '구운', selected: false, sort: 60 },
+            { id: 701, parentId: null, label: '견과류/코코아', selected: false, sort: 70 },
+            { id: 801, parentId: null, label: '향신료', selected: false, sort: 80 },
+            { id: 901, parentId: null, label: '달콤한', selected: false, sort: 90 },
+            // 과일 하위
+            { id: 202, parentId: 201, label: '베리', selected: false, sort: 10 },
+            { id: 203, parentId: 201, label: '말린 과일', selected: false, sort: 20 },
+            { id: 204, parentId: 201, label: '감귤류', selected: false, sort: 30 },
+            // 신/발효된 하위
+            { id: 302, parentId: 301, label: '신맛', selected: false, sort: 10 },
+            { id: 303, parentId: 301, label: '발효된', selected: false, sort: 20 },
+            // 기타 하위
+            { id: 502, parentId: 501, label: '화학적인', selected: false, sort: 10 },
+            { id: 503, parentId: 501, label: '퀴퀴한/흙냄새', selected: false, sort: 20 },
+            { id: 504, parentId: 501, label: '종이같은', selected: false, sort: 30 },
+            // 견과류/코코아 하위
+            { id: 702, parentId: 701, label: '견과류', selected: false, sort: 10 },
+            { id: 703, parentId: 701, label: '코코아', selected: false, sort: 20 },
+            // 달콤한 하위
+            { id: 902, parentId: 901, label: '바닐라/바닐린', selected: false, sort: 10 },
+            { id: 903, parentId: 901, label: '황설탕(브라운슈거)', selected: false, sort: 20 },
+          ],
+        },
+      ],
+      affective_assessment: {
+        explanation: '품질에 대한 개인적인 인상과 의견을 남겨주세요.',
+        tooltips: [
+          '극히 낮음',
+          '매우 낮음',
+          '적당히 낮음',
+          '약간 낮음',
+          '높지도 낮지도 않음',
+          '약간 높음',
+          '적당히 높음',
+          '매우 높음',
+          '극히 높음',
+        ],
+        assessments: [
+          { id: 1, sort: 10, type: 'slider', label: '프레그런스', min: 1, max: 9, selected: 1 },
+          { id: 2, sort: 20, type: 'slider', label: '아로마', min: 1, max: 9, selected: 1 },
+        ],
+        comment: { type: 'textarea', placeholder: '개인적인 의견을 입력해주세요.', comment: '' },
+      },
+    },
+    {
+      id: 2,
+      title: '맛 평가',
+      explanation: '커피를 시음하는 과정에서 느낀점들을 평가해주세요.',
+      single_selections: [
+        { id: 1, sort: 10, type: 'slider', label: '향미', min: 1, max: 3, selected: 1 },
+        {
+          id: 2,
+          sort: 20,
+          type: 'slider',
+          label: '뒷맛(애프터테이스트)',
+          min: 1,
+          max: 3,
+          selected: 1,
+        },
+      ],
+      multiple_selections: [
+        {
+          id: 1,
+          sort: 10,
+          title: '해당되는 기술어',
+          type: 'multi_select',
+          limit: 5,
+          items: [
+            { id: 101, parentId: null, label: '꽃', selected: false },
+            { id: 201, parentId: null, label: '과일', selected: false },
+            { id: 202, parentId: 201, label: '베리', selected: false },
+            { id: 203, parentId: 201, label: '말린 과일', selected: false },
+            { id: 204, parentId: 201, label: '감귤류', selected: false },
+            { id: 301, parentId: null, label: '신/발효된', selected: false },
+            { id: 302, parentId: 301, label: '신맛', selected: false },
+            { id: 303, parentId: 301, label: '발효된', selected: false },
+            { id: 401, parentId: null, label: '녹색채소/식물성', selected: false },
+            { id: 501, parentId: null, label: '기타', selected: false },
+            { id: 502, parentId: 501, label: '화학적인', selected: false },
+            { id: 503, parentId: 501, label: '퀴퀴한/흙냄새', selected: false },
+            { id: 504, parentId: 501, label: '종이같은', selected: false },
+            { id: 601, parentId: null, label: '구운', selected: false },
+            { id: 701, parentId: null, label: '견과류/코코아', selected: false },
+            { id: 702, parentId: 701, label: '견과류', selected: false },
+            { id: 703, parentId: 701, label: '코코아', selected: false },
+            { id: 801, parentId: null, label: '향신료', selected: false },
+            { id: 901, parentId: null, label: '달콤한', selected: false },
+            { id: 902, parentId: 901, label: '바닐라/바닐린', selected: false },
+            { id: 903, parentId: 901, label: '황설탕(브라운슈거)', selected: false },
+          ],
+        },
+        {
+          id: 2,
+          sort: 20,
+          title: '주요 맛',
+          type: 'multi_select',
+          limit: 2,
+          items: [
+            { id: 1001, parentId: null, label: '짠맛', selected: false },
+            { id: 1101, parentId: null, label: '신맛', selected: false },
+            { id: 1201, parentId: null, label: '단맛', selected: false },
+            { id: 1301, parentId: null, label: '쓴맛', selected: false },
+            { id: 1401, parentId: null, label: '감칠맛', selected: false },
+          ],
+        },
+      ],
+      affective_assessment: {
+        explanation: '품질에 대한 개인적인 인상과 의견을 남겨주세요.',
+        tooltips: [
+          '극히 낮음',
+          '매우 낮음',
+          '적당히 낮음',
+          '약간 낮음',
+          '높지도 낮지도 않음',
+          '약간 높음',
+          '적당히 높음',
+          '매우 높음',
+          '극히 높음',
+        ],
+        assessments: [
+          { id: 1, sort: 10, type: 'slider', label: '프레그런스', min: 1, max: 9, selected: 1 },
+          { id: 2, sort: 20, type: 'slider', label: '아로마', min: 1, max: 9, selected: 1 },
+        ],
+        comment: { type: 'textarea', placeholder: '개인적인 의견을 입력해주세요.', comment: '' },
+      },
+    },
+    {
+      id: 3,
+      title: '산미 평가',
+      explanation: '커피의 산미를 평가해주세요',
+      single_selections: [
+        { id: 1, sort: 10, type: 'slider', label: '산미', min: 1, max: 3, selected: 1 },
+      ],
+      multiple_selections: [
+        {
+          id: 1,
+          sort: 10,
+          title: '해당되는 기술어',
+          type: 'multi_select',
+          limit: 1,
+          items: [
+            { id: 1501, parentId: null, label: '마른 산미(허브, 풀, 시큼한)', selected: false },
+            {
+              id: 1601,
+              parentId: null,
+              label: '달콤한 산미(군침도는, 과일같은, 밝은 산미)',
+              selected: false,
+            },
+          ],
+        },
+      ],
+      affective_assessment: {
+        explanation: '품질에 대한 개인적인 인상과 의견을 남겨주세요.',
+        tooltips: [
+          '극히 낮음',
+          '매우 낮음',
+          '적당히 낮음',
+          '약간 낮음',
+          '높지도 낮지도 않음',
+          '약간 높음',
+          '적당히 높음',
+          '매우 높음',
+          '극히 높음',
+        ],
+        assessments: [
+          { id: 1, sort: 10, type: 'slider', label: '산미 총점', min: 1, max: 9, selected: 1 },
+        ],
+        comment: { type: 'textarea', placeholder: '개인적인 의견을 입력해주세요.', comment: '' },
+      },
+    },
+    {
+      id: 4,
+      title: '단 맛 평가',
+      explanation: '커피의 단맛을 평가해주세요',
+      single_selections: [
+        { id: 1, sort: 10, type: 'slider', label: '단맛', min: 1, max: 3, selected: 1 },
+      ],
+      multiple_selections: [],
+      affective_assessment: {
+        explanation: '품질에 대한 개인적인 인상과 의견을 남겨주세요.',
+        tooltips: [
+          '극히 낮음',
+          '매우 낮음',
+          '적당히 낮음',
+          '약간 낮음',
+          '높지도 낮지도 않음',
+          '약간 높음',
+          '적당히 높음',
+          '매우 높음',
+          '극히 높음',
+        ],
+        assessments: [
+          { id: 1, sort: 10, type: 'slider', label: '단맛 총점', min: 1, max: 9, selected: 1 },
+        ],
+        comment: { type: 'textarea', placeholder: '개인적인 의견을 입력해주세요.', comment: '' },
+      },
+    },
+    {
+      id: 5,
+      title: '마우스필 평가',
+      explanation: '커피를 마신후에 여운의 정도를 평가해주세요',
+      single_selections: [
+        { id: 1, sort: 10, type: 'slider', label: '마우스필', min: 1, max: 3, selected: 1 },
+      ],
+      multiple_selections: [
+        {
+          id: 1,
+          sort: 10,
+          title: '해당되는 기술어',
+          type: 'multi_select',
+          limit: 2,
+          items: [
+            {
+              id: 1701,
+              parentId: null,
+              label: '거친(껄끄러운, 가루같은, 모래같은)',
+              selected: false,
+            },
+            { id: 1801, parentId: null, label: '기름진', selected: false },
+            {
+              id: 1901,
+              parentId: null,
+              label: '부드러운(벨벳같은, 비단같은, 시럽같은)',
+              selected: false,
+            },
+            { id: 2001, parentId: null, label: '입안이 마르는', selected: false },
+            { id: 2101, parentId: null, label: '금속성', selected: false },
+          ],
+        },
+      ],
+      affective_assessment: {
+        explanation: '품질에 대한 개인적인 인상과 의견을 남겨주세요.',
+        tooltips: [
+          '극히 낮음',
+          '매우 낮음',
+          '적당히 낮음',
+          '약간 낮음',
+          '높지도 낮지도 않음',
+          '약간 높음',
+          '적당히 높음',
+          '매우 높음',
+          '극히 높음',
+        ],
+        assessments: [
+          { id: 1, sort: 10, type: 'slider', label: '마우스필 총점', min: 1, max: 9, selected: 1 },
+        ],
+        comment: { type: 'textarea', placeholder: '개인적인 의견을 입력해주세요.', comment: '' },
+      },
+    },
+  ],
+
+  total_evaluation: {
+    extrinsic_attributes_comment: {
+      type: 'textarea',
+      placeholder: '추가 코멘트를 입력해주세요.',
+      comment: '',
+    },
+    affective_assessment: {
+      explanation: '품질에 대한 개인적인 인상과 의견을 남겨주세요.',
+      tooltips: [
+        '극히 낮음',
+        '매우 낮음',
+        '적당히 낮음',
+        '약간 낮음',
+        '높지도 낮지도 않음',
+        '약간 높음',
+        '적당히 높음',
+        '매우 높음',
+        '극히 높음',
+      ],
+      assessments: [
+        { id: 1, sort: 10, type: 'slider', label: '전체적 인상', min: 1, max: 9, selected: 1 },
+      ],
+      comment: {
+        type: 'textarea',
+        placeholder: '전체적인 인상을 입력해주세요.',
+        comment: '',
+      },
+    },
+    cup_defect_items: [
+      {
+        id: 1,
+        sort: 10,
+        type: 'slider',
+        label: '균일하지 않은 컵(들)',
+        min: 0,
+        max: 5,
+        selected: 0,
+      },
+      {
+        id: 2,
+        sort: 20,
+        type: 'slider',
+        label: '결점이 있는 컵(들)',
+        min: 0,
+        max: 5,
+        selected: 0,
+      },
+    ],
+    coffee_defect: {
+      id: 1,
+      title: '결점(있을 경우)',
+      type: 'multi_select',
+      limit: null,
+      items: [
+        { id: 1, parentId: null, label: '곰팡이', selected: false, sort: 10 },
+        { id: 2, parentId: null, label: '페놀', selected: false, sort: 20 },
+        { id: 3, parentId: null, label: '감자', selected: false, sort: 30 },
+      ],
+    },
+  },
+};

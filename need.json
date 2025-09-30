@@ -1,0 +1,367 @@
+// 필요한 데이터들
+
+// [체크박스 라벨 사전] response
+// 서버로 부터 받는 [체크박스 라벨 사전] 객체(버전 단위로 불변하게 만들기)
+// [체크박스 라벨 사전] 데이터를 받아 프론트에서 한번에 폼 요소들을 그릴 수 있습니다.
+// 서버에 GET 요청을 보낼때 version값을 쿼리 파라미터로 보내 버전에 맞는 response값을 받을 수 있도록
+{
+  "version": "0.0.1",  // 버전별 관리로 클라이언트가 입력폼 라벨을 변경요청했을때 구버전 폼 양식의 라벨이 변경되지 않도록 해줌
+  "facets": [
+    // {key: String, label: {ko:String, en: String}, limit: Integer | null}
+    {"key": "flavor", "label" : {"ko":"향미", "en":"flavor"}, "limit": 5},
+    {"key": "taste", "label": {"ko": "맛", "en": "taste"}, "limit": 2},
+    {"key": "acidity", "label": {"ko": "산미", "en": "acidity"}, "limit": 1},
+    {"key": "mouthFeel", "label": {"ko": "마우스필", "en": "mouth feel"}, "limit": 2},
+    {"key": "defect", "label": {"ko": "결함", "en": "defect"}, "limit": null}
+  ],
+  "items":{
+    // ID는 자동 생성되는 PK, parentId는 pk를 자기참조 fk로 만들어서 사용! 
+    // -> 백엔드분들도 어떤 id에 따라 label을 명시한다는 협의를 하실 필요 없습니다!
+    // 프론트는 id값이 무엇을 명시하는지 신경 쓸 필요 없이, 그냥 id값을 컴포넌트에 상태나 props 등으로 뿌려주기만 하면 됩니당.
+    "flavor":[ 
+        { "id": 101, "parentId": null, "label" : {"ko":"꽃", "en":"flower"} }, // {id: Integer, parentId: Integer | null, label: {ko:String, en:String}} 
+        { "id": 201, "parentId": null, "label" : {"ko":"과일", "en":"fruit"} },
+        { "id": 202, "parentId": 201, "label" : {"ko":"베리", "en":"berry"} },
+        { "id": 203, "parentId": 201, "label" : {"ko":"말린 과일", "en":"dried fruit"} },
+        { "id": 204, "parentId": 201, "label" : {"ko":"감귤류", "en":"citrus fruits"} },
+        { "id": 301, "parentId": null, "label" : {"ko":"신/발효된", "en":"sour/fermented"} },
+        { "id": 302, "parentId": 301, "label" : {"ko":"신맛", "en":"acidity"} },
+        { "id": 303, "parentId": 301, "label" : {"ko":"발효된", "en":"fermented"} },
+        { "id": 401, "parentId": null, "label" : {"ko":"녹색채소/식물성", "en":"Green vegetables/vegetables"} },
+        { "id": 501, "parentId": null, "label" : {"ko":"기타", "en":"etc"} },
+        { "id": 502, "parentId": 501, "label" : {"ko":"화학적인", "en":"chemical"} },
+        { "id": 503, "parentId": 501, "label" : {"ko":"퀴퀴한/흙냄새", "en":"Musty/dirt smell"} },
+        { "id": 504, "parentId": 501, "label" : {"ko":"종이같은", "en":"paperlike"} },
+        { "id": 601, "parentId": null, "label" : {"ko":"구운", "en":"roast"} },
+        { "id": 701, "parentId": null, "label" : {"ko":"견과류/코코아", "en":"Nuts/Cocoa"} },
+        { "id": 702, "parentId": 701, "label" : {"ko":"견과류", "en":"Nuts"} },
+        { "id": 703, "parentId": 701, "label" : {"ko":"코코아", "en":"Cocoa"} },
+        { "id": 801, "parentId": null, "label" : {"ko":"향신료", "en":"spices"} },
+        { "id": 901, "parentId": null, "label" : {"ko":"달콤한", "en":"sweetish"} },
+        { "id": 902, "parentId": 901, "label" : {"ko":"바닐라/바닐린", "en":"vanilla/vanillin"} },
+        { "id": 903, "parentId": 901, "label" : {"ko":"황설탕(브라운슈거)", "en":"Brown sugar (brown sugar)"} }
+    ],
+    "taste":[
+        { "id": 1001, "parentId": null, "label" : {"ko":"짠맛", "en":"salty"} },
+        { "id": 1101, "parentId": null, "label" : {"ko":"신맛", "en":"acidity"} },
+        { "id": 1201, "parentId": null, "label" : {"ko":"단맛", "en":"sweet"} },
+        { "id": 1301, "parentId": null, "label" : {"ko":"쓴맛", "en":"acerbity"} },
+        { "id": 1401, "parentId": null, "label" : {"ko":"감칠맛", "en":"umami"} }
+    ],
+    "acidity":[
+        { "id": 1501, "parentId": null, "label" : {"ko":"마른 산미(허브, 풀, 시큼한)", "en":"Dry acidity(herbal, grassy, sour)"} },
+        { "id": 1601, "parentId": null, "label" : {"ko":"달콤한 산미(군침도는, 과일같은, 밝은 산미)", "en":"Sweet acidity(mouth-watering, fruity, bright acidity)"} }
+    ],
+    "mouthFeel":[
+        { "id": 1701, "parentId": null, "label" : {"ko":"거친(껄끄러운, 가루같은, 모래같은)", "en":"coarse(gritty, powdery, sandy)"} },
+        { "id": 1801, "parentId": null, "label" : {"ko":"기름진", "en":"rich"} },
+        { "id": 1901, "parentId": null, "label" : {"ko":"부드러운(벨벳같은, 비단같은, 시럽같은)", "en":"soft(velvety, silky, syrupy)"} },
+        { "id": 2001, "parentId": null, "label" : {"ko":"입안이 마르는", "en":"dry mouth"} },
+        { "id": 2101, "parentId": null, "label" : {"ko":"금속성", "en":"metallic"} }
+    ],
+    "defect":[
+        { "id": 2201, "parentId": null, "label" : {"ko":"곰팡이", "en":"mold"} },
+        { "id": 2301, "parentId": null, "label" : {"ko":"페놀", "en":"phenol"} },
+        { "id": 2401, "parentId": null, "label" : {"ko":"감자", "en":"potato"} }
+    ]
+  }
+}
+
+
+// 사용자 커핑 request / response
+// response JSON 데이터엔 해당 커핑 폼을 구분할 수 있는 ID값을 추가로 받아와야 할 거 같습니당
+// PDF로 변환하기 위한 데이터는 이거 통째로 받으면 됩니다
+{
+  "사용자ID": "사용자ID", // 이건 백엔드에서 관리할 정보긴 한데, request에서 프론트에서 보내야 할 지 아니면 백엔드에서 알아서 처리가 가능한지 몰라 넣어두기만 했습니다.
+  // 0. 커핑 정보
+  // 이건 목적을 무슨 용도로 적어야 하는걸까요?
+  "평가정보": {
+    "이름": "홍길동", // String (이건 원두명일까요, 아니면 사용자 이름일까요?)
+    "날짜": 2025-09-20, // Date (날짜 같은 경우엔 백엔드단에서 처리하는 편인가요? 그렇다면 요건 빼도 될 거 같습니당)
+    "목적": "커핑 입문 프로그램", // String (이건 커핑 등록자가 등록한 커핑 목적을 그대로 집어넣는 방식으로 생각했어요)
+    "샘플번호": "B-1204" // String (샘플번호는 커핑 등록자가 등록해놓는걸 쓰면 될 거 같네용)
+  },
+  // 1. 감각 묘사 평가
+  "감각묘사평가": {
+    "커피제작평가": {
+      "프레그런스": 3, // 분쇄향, 가루향 (Integer 1 | 2 | 3) enum으로
+      "아로마": 3, // 물 넣었을 때 나는 향 (Integer 1 | 2 | 3) enum으로
+      "기술어": [101, 202, 401, 501, 305] // (Integer[] 101 | 201 | 202 ... | 903) [체크박스 라벨 사전]에 해당하는 id값
+    },
+    "커피시음평가": {
+      "향미": 3, // 맛이 얼마나 지속되는지 (Integer 1 | 2 | 3) enum으로 
+      "애프터테이스트": 3, // 뒷맛의 여운 (Integer 1 | 2 | 3) enum으로
+      "기술어": [101, 202, 401, 501, 305], // (Integer[] 최대 5개) [체크박스 라벨 사전]에 해당하는 id값
+      "맛": [1001, 1101] // (Integer[] 최대 2개) [체크박스 라벨 사전]에 해당하는 id값
+    },
+    "산미평가": {
+      "산미": 3, // (Integer 1 | 2 | 3) enum으로
+      "기술어": [1501] // (Integer[] 최대 1개) [체크박스 라벨 사전]에 해당하는 id값
+    },
+    "단맛평가": {
+      "단맛": 3 // (Integer 1 | 2 | 3) enum으로
+    },
+    "마우스필평가": {
+      "마우스필": 3, // (Integer 1 | 2 | 3) enum으로
+      "기술어": [1701, 1801] // (Integer[] 최대 2개) [체크박스 라벨 사전]에 해당하는 id값
+    }
+  },
+  // 2. 정동 평가
+  "정동평가": {
+    "커피제작평가": {
+      "개인점수": 9, // (Integer 1 | 2 ... | 9) enum으로
+      "코멘트": "ㅁㄴㅇㄹ" // (String 또는 null)
+    },
+    "커피시음평가": {
+      "개인점수": 9, // (Integer 1 | 2 ... | 9) enum으로
+      "코멘트": "ㅁㄴㅇㄹ" // (String 또는 null)
+    },
+    "산미평가": {
+      "개인점수": 9, // (Integer 1 | 2 ... | 9) enum으로
+      "코멘트": "ㅁㄴㅇㄹ" // (String 또는 null)
+    },
+    "단맛평가": {
+      "개인점수": 9, // (Integer 1 | 2 ... | 9) enum으로
+      "코멘트": "ㅁㄴㅇㄹ" // (String 또는 null)
+    },
+    "마우스필평가": {
+      "개인점수": 9, // (Integer 1 | 2 ... | 9) enum으로
+      "코멘트": "ㅁㄴㅇㄹ" // (String 또는 null)
+    },
+    "전체적인상": {
+      "개인점수": 9, // (Integer 1 | 2 ... | 9) enum으로
+      "코멘트": "ㅁㄴㅇㄹ", // (String 또는 null)
+      "균일하지않은컵": 5, // (Integer 1 | 2 ... | 5 또는 null)
+      "결점이있는컵": 5, // (Integer 1 | 2 ... | 5 또는 null)
+      "결점": [2201, 2301, 2401] // (Integer[] 최대 2개) [체크박스 라벨 사전]에 해당하는 id값
+    }
+  },
+  // 3. 외재적 속성 평가(필요한가?)
+  "외재적속성평가": {
+    "코멘트": "ㅁㄴㅇㄹ" // (String 또는 null)
+  }
+}
+
+// 영문 key값
+{
+  "userId": "사용자ID", 
+  "evaluationInfo": {
+    "name": "홍길동",            // cupping 대상 원두 이름일 수도 있고, 사용자의 이름일 수도 있음
+    "date": "2025-09-20",
+    "purpose": "커핑 입문 프로그램", 
+    "sampleCode": "B-1204"
+  },
+  "sensoryEvaluation": {
+    "coffeePreparation": {
+      "fragrance": 3,
+      "aroma": 3,
+      "descriptors": [101, 202, 401, 501, 305]
+    },
+    "coffeeTasting": {
+      "flavor": 3,
+      "aftertaste": 3,
+      "descriptors": [101, 202, 401, 501, 305],
+      "taste": [1001, 1101]
+    },
+    "acidityEvaluation": {
+      "acidity": 3,
+      "descriptors": [1501]
+    },
+    "sweetnessEvaluation": {
+      "sweetness": 3
+    },
+    "mouthfeelEvaluation": {
+      "mouthfeel": 3,
+      "descriptors": [1701, 1801]
+    }
+  },
+  "affectiveEvaluation": {
+    "coffeePreparation": {
+      "score": 9,
+      "comment": "ㅁㄴㅇㄹ"
+    },
+    "coffeeTasting": {
+      "score": 9,
+      "comment": "ㅁㄴㅇㄹ"
+    },
+    "acidityEvaluation": {
+      "score": 9,
+      "comment": "ㅁㄴㅇㄹ"
+    },
+    "sweetnessEvaluation": {
+      "score": 9,
+      "comment": "ㅁㄴㅇㄹ"
+    },
+    "mouthfeelEvaluation": {
+      "score": 9,
+      "comment": "ㅁㄴㅇㄹ"
+    },
+    "overallImpression": {
+      "score": 9,
+      "comment": "ㅁㄴㅇㄹ",
+      "inconsistentCups": 5,
+      "defectiveCups": 5,
+      "defects": [2201, 2301, 2401]
+    }
+  },
+  "extrinsicAttributes": {
+    "comment": "ㅁㄴㅇㄹ"
+  }
+}
+
+
+// 커핑 등록 request
+// 등록자가 커핑할 원두에 대한 정보와 커핑폼에 대한 주관적인? 모범답안을 입력해서 등록하는 방식으로 생각했습니다.
+// 본 서비스 기준이라면 더 추가해야 할 것들이 많지만(추출법, 통계 그래프, 워드 클라우드, 댓글, 실시간 채팅 등등)... 
+// 추석까지 프로토타입을 내는 목적으로 사용한다 가정했을땐, 필요없다 판단되는 것들은 뺐습니다.
+// ERD를 다시 수정해야 한다는게 많이 복잡한 작업이 될 거 같다면 일단 본 서비스에서 사용할 JSON 데이터로 다시 수정해두겠습니닷
+{
+  "사용자(등록자)ID" : "사용자ID", // 이것도 백엔드에서 알아서 처리가 될 거 같긴 한데, 일단 넣어뒀습니다.
+  "원두정보": {
+    "원두이름": "애티오피아원두", // String (이건 원두명일까요, 아니면 사용자 이름일까요?)
+    "원두이미지": "base64....", // String? (등록 원두 이미지를 저장할때 base64 주소로 보낼까요, 아니면 s3 같은거 이용해서 이미지 등록할때 서버 url을 받아서 저장할까요?)
+    "원두소개": "원두 소개글", // String (원두 소개글 정도는 넣어두는게 클라이언트 입장에서 읽는 재미가 있을거 같아서 추가했습니다)
+    "등록날짜": 2025-09-20, // Date (날짜 같은 경우엔 백엔드단에서 처리하는 편인가요? 그렇다면 요건 빼도 될 거 같습니당)
+    "목적": "커핑 입문 프로그램", // String (목적이라면 이런걸 말하는게 아닐까 싶어서 등록했습니당)
+    "샘플번호": "B-1204" // String (샘플번호는 커핑 등록자가 등록해놓는걸 쓰면 될 거 같네용)
+  },
+  // 1. 감각 묘사 주관적인? 답안
+  // 등록자가 작성해놓은 모범답안을 가지고 사용자의 커핑 결과와 시각적으로 바교하는 기능이 있으면, 사장님이 설명하실때 좀 더 편하지 않을까 싶습니다
+  "감각묘사평가": {
+    "커피제작평가": {
+      "프레그런스": 3, // 분쇄향, 가루향 (Integer 1 | 2 | 3) enum으로
+      "아로마": 3, // 물 넣었을 때 나는 향 (Integer 1 | 2 | 3) enum으로
+      "기술어": [101, 202, 401, 501, 305] // (Integer[] 101 | 201 | 202 ... | 903) [체크박스 라벨 사전]에 해당하는 id값
+    },
+    "커피시음평가": {
+      "향미": 3, // 맛이 얼마나 지속되는지 (Integer 1 | 2 | 3) enum으로 
+      "애프터테이스트": 3, // 뒷맛의 여운 (Integer 1 | 2 | 3) enum으로
+      "기술어": [101, 202, 401, 501, 305], // (Integer[] 최대 5개) [체크박스 라벨 사전]에 해당하는 id값
+      "맛": [1001, 1101] // (Integer[] 최대 2개) [체크박스 라벨 사전]에 해당하는 id값
+    },
+    "산미평가": {
+      "산미": 3, // (Integer 1 | 2 | 3) enum으로
+      "기술어": [1501] // (Integer[] 최대 1개) [체크박스 라벨 사전]에 해당하는 id값
+    },
+    "단맛평가": {
+      "단맛": 3 // (Integer 1 | 2 | 3) enum으로
+    },
+    "마우스필평가": {
+      "마우스필": 3, // (Integer 1 | 2 | 3) enum으로
+      "기술어": [1701, 1801] // (Integer[] 최대 2개) [체크박스 라벨 사전]에 해당하는 id값
+    }
+  },
+}
+// 영문 key값
+{
+  // "registrantId": "사용자ID", 
+  "beanInfo": {
+    "beanName": "애티오피아원두",          // cupping 대상 원두 이름
+    "beanImage": "base64....",            // 실제 저장은 S3 URL이 더 권장됨
+    "beanDescription": "원두 소개글",       // 클라이언트에서 참고용 설명
+    "registrationDate": "2025-09-20",     // 보통은 백엔드에서 처리
+    "purpose": "Cupping Introduction Program",
+    "sampleCode": "B-1204"
+  },
+  "sensoryEvaluation": {
+    "coffeePreparation": {
+      "fragrance": 3,
+      "aroma": 3,
+      "descriptors": [101, 202, 401, 501, 305]
+    },
+    "coffeeTasting": {
+      "flavor": 3,
+      "aftertaste": 3,
+      "descriptors": [101, 202, 401, 501, 305],
+      "taste": [1001, 1101]
+    },
+    "acidityEvaluation": {
+      "acidity": 3,
+      "descriptors": [1501]
+    },
+    "sweetnessEvaluation": {
+      "sweetness": 3
+    },
+    "mouthfeelEvaluation": {
+      "mouthfeel": 3,
+      "descriptors": [1701, 1801]
+    }
+  }
+}
+
+// PDF 파일을 만들고, 사용자의 PDF파일을 클라이언트에서 그때그때 생성할지, 한 번 만든 PDF 파일을 DB에 저장해뒀다 꺼내서 사용하는 방식을 쓸 지
+// 클라이언트의 렌더링 속도가 빠르다면 백엔드에 넣을 필요 없는데 ,한 번 PDF 생성하는데 시간이 오래 걸린다면 백엔드에 저장을 해야할 수도 있음
+
+
+// 커핑 프로그램을 할 때 커피가 뜨거운 상태일때 향미랑, 미지근할 때 향미의 차이가 다른것도 보여주셨는데, 이럴땐 기록을 어떻게 해야할까?
+
+
+
+
+
+
+// 수정본
+
+// 서버에 GET 요청을 보낼때 version값을 쿼리 파라미터로 보내 버전에 맞는 response값을 받을 수 있도록
+{
+  "version": "0.0.1",  // 버전별 관리로 클라이언트가 입력폼 라벨을 변경요청했을때 구버전 폼 양식의 라벨이 변경되지 않도록 해줌
+  "categorys": [
+    // {key: String, label: {ko:String, en: String}, limit: Integer | null}
+    {"key": "flavor", "label" : {"ko":"향미", "en":"flavor"}, "limit": 5},
+    {"key": "taste", "label": {"ko": "맛", "en": "taste"}, "limit": 2},
+    {"key": "acidity", "label": {"ko": "산미", "en": "acidity"}, "limit": 1},
+    {"key": "mouthFeel", "label": {"ko": "마우스필", "en": "mouth feel"}, "limit": 2},
+    {"key": "defect", "label": {"ko": "결함", "en": "defect"}, "limit": null}
+  ],
+  "items":{
+    // ID는 자동 생성되는 PK, parentId는 pk를 자기참조 fk로 만들어서 사용! 
+    // -> 백엔드분들도 어떤 id에 따라 label을 명시한다는 협의를 하실 필요 없습니다!
+    // 프론트는 id값이 무엇을 명시하는지 신경 쓸 필요 없이, 그냥 id값을 컴포넌트에 상태나 props 등으로 뿌려주기만 하면 됩니당.
+    "flavor":[ 
+        { "id": 101, "parentId": null, "label" : {"ko":"꽃", "en":"flower"} }, // {id: Integer, parentId: Integer | null, label: {ko:String, en:String}} 
+        { "id": 201, "parentId": null, "label" : {"ko":"과일", "en":"fruit"} },
+        { "id": 202, "parentId": 201, "label" : {"ko":"베리", "en":"berry"} },
+        { "id": 203, "parentId": 201, "label" : {"ko":"말린 과일", "en":"dried fruit"} },
+        { "id": 204, "parentId": 201, "label" : {"ko":"감귤류", "en":"citrus fruits"} },
+        { "id": 301, "parentId": null, "label" : {"ko":"신/발효된", "en":"sour/fermented"} },
+        { "id": 302, "parentId": 301, "label" : {"ko":"신맛", "en":"acidity"} },
+        { "id": 303, "parentId": 301, "label" : {"ko":"발효된", "en":"fermented"} },
+        { "id": 401, "parentId": null, "label" : {"ko":"녹색채소/식물성", "en":"Green vegetables/vegetables"} },
+        { "id": 501, "parentId": null, "label" : {"ko":"기타", "en":"etc"} },
+        { "id": 502, "parentId": 501, "label" : {"ko":"화학적인", "en":"chemical"} },
+        { "id": 503, "parentId": 501, "label" : {"ko":"퀴퀴한/흙냄새", "en":"Musty/dirt smell"} },
+        { "id": 504, "parentId": 501, "label" : {"ko":"종이같은", "en":"paperlike"} },
+        { "id": 601, "parentId": null, "label" : {"ko":"구운", "en":"roast"} },
+        { "id": 701, "parentId": null, "label" : {"ko":"견과류/코코아", "en":"Nuts/Cocoa"} },
+        { "id": 702, "parentId": 701, "label" : {"ko":"견과류", "en":"Nuts"} },
+        { "id": 703, "parentId": 701, "label" : {"ko":"코코아", "en":"Cocoa"} },
+        { "id": 801, "parentId": null, "label" : {"ko":"향신료", "en":"spices"} },
+        { "id": 901, "parentId": null, "label" : {"ko":"달콤한", "en":"sweetish"} },
+        { "id": 902, "parentId": 901, "label" : {"ko":"바닐라/바닐린", "en":"vanilla/vanillin"} },
+        { "id": 903, "parentId": 901, "label" : {"ko":"황설탕(브라운슈거)", "en":"Brown sugar (brown sugar)"} }
+    ],
+    "taste":[
+        { "id": 1001, "parentId": null, "label" : {"ko":"짠맛", "en":"salty"} },
+        { "id": 1101, "parentId": null, "label" : {"ko":"신맛", "en":"acidity"} },
+        { "id": 1201, "parentId": null, "label" : {"ko":"단맛", "en":"sweet"} },
+        { "id": 1301, "parentId": null, "label" : {"ko":"쓴맛", "en":"acerbity"} },
+        { "id": 1401, "parentId": null, "label" : {"ko":"감칠맛", "en":"umami"} }
+    ],
+    "acidity":[
+        { "id": 1501, "parentId": null, "label" : {"ko":"마른 산미(허브, 풀, 시큼한)", "en":"Dry acidity(herbal, grassy, sour)"} },
+        { "id": 1601, "parentId": null, "label" : {"ko":"달콤한 산미(군침도는, 과일같은, 밝은 산미)", "en":"Sweet acidity(mouth-watering, fruity, bright acidity)"} }
+    ],
+    "mouthFeel":[
+        { "id": 1701, "parentId": null, "label" : {"ko":"거친(껄끄러운, 가루같은, 모래같은)", "en":"coarse(gritty, powdery, sandy)"} },
+        { "id": 1801, "parentId": null, "label" : {"ko":"기름진", "en":"rich"} },
+        { "id": 1901, "parentId": null, "label" : {"ko":"부드러운(벨벳같은, 비단같은, 시럽같은)", "en":"soft(velvety, silky, syrupy)"} },
+        { "id": 2001, "parentId": null, "label" : {"ko":"입안이 마르는", "en":"dry mouth"} },
+        { "id": 2101, "parentId": null, "label" : {"ko":"금속성", "en":"metallic"} }
+    ],
+    "defect":[
+        { "id": 2201, "parentId": null, "label" : {"ko":"곰팡이", "en":"mold"} },
+        { "id": 2301, "parentId": null, "label" : {"ko":"페놀", "en":"phenol"} },
+        { "id": 2401, "parentId": null, "label" : {"ko":"감자", "en":"potato"} }
+    ]
+  }
+}
