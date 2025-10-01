@@ -10,14 +10,14 @@ interface SchemaTextField {
 }
 
 interface SchemaScaInfo {
-  title?: string;
+  title: string;
   name: SchemaTextField;
   purpose: SchemaTextField;
   created_at: string; // FORMATTED 같은 문자열
   sample_no: SchemaTextField;
 }
 
-interface SchemaSingleSelectionItem {
+export interface SchemaSingleSelectionItem {
   id: Id;
   label: string;
   type?: 'slider';
@@ -63,12 +63,12 @@ interface SchemaAffectiveAssessmentBlock {
   comment?: { type: 'textarea'; placeholder?: string; comment?: string };
 }
 
-interface EvaluationSchemaSection {
+export interface EvaluationSchemaSection {
   id: Id;
-  title?: string;
+  title: string;
   explanation: string;
-  single_selections?: SchemaSingleSelectionItem[];
-  multiple_selections?: SchemaMultipleGroup[];
+  single_selections: SchemaSingleSelectionItem[];
+  multiple_selections: SchemaMultipleGroup[];
   /** 섹션 내부 정동평가(신규 구조) */
   affective_assessment?: SchemaAffectiveAssessmentBlock;
 }
