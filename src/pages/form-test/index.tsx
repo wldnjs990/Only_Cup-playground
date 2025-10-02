@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { FORM_SCHEMA_MOCK } from '../../constants/form_schema_mock';
 import type { EvaluationRootSchema, EvaluationSchemaSection } from '../../hooks/useFormResult';
 import EvaluationTest from './components/EvaluationTest';
+import { useForm, SubmitHandler } from 'react-hook-form';
 
 export default function FormTest() {
   // 탭 선택 여부
@@ -16,6 +17,17 @@ export default function FormTest() {
   // 감각 묘사 평가 스키마(단일 선택)
   const [evaluationSchema, setEvaluationSchema] = useState<EvaluationSchemaSection | null>(null);
 
+  // RHF 사용
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm<EvaluationRootSchema>();
+  const onSubmit: SubmitHandler<EvaluationRootSchema> = (data) => console.log(data);
+
+  console.log(watch('sca_info.name'));
+
   // 탭 바뀔때 마다 평가할 스키마값 변경
   useEffect(() => {
     setEvaluationSchema(() => formSchema.evaluation_schemas[selectedTab]);
@@ -23,6 +35,7 @@ export default function FormTest() {
 
   return (
     <div className="flex h-screen w-full flex-row-reverse rounded-lg bg-white shadow-xl/20">
+      <input {...register('sca_info.name')} defaultValue={'홍길동'} />
       <nav className="bg-[#fdfdfd] px-5 py-2">
         <ul className="flex w-40 flex-col">
           {formSchema.evaluation_schemas.map((item, idx) => {

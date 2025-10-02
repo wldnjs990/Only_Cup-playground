@@ -7,5 +7,6 @@ export default function SingleSelectionTest({
   single_selection: SchemaSingleSelectionItem;
 }) {
   const { id, label, max, min, range, selected, type } = single_selection;
+  
   return <InputFrames />;
 }
