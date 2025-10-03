@@ -1,3 +1,5 @@
+// TODO : range타입 enum으로 바꾸고, 연관된 코드들 리팩토링 하기
+
 interface EvaluationRoot {
   version: number;
   sca_info: ScaInfo;
@@ -77,7 +79,7 @@ interface MultipleSelection {
 interface SelectionItem {
   id: number;
   parentId: number | null; // null이면 최상위 카테고리
-  label: Label;
+  label: string;
   selected: boolean; // 선택 여부
 }
 

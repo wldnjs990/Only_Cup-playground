@@ -8,7 +8,7 @@ export default function MultiSelection({
 }: {
   multiple_selection: MultipleSelection;
 }) {
-  const { treeList: treeSelectionItems } = useMakeTreeList(multiple_selection);
+  const { treeList: treeSelectionItems } = useMakeTreeList(multiple_selection.items);
 
   return (
     <>

@@ -1,143 +1,5 @@
+import type { EvaluationRootSchema } from '@/types/schema';
 import { useCallback, useMemo, useState } from 'react';
-
-/** ---------- (필요한 최소 타입) 스키마 입력 측 ---------- */
-type Id = number;
-
-interface SchemaTextField {
-  type: 'text';
-  label: string;
-  value?: string;
-}
-
-interface SchemaScaInfo {
-  title: string;
-  name: SchemaTextField;
-  purpose: SchemaTextField;
-  created_at: string; // FORMATTED 같은 문자열
-  sample_no: SchemaTextField;
-}
-
-export interface SchemaSingleSelectionItem {
-  id: Id;
-  label: string;
-  type?: 'slider';
-  sort?: number;
-  // single_selections는 range 또는 min/max 둘 중 하나로 올 수 있다고 가정
-  range?: number;
-  min?: number;
-  max?: number;
-  selected?: number;
-}
-
-interface SchemaMultipleItem {
-  id: Id;
-  parentId: Id | null;
-  label: string;
-  selected?: boolean;
-  sort?: number;
-}
-
-interface SchemaMultipleGroup {
-  id: Id;
-  title: string;
-  limit: number | null; // null이면 무제한
-  type?: 'multi_select';
-  items: SchemaMultipleItem[];
-  sort?: number;
-}
-
-interface SchemaAffectiveAssessmentItem {
-  id: Id;
-  type?: 'slider';
-  label: string;
-  min?: number; // 기본 1
-  max?: number; // 기본 9
-  selected?: number;
-  sort?: number;
-}
-
-interface SchemaAffectiveAssessmentBlock {
-  explanation?: string;
-  tooltips?: string[];
-  assessments?: SchemaAffectiveAssessmentItem[];
-  comment?: { type: 'textarea'; placeholder?: string; comment?: string };
-}
-
-export interface EvaluationSchemaSection {
-  id: Id;
-  title: string;
-  explanation: string;
-  single_selections: SchemaSingleSelectionItem[];
-  multiple_selections: SchemaMultipleGroup[];
-  /** 섹션 내부 정동평가(신규 구조) */
-  affective_assessment?: SchemaAffectiveAssessmentBlock;
-}
-
-interface SchemaCoffeeDefect {
-  id: Id;
-  title: string;
-  type: 'multi_select';
-  limit: number | null;
-  items: { id: Id; parentId: Id | null; label: string; selected?: boolean; sort?: number }[];
-}
-
-interface SchemaTotalEvaluation {
-  extrinsic_attributes_comment?:
-    | string
-    | { type: 'textarea'; placeholder?: string; comment?: string };
-  /** 전역 종합 정동평가(있을 수도/없을 수도) */
-  affective_assessment?: SchemaAffectiveAssessmentBlock;
-  cup_defect_items?: {
-    id: Id;
-    sort?: number;
-    type?: 'slider';
-    label: string; // (스키마에서는 label로 통일)
-    min?: number; // 기본 0
-    max?: number; // 기본 5
-    selected?: number; // 기본 0
-  }[];
-  coffee_defect?: SchemaCoffeeDefect;
-}
-
-export interface EvaluationRootSchema {
-  version: number;
-  sca_info: SchemaScaInfo;
-  evaluation_schemas: EvaluationSchemaSection[];
-  total_evaluation?: SchemaTotalEvaluation;
-}
-
-/** ---------- 결과(폼 값) 측: FORM_RESULT_MOCK과 동일한 구조 ---------- */
-export interface FormResult {
-  version: number;
-  sca_info: {
-    name: string;
-    purpose: string;
-    created_at: string; // 스키마의 문자열 유지
-    sample_no: string;
-  };
-  evaluation_schemas: {
-    id: Id;
-    explanation: string;
-    single_selections: { id: Id; label: string; range: number; selected: number }[];
-    multiple_selections: {
-      id: Id;
-      title: string;
-      limit: number | null;
-      items: { id: Id; parentId: Id | null; label: string; selected: boolean }[];
-    }[];
-    affective_assessments: { id: Id; range: number; selected: number }[];
-    affective_comment: string;
-  }[];
-  total_evaluation: {
-    extrinsic_attributes_comment: string;
-    affective_assessments_title: string;
-    affective_assessments: { id: Id; range: number; selected: number }[];
-    affective_comment: string;
-    cup_defect_items: { id: Id; defect_name: string; range: number; selected: number }[];
-    coffee_defect_title: string;
-    coffee_defect_items: { id: Id; parentId: Id | null; label: string; selected: boolean }[];
-  };
-}
 
 /** ---------- 유틸: 안전한 숫자 파생 ---------- */
 const toRange = (item: { range?: number; min?: number; max?: number }, fallback = 3) => {
@@ -150,8 +12,8 @@ const toRange = (item: { range?: number; min?: number; max?: number }, fallback 
 const clamp = (v: number, min: number, max: number) => Math.min(max, Math.max(min, v));
 
 /** ---------- 스키마 → 초기 결과 변환 ---------- */
-function makeInitialResultFromSchema(schema: EvaluationRootSchema): FormResult {
-  const result: FormResult = {
+function makeInitialResultFromSchema(schema: EvaluationRootSchema): EvaluationRoot {
+  const result: EvaluationRoot = {
     version: schema.version,
     sca_info: {
       name: schema.sca_info.name.value ?? '',
@@ -233,7 +95,7 @@ function makeInitialResultFromSchema(schema: EvaluationRootSchema): FormResult {
 /** ---------- 결과 검증 ---------- */
 type ValidationIssue = { path: string; message: string };
 
-function validateResult(result: FormResult): ValidationIssue[] {
+function validateResult(result: EvaluationRoot): ValidationIssue[] {
   const issues: ValidationIssue[] = [];
 
   // per-section
@@ -299,10 +161,10 @@ function validateResult(result: FormResult): ValidationIssue[] {
 /** ---------- React 훅 ---------- */
 export function useFormResult(schema: EvaluationRootSchema) {
   const initial = useMemo(() => makeInitialResultFromSchema(schema), [schema]);
-  const [formResult, setFormResult] = useState<FormResult>(initial);
+  const [formResult, setFormResult] = useState<EvaluationRoot>(initial);
 
   /** 단일 선택 점수 설정 */
-  const setSingleSelection = useCallback((sectionId: Id, itemId: Id, value: number) => {
+  const setSingleSelection = useCallback((sectionId: number, itemId: number, value: number) => {
     setFormResult((prev) => {
       const next = structuredClone(prev);
       const sec = next.evaluation_schemas.find((s) => s.id === sectionId);
@@ -315,7 +177,7 @@ export function useFormResult(schema: EvaluationRootSchema) {
   }, []);
 
   /** 멀티 선택 토글 (limit 준수) */
-  const toggleMultiSelection = useCallback((sectionId: Id, groupId: Id, itemId: Id) => {
+  const toggleMultiSelection = useCallback((sectionId: number, groupId: number, itemId: number) => {
     setFormResult((prev) => {
       const next = structuredClone(prev);
       const sec = next.evaluation_schemas.find((s) => s.id === sectionId);
@@ -341,20 +203,23 @@ export function useFormResult(schema: EvaluationRootSchema) {
   }, []);
 
   /** 섹션 정동평가 점수 설정(폼 결과 구조상 섹션의 affective_assessments) */
-  const setAffectiveScore = useCallback((sectionId: Id, assessmentId: Id, value: number) => {
-    setFormResult((prev) => {
-      const next = structuredClone(prev);
-      const sec = next.evaluation_schemas.find((s) => s.id === sectionId);
-      if (!sec) return prev;
-      const a = sec.affective_assessments.find((x) => x.id === assessmentId);
-      if (!a) return prev;
-      a.selected = clamp(value, 0, a.range);
-      return next;
-    });
-  }, []);
+  const setAffectiveScore = useCallback(
+    (sectionId: number, assessmentId: number, value: number) => {
+      setFormResult((prev) => {
+        const next = structuredClone(prev);
+        const sec = next.evaluation_schemas.find((s) => s.id === sectionId);
+        if (!sec) return prev;
+        const a = sec.affective_assessments.find((x) => x.id === assessmentId);
+        if (!a) return prev;
+        a.selected = clamp(value, 0, a.range);
+        return next;
+      });
+    },
+    [],
+  );
 
   /** 섹션 정동 코멘트 설정 */
-  const setAffectiveComment = useCallback((sectionId: Id, text: string) => {
+  const setAffectiveComment = useCallback((sectionId: number, text: string) => {
     setFormResult((prev) => {
       const next = structuredClone(prev);
       const sec = next.evaluation_schemas.find((s) => s.id === sectionId);
@@ -365,7 +230,7 @@ export function useFormResult(schema: EvaluationRootSchema) {
   }, []);
 
   /** 전체 총평( total_evaluation ) 설정 */
-  const setTotalAffectiveScore = useCallback((assessmentId: Id, value: number) => {
+  const setTotalAffectiveScore = useCallback((assessmentId: number, value: number) => {
     setFormResult((prev) => {
       const next = structuredClone(prev);
       const a = next.total_evaluation.affective_assessments.find((x) => x.id === assessmentId);
@@ -384,7 +249,7 @@ export function useFormResult(schema: EvaluationRootSchema) {
   }, []);
 
   /** 컵 결점 슬라이더 설정 */
-  const setCupDefectValue = useCallback((defectId: Id, value: number) => {
+  const setCupDefectValue = useCallback((defectId: number, value: number) => {
     setFormResult((prev) => {
       const next = structuredClone(prev);
       const it = next.total_evaluation.cup_defect_items.find((x) => x.id === defectId);
