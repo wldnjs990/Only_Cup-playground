@@ -8,7 +8,7 @@ export const FORM_RESULT_MOCK: EvaluationRoot = {
     created_at: FORMATTED,
     sample_no: 'SAM-572',
   },
-  main_evaluations: [
+  evaluation_schemas: [
     {
       id: 1,
       explanation: '커피를 만드는 과정에서 느낀점들을 평가해주세요.',

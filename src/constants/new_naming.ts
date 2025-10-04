@@ -1,5 +1,5 @@
 // src/schemas/form-schema-mock.ts
-import type { EvaluationRootSchema } from '@/types/schema';
+import type { EvaluationRootSchema } from '@/types/new_naming';
 import { FORMATTED } from './now_date';
 
 export const FORM_SCHEMA_MOCK: EvaluationRootSchema = {

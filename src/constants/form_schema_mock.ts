@@ -4,14 +4,15 @@ import { FORMATTED } from './now_date';
 
 export const FORM_SCHEMA_MOCK: EvaluationRootSchema = {
   version: 1,
-  basic_info: {
+  sca_info: {
     title: '기본 정보를 입력해주세요.',
     name: { type: 'text', label: '이름', value: '' },
     purpose: { type: 'text', label: '커핑 목적', value: '' },
     created_at: FORMATTED,
     sample_no: { type: 'text', label: '샘플 번호', value: '' },
   },
-  main_evaluations: [
+
+  evaluation_schemas: [
     {
       id: 1,
       title: '향 평가',
