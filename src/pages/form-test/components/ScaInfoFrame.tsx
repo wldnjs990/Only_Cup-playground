@@ -5,6 +5,7 @@ import { InputCn } from '@/components/ui/input_cn';
 import SequenceButton from './SequenceButton';
 import { twMerge } from 'tailwind-merge';
 import clsx from 'clsx';
+import { motion } from 'motion/react';
 
 export default function ScaInfoFrame({
   setSequence,
@@ -42,46 +43,62 @@ export default function ScaInfoFrame({
 
   return (
     <TestFrame>
-      <section className="flex w-full max-w-100 flex-col gap-5">
+      <motion.section
+        key={nowPath}
+        initial={{ y: 10, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        exit={{ y: -10, opacity: 0 }}
+        transition={{ duration: 0.2 }}
+        className="flex w-full max-w-100 flex-col gap-5"
+      >
         <article className="flex flex-col items-center justify-center gap-3">
-          <h1 className="text-4xl font-black">SCA 커피 가치 평가</h1>
-          <p className="text-xl">Prod by. OnlyCup</p>
+          <h1 className="text-2xl font-black md:text-4xl">SCA 커피 가치 평가</h1>
+          <p className="text-[16px] md:text-xl">Prod by. OnlyCup</p>
           <img src="/src/assets/images/onlycup_logo_200.png" alt="온리컵 로고" />
         </article>
-        <p className="text-center text-lg font-medium">{explain}</p>
+        <p className="text-center text-sm font-medium md:text-lg">{explain}</p>
         <article className="flex items-center gap-2">
-          <label htmlFor="nameLabel" className="w-[20%]">
+          <label htmlFor="nameLabel" className="w-[20%] text-xs md:text-sm">
             {nameLabel}
           </label>
           <InputCn
             id="nameLabel"
             value={nameField.value}
             onChange={(val) => nameField.onChange(val)}
-            className={twMerge('flex-1', clsx(nameState.error && 'border-red-600'))}
+            className={twMerge(
+              'flex-1 text-sm md:text-[16px]',
+              clsx(nameState.error && 'border-red-600'),
+            )}
           />
           {/* {nameState && <p className="text-sm text-red-600">{nameState.error?.message}</p>} */}
         </article>
         <article className="flex items-center gap-2">
-          <label htmlFor="purposeLabel" className="w-[20%]">
+          <label htmlFor="purposeLabel" className="w-[20%] text-xs md:text-sm">
             {purposeLabel}
           </label>
           <InputCn
             id="purposeLabel"
             value={purposeField.value}
             onChange={(val) => purposeField.onChange(val)}
-            className={twMerge('flex-1', clsx(purposeState.error && 'border-red-600'))}
+            className={twMerge(
+              'flex-1 text-sm md:text-[16px]',
+              clsx(purposeState.error && 'border-red-600'),
+            )}
           />
           {/* {purposeState && <p className="text-sm text-red-600">{purposeState.error?.message}</p>} */}
         </article>
         <article className="flex items-center gap-2">
-          <label htmlFor="sampleNoLabel" className="w-[20%]">
+          <label htmlFor="sampleNoLabel" className="w-[20%] text-xs md:text-sm">
             {sampleNoLabel}
           </label>
           <InputCn
             id="sampleNoLabel"
             value={sampleNoField.value}
             onChange={(val) => sampleNoField.onChange(val)}
-            className={twMerge('flex-1', clsx(sampleNoState.error && 'border-red-600'))}
+            className={twMerge(
+              'flex-1 text-sm md:text-[16px]',
+              clsx(sampleNoState.error && 'border-red-600'),
+            )}
           />
           {/* {sampleNoState && <p className="text-sm text-red-600">{sampleNoState.error?.message}</p>} */}
         </article>
@@ -98,7 +115,7 @@ export default function ScaInfoFrame({
             setSequence(2);
           }}
         />
-      </section>
+      </motion.section>
     </TestFrame>
   );
 }

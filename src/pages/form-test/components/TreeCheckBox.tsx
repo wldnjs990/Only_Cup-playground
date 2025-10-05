@@ -43,29 +43,31 @@ export default function TreeCheckBox({
   });
 
   return (
-    <article className="flex flex-col gap-2">
+    <article className="mt-2 flex flex-col gap-2">
       <CheckBox
         nowPath={parentCheckBoxPath}
         label={label}
         parentId={parentId}
         onChange={handleCheck}
       />
-      <article className="ml-5 flex gap-1">
-        {childrens.map((children) => {
-          const { id, idx, label, parentId } = children;
-          const childrenCheckBoxPath =
-            `${nowPath}.${idx}.checked` as FieldPath<EvaluationRootSchema>;
-          return (
-            <CheckBox
-              key={id}
-              nowPath={childrenCheckBoxPath}
-              label={label}
-              parentId={parentId}
-              onChange={handleCheck}
-            />
-          );
-        })}
-      </article>
+      {childrens.length > 0 && (
+        <article className="ml-5 flex gap-1">
+          {childrens.map((children) => {
+            const { id, idx, label, parentId } = children;
+            const childrenCheckBoxPath =
+              `${nowPath}.${idx}.checked` as FieldPath<EvaluationRootSchema>;
+            return (
+              <CheckBox
+                key={id}
+                nowPath={childrenCheckBoxPath}
+                label={label}
+                parentId={parentId}
+                onChange={handleCheck}
+              />
+            );
+          })}
+        </article>
+      )}
     </article>
   );
 }

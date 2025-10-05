@@ -32,7 +32,10 @@ export default function CheckBox({
         checked={checked}
         onCheckedChange={(val) => onChange(val, checked, nowPath)}
       />
-      <label htmlFor={label} className={clsx(parentId ? 'text-sm' : 'text-lg font-medium')}>
+      <label
+        htmlFor={label}
+        className={clsx(parentId ? 'text-xs md:text-sm' : 'text-sm font-medium md:text-lg')}
+      >
         {label}
       </label>
     </article>

@@ -21,10 +21,10 @@ export default function AffectiveAssessmentFrame({
       <hr />
       <section className="flex flex-col gap-5">
         <article className="flex flex-col gap-1">
-          <h2 className="h2-style">
+          <h2 className="h2-style md:h2-md-style">
             {title} - {rootTitle}
           </h2>
-          <span className="font-medium">{explanation}</span>
+          <span className="text-sm font-medium md:text-[16px]">{explanation}</span>
         </article>
         <article>
           {assessments.map((assessment, idx) => {

@@ -123,14 +123,24 @@ body {
   }
 }
 
-.h1-style {
+.h1-md-style {
   @apply text-3xl font-bold;
 }
+.h1-style {
+  @apply text-2xl font-bold;
+}
 
-.h2-style {
+.h2-md-style {
   @apply text-2xl font-semibold;
+}
+.h2-style {
+  @apply text-xl font-semibold;
+}
+
+.h3-md-style {
+  @apply text-lg font-semibold;
 }
 
 .h3-style {
-  @apply text-lg font-semibold;
+  @apply text-[16px] font-semibold;
 }

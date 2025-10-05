@@ -32,15 +32,15 @@ export default function MultipleSelection({
   return (
     <article>
       <article className="flex items-center gap-1">
-        <h3 className="h3-style">{title}</h3>
+        <h3 className={'h3-style md:h3-md-style text-[16px]'}>{title}</h3>
         {limit && (
           <>
-            <span className="text-sm">{limit ? `${now_checked} / ${limit}` : ''}</span>
-            <span className="text-red-600">*</span>
+            <span className="text-xs md:text-sm">{limit ? `${now_checked} / ${limit}` : ''}</span>
+            <span className="text-xs text-red-600 md:text-sm">*</span>
           </>
         )}
       </article>
-      <article className="mt-3 flex flex-col gap-1">
+      <article className="mt-3 flex flex-col gap-2">
         {/* 체크박스 아이템들 인덱스 하나하나 연결시켜야 해서 itemsPath 연결 + Tree변환 객체에 idx값 저장해둬서 그걸로 연결지으면 됨 */}
         {multipleSelectionTrees.map((multipleSelectionTree) => {
           return (

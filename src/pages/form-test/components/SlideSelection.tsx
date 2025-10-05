@@ -50,8 +50,8 @@ export default function SlideSelection({
   return (
     <article className="flex flex-col gap-3">
       <div className="flex items-center gap-1">
-        <h3 className="h3-style">{label}</h3>
-        <span className="text-sm">
+        <h3 className="h3-style md:h3-md-style">{label}</h3>
+        <span className="text-xs md:text-sm">
           {selected} / {range}
         </span>
       </div>

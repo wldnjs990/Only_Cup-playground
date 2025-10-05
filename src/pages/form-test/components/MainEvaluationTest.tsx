@@ -58,11 +58,11 @@ export default function MainEvaluationTest({
   };
 
   return (
-    <TestFrame className={'flex-row-reverse'}>
+    <TestFrame className={'flex-col md:flex-row-reverse'}>
       {/* 메인 폼 네비게이션 */}
       {/* TODO : 네비게이션 바 렌더링 최적화 하기(selectedTab 상태를 사용하는게 문제인거 같은데..) */}
-      <nav className="flex h-full flex-col justify-between bg-[#fdfdfd] p-2">
-        <ul className="flex w-40 flex-col">
+      <nav className="flex w-full flex-col gap-1 bg-[#fdfdfd] p-0 text-xs shadow-2xs sm:text-[16px] md:h-full md:w-auto md:justify-between md:gap-0 md:p-2 md:text-sm md:shadow-none">
+        <ul className="flex w-full flex-row md:w-40 md:flex-col">
           {mainEvaluations?.map((item, idx) => {
             const { id, title } = item;
             return (
@@ -72,17 +72,18 @@ export default function MainEvaluationTest({
                 animate={{
                   backgroundColor: idx === selectedTab ? '#eee' : '#eee0',
                 }}
-                className="relative flex h-6 w-full min-w-0 flex-1 cursor-pointer items-center justify-between rounded-[5px] rounded-b-none bg-white px-[15px] py-[10px] text-[#0f1115] select-none"
+                className="relative flex h-10 min-h-0 w-full flex-1 cursor-pointer items-center justify-center rounded-[5px] rounded-b-none bg-white text-[#0f1115] select-none md:h-6 md:min-w-0 md:px-[15px] md:py-[10px]"
                 onClick={() => setSelectedTab(idx)}
               >
                 {title}
-                {idx === selectedTab ? <motion.div layoutId="underline" id="underline" /> : null}
+                {/* {idx === selectedTab ? <motion.div layoutId="underline" id="underline" /> : null} */}
               </motion.li>
             );
           })}
         </ul>
-        <article className="flex flex-col gap-1">
+        <article className="flex flex-1 flex-row items-center gap-1 text-sm sm:text-[16px] md:flex-auto md:flex-col md:items-stretch md:justify-end">
           <SequenceButton
+            className="flex-1 md:flex-none"
             text="이전"
             onClick={() => {
               setSequence(1);
@@ -90,6 +91,7 @@ export default function MainEvaluationTest({
           />
           <SequenceButton
             text="다음"
+            className="flex-1 md:flex-none"
             onClick={() => {
               // 다중 체크 요소 1개라도 체크 안 된 파트 있는지 확인되면 다음 단계 이동
               if (multipleCheckValidate()) {
@@ -100,7 +102,7 @@ export default function MainEvaluationTest({
         </article>
       </nav>
       {/* 메인 폼 (감각 묘사 평가, 정동 평가) */}
-      <section className="h-[100dvh] min-h-0 flex-1 overflow-y-auto px-5 py-15">
+      <section className="h-[100dvh] min-h-0 w-full flex-1 overflow-y-auto px-5 py-5 md:py-15">
         <AnimatePresence mode="wait">
           <motion.div
             key={selectedTab}
