@@ -82,7 +82,3 @@ interface SelectionItem {
   label: string;
   selected: boolean; // 선택 여부
 }
-
-interface TreeSelectionItem extends SelectionItem {
-  childrens: SelectionItem[];
-}

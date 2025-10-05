@@ -1,6 +1,6 @@
 import type { EvaluationRootSchema, SingleSelectionSchema } from '@/types/new_naming';
 import { useFormContext, type FieldPath } from 'react-hook-form';
-import SingleSelection from './SingleSelection';
+import SlideSelection from './SlideSelection';
 
 export default function SingleSelectionFrame({
   parentPath,
@@ -16,10 +16,20 @@ export default function SingleSelectionFrame({
   const singleSelections = methods.getValues(nowPath) as SingleSelectionSchema[];
 
   return (
-    <section className="mt-5">
-      {singleSelections.map((singleSelection, idx) => {
-        return <SingleSelection key={singleSelection.id} parentPath={nowPath} idx={idx} />;
-      })}
-    </section>
+    <>
+      <hr />
+      <section>
+        {singleSelections.map((singleSelection, idx) => {
+          return (
+            <SlideSelection
+              key={singleSelection.id}
+              parentPath={nowPath}
+              idx={idx}
+              slider_range={singleSelection.range}
+            />
+          );
+        })}
+      </section>
+    </>
   );
 }

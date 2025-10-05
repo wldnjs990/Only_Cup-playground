@@ -5,7 +5,7 @@ import type { number } from 'motion/react';
 // 제네릭 + 재귀를 활용한 동적 enum값
 // A['length'] : 배열 A의 현재 길이 (ex. [1, 2] == 2)
 // A[number] : 배열 안 요소들을 유니온 타입으로 변환 (ex. [1, 2]면 1 | 2
-type Range0ToN<N extends number, A extends number[] = [1]> =
+export type Range0ToN<N extends number, A extends number[] = [1]> =
   // 시작 A의 길이는 1
   // N을 달성 못했을 경우 A애 현재 A의 길이를 담아서 다음으로 이동
   // 삼항연산자로 A의 길이가 목표길이 N을 당성했으면 A[number]로 유니온 타입 변환
@@ -42,13 +42,14 @@ type SliderField<N, A> = {
 
 // 싱글 선택(= 슬라이더 목록)
 export type SingleSelectionSchema = SliderField<3, [1]>;
+export type SingleDefectSelectionSchema = SliderField<5, [0]>;
 
 // ---------- 멀티 셀렉트(트리 지원) ----------
 export type SelectionItemSchema = {
   id: number;
   parentId: number | null; // null이면 최상위
   label: string;
-  selected: boolean;
+  checked: boolean;
   sort?: number; // 일부 섹션에는 sort가 있음
 };
 
@@ -58,6 +59,7 @@ export type MultipleSelectionSchema = {
   type: 'multi_select';
   title: string;
   limit: number | null;
+  now_checked: number | null;
   items: SelectionItemSchema[];
 };
 
@@ -65,16 +67,18 @@ export type MultipleSelectionSchema = {
 export type TextareaField = {
   type: 'textarea';
   placeholder: string;
-  comment: string;
+  value: string;
 };
 
 export type AffectiveAssessmentSchema = {
   title: string;
   explanation: string;
   tooltips: string[]; // 9단계 라벨 등
-  assessments: SliderField<9, [1]>[]; // 각 항목은 슬라이더
+  assessments: AssessmentsSchema[]; // 각 항목은 슬라이더
   comment: TextareaField; // 자유 텍스트 코멘트
 };
+
+export type AssessmentsSchema = SliderField<9, [1]>;
 
 // ---------- 평가 섹션 ----------
 export type MainEvaluation = {
@@ -87,25 +91,51 @@ export type MainEvaluation = {
 };
 
 // ---------- 총평(total_evaluation) ----------
-export type CoffeeDefectSchema = {
-  id: number;
+export type TotalEvaluationSchema = {
   title: string;
-  type: 'multi_select';
-  limit: number | null; // 스키마에선 null
-  items: SelectionItemSchema[];
+  extrinsic_attributes: ExtrinsicAttributesSchema; // 추가 코멘트
+  affective_assessment: AffectiveAssessmentSchema;
+  defect: DefectSchema;
 };
 
-export type TotalEvaluation = {
-  extrinsic_attributes_comment: TextareaField; // 추가 코멘트
-  affective_assessment: AffectiveAssessmentSchema;
-  cup_defect_items: SliderField<5, []>[]; // min/max 0~5 사용
-  coffee_defect: CoffeeDefectSchema;
+export type DefectSchema = {
+  cup: CupSchema;
+  coffee: CoffeeSchema;
 };
+export type CupSchema = {
+  id: number;
+  title: string;
+  explanation: string;
+  single_selections: SingleDefectSelectionSchema[];
+};
+export type CoffeeSchema = {
+  id: number;
+  title: string;
+  explanation: string;
+  multiple_selections: MultipleSelectionSchema[];
+};
+
+// ------- extrinsic_attributes 타입 급조
+type ExtrinsicAttributesSchema = {
+  comment: TextareaField;
+};
+
+// -------
+type CupDefectItemsSchema = SliderField<5, [0]>;
 
 // ---------- 루트 ----------
 export type EvaluationRootSchema = {
   version: number;
   basic_info: BasicInfo;
-  main_evaluations: MainEvaluations[];
-  total_evaluation: TotalEvaluation;
+  main_evaluations: MainEvaluation[];
+  total_evaluation: TotalEvaluationSchema;
 };
+
+// 트리 만들기용
+interface TreeSelectionChildItem extends SelectionItemSchema {
+  idx: number; // RHF 경로 저장용 인덱스 속성
+}
+
+interface TreeSelectionParentItem extends TreeSelectionChildItem {
+  childrens: TreeSelectionChildItem[];
+}

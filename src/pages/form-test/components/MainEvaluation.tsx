@@ -1,6 +1,8 @@
 import type { EvaluationRootSchema, MainEvaluation } from '@/types/new_naming';
 import { useFormContext, type FieldPath } from 'react-hook-form';
 import SingleSelectionFrame from './SingleSelectionFrame';
+import MultipleSelectionFrame from './MultipleSelectionFrame';
+import AffectiveAssessmentFrame from './AffectiveAssessmentFrame';
 
 export default function MainEvaluation({
   idx,
@@ -13,16 +15,26 @@ export default function MainEvaluation({
   // useFormContext 가져오기
   const methods = useFormContext<EvaluationRootSchema>();
   // 메인 평가지 제목(참조용)
-  const title = methods.getValues(`${nowPath}.title` as FieldPath<EvaluationRootSchema>);
+  const title = methods.getValues(`${nowPath}.title` as FieldPath<EvaluationRootSchema>) as string;
   // 메인 평가지 설명(참조용)
   const explanation = methods.getValues(
     `${nowPath}.explanation` as FieldPath<EvaluationRootSchema>,
-  );
+  ) as string;
   return (
-    <>
-      <h1 className="text-3xl font-bold">{title}</h1>
-      <p className="font-semibold">{explanation}</p>
-      <SingleSelectionFrame parentPath={nowPath} />
-    </>
+    <main>
+      {/* 타이틀 영역 */}
+      <section className="flex flex-col gap-2">
+        <h1 className="h1-style">{title}</h1>
+        <p className="font-semibold">{explanation}</p>
+      </section>
+      <section className="mt-5 flex flex-col gap-10">
+        {/* SingleSelection 영역 */}
+        <SingleSelectionFrame parentPath={nowPath} />
+        {/* MultipliSelection 영역 */}
+        <MultipleSelectionFrame parentPath={nowPath} />
+        {/* AffectiveAssessmentFrame 영역 */}
+        <AffectiveAssessmentFrame parentPath={nowPath} />
+      </section>
+    </main>
   );
 }

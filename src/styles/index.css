@@ -1,5 +1,9 @@
 @import 'tailwindcss';
-@import "tw-animate-css";
+@import 'tw-animate-css';
+
+body {
+  overflow: hidden;
+}
 
 @custom-variant dark (&:is(.dark *));
 
@@ -117,4 +121,16 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+.h1-style {
+  @apply text-3xl font-bold;
+}
+
+.h2-style {
+  @apply text-2xl font-semibold;
+}
+
+.h3-style {
+  @apply text-lg font-semibold;
 }
