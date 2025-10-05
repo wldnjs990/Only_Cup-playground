@@ -15,9 +15,10 @@ export default function Textarea({ parentPath }: { parentPath: FieldPath<Evaluat
     <>
       <TextareaCn
         onChange={(e) => setValue(commentValuePath, e.target.value)}
-        placeholder={placeholder}
+        placeholder={`${placeholder} (최대 100자 이내)`}
         className="h-30"
         value={commentValue}
+        maxLength={100}
       />
     </>
   );

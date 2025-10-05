@@ -15,13 +15,18 @@ export default function PdfTest() {
   const layout = defaultLayoutPlugin();
 
   useEffect(() => {
+    const local = localStorage.getItem('docList');
+    // 테스트용 마지막 doc만 꺼내서 쓰기
+    const docList: EvaluationRoot[] = local ? JSON.parse(local) : [];
+    const pdfDoc: EvaluationRoot | null = docList ? docList[docList.length - 1] : null;
     // react-pdf-renderer로 제작한 pdf document 양식 blob url로 변환
-    (async () => {
-      // react-pdf/renderer로 Blob 생성
-      const blob = await pdf(<PdfDocument />).toBlob();
-      // Blob → Object URL로 변환해서 저장
-      setUrl(URL.createObjectURL(blob));
-    })();
+    pdfDoc &&
+      (async () => {
+        // react-pdf/renderer로 Blob 생성
+        const blob = await pdf(<PdfDocument pdfDoc={pdfDoc} />).toBlob();
+        // Blob → Object URL로 변환해서 저장
+        setUrl(URL.createObjectURL(blob));
+      })();
   }, []);
 
   if (!url) return <div style={{ padding: 16 }}>PDF 생성 중…</div>;
@@ -29,7 +34,7 @@ export default function PdfTest() {
   return (
     <div style={{ height: '100vh' }}>
       {/* 워커 파일 경로: public/pdfjs/ 또는 vite-plugin-static-copy 결과 경로 */}
-      <Worker workerUrl={`/pdfjs/pdf.worker.min.js`}>
+      <Worker workerUrl={`/public/pdfjs/pdf.worker.min.js`}>
         {/* Viewer에 제작한 pdf의 url을 집어넣으면 pdf 뷰어가 생성됨 */}
         {/* 추가로 plugins에 @react-pdf-viewer/default-layout 플러그인을 추가로 설치해 pdf 뷰어 레이아웃을 가져와 붙였음(이건 선택사항)*/}
         <Viewer fileUrl={url} plugins={[layout]} />

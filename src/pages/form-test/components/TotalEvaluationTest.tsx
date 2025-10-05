@@ -12,7 +12,7 @@ export default function TotalEvaluationTest({
 }: {
   setSequence: React.Dispatch<React.SetStateAction<1 | 3 | 2>>;
 }) {
-  const { getValues, setValue, control } = useFormContext<EvaluationRootSchema>();
+  const { getValues } = useFormContext<EvaluationRootSchema>();
   const nowPath = 'total_evaluation';
   // 외재적 속성 평가 경로
   const extrinsicAttributesCommentPath = `${nowPath}.extrinsic_attributes`;
@@ -30,7 +30,7 @@ export default function TotalEvaluationTest({
       <section className="flex h-full min-h-0 flex-1 flex-col gap-10 overflow-y-auto p-5">
         <article className="flex flex-col gap-2">
           <h1 className="h1-style">최종 평가</h1>
-          <p className="text-lg font-medium">오늘 커핑에 대한 종합적인 평가를 남겨주세요!</p>
+          <p className="text-lg font-medium">커핑에 대한 종합적인 평가를 남겨주세요!</p>
         </article>
         {/* 정동 평가 */}
         <AffectiveAssessmentFrame parentPath={nowPath} />

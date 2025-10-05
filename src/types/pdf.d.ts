@@ -80,5 +80,9 @@ interface SelectionItem {
   id: number;
   parentId: number | null; // null이면 최상위 카테고리
   label: string;
-  selected: boolean; // 선택 여부
+  checked: boolean; // 선택 여부
+}
+
+interface TreeSelectionParentItem extends SelectionItem {
+  childrens: SelectionItem[];
 }

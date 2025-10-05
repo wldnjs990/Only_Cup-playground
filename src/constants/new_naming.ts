@@ -318,7 +318,7 @@ export const FORM_SCHEMA_MOCK: EvaluationRootSchema = {
     },
     affective_assessment: {
       title: '정동 평가',
-      explanation: '오늘 커핑한 제품에 대한 개인적인 인상과 의견을 남겨주세요.',
+      explanation: '커핑한 제품에 대한 개인적인 인상과 의견을 남겨주세요.',
       tooltips: [
         '극히 낮음',
         '매우 낮음',

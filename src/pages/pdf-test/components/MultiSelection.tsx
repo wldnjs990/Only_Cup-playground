@@ -1,14 +1,14 @@
 import { Text, View } from '@react-pdf/renderer';
 // import { useEffect, useState } from 'react';
 import SelectionItems from './SelectionItems';
-import { useMakeTreeList } from '../../../hooks/useMakeTree';
+import { useMakeTreeList } from '@/hooks/useMakeTreeList';
 
 export default function MultiSelection({
   multiple_selection,
 }: {
   multiple_selection: MultipleSelection;
 }) {
-  const { treeList: treeSelectionItems } = useMakeTreeList(multiple_selection.items);
+  const treeSelectionItems = useMakeTreeList(multiple_selection.items);
 
   return (
     <>

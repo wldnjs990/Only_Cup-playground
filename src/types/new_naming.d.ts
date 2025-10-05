@@ -132,10 +132,10 @@ export type EvaluationRootSchema = {
 };
 
 // 트리 만들기용
-interface TreeSelectionChildItem extends SelectionItemSchema {
+interface TreeSelectionChildItemSchema extends SelectionItemSchema {
   idx: number; // RHF 경로 저장용 인덱스 속성
 }
 
-interface TreeSelectionParentItem extends TreeSelectionChildItem {
-  childrens: TreeSelectionChildItem[];
+interface TreeSelectionParentItemSchema extends TreeSelectionChildItemSchema {
+  childrens: TreeSelectionChildItemSchema[];
 }

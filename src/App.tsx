@@ -9,9 +9,9 @@ export default function App() {
     <Routes>
       <Route element={<Layout />}>
         <Route path="/" element={<FormTest />}></Route>
-        <Route path="/pdf" element={<PdfTest />}></Route>
         <Route path="/skeleton" element={<FormSkeleton />}></Route>
       </Route>
+      <Route path="/pdf" element={<PdfTest />}></Route>
     </Routes>
   );
 }

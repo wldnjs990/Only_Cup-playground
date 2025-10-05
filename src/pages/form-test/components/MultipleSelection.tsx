@@ -1,12 +1,13 @@
 import type { EvaluationRootSchema, MultipleSelectionSchema } from '@/types/new_naming';
 import { useFormContext, useWatch, type FieldPath } from 'react-hook-form';
-import { useMakeTreeList } from '@/hooks/useMakeTree';
+import { useMakeTreeListSchema } from '@/hooks/useMakeTreeSchema';
 import TreeCheckBox from './TreeCheckBox';
 
 export default function MultipleSelection({
   parentPath,
   idx,
 }: {
+  selectionRootPath: FieldPath<EvaluationRootSchema>;
   parentPath: FieldPath<EvaluationRootSchema>;
   idx: number;
 }) {
@@ -22,7 +23,7 @@ export default function MultipleSelection({
 
   // 아이템 부모 - 자식 트리형태로 변환 훅 사용
   // RHF 경로 저장용 idx도 추가로 붙임 => idx 속성으로 경로 추가하면 됨
-  const multipleSelectionTrees = useMakeTreeList(items);
+  const multipleSelectionTrees = useMakeTreeListSchema(items);
 
   // TODO : type에 맞는 input을 선택해 렌더링 해주는 재사용 컴포넌트 만들기
   // const typePath = `${nowPath}.type` as FieldPath<EvaluationRootSchema>;
@@ -32,7 +33,12 @@ export default function MultipleSelection({
     <article>
       <article className="flex items-center gap-1">
         <h3 className="h3-style">{title}</h3>
-        <span className="text-sm">{now_checked ? `${now_checked} / ${limit}` : ''}</span>
+        {limit && (
+          <>
+            <span className="text-sm">{limit ? `${now_checked} / ${limit}` : ''}</span>
+            <span className="text-red-600">*</span>
+          </>
+        )}
       </article>
       <article className="mt-3 flex flex-col gap-1">
         {/* 체크박스 아이템들 인덱스 하나하나 연결시켜야 해서 itemsPath 연결 + Tree변환 객체에 idx값 저장해둬서 그걸로 연결지으면 됨 */}

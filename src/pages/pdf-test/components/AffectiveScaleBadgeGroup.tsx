@@ -17,8 +17,8 @@ export default function AffectiveScaleBadgeGroup({
         </Text>
       )}
       {affective_assessments.map((affective_assessment) => {
-        const { range, selected } = affective_assessment;
-        return <AffectiveScaleBadge range={range} selected={selected} />;
+        const { id, range, selected } = affective_assessment;
+        return <AffectiveScaleBadge key={id} range={range} selected={selected} />;
       })}
     </TopGroupFrame>
   );

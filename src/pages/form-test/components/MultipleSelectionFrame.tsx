@@ -18,7 +18,14 @@ export default function MultipleSelectionFrame({
       <hr />
       <section className="flex flex-col gap-10">
         {multipleSelections.map((multipleSelection, idx) => {
-          return <MultipleSelection key={multipleSelection.id} parentPath={nowPath} idx={idx} />;
+          return (
+            <MultipleSelection
+              key={multipleSelection.id}
+              selectionRootPath={parentPath}
+              parentPath={nowPath}
+              idx={idx}
+            />
+          );
         })}
       </section>
     </>
