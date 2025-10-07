@@ -8,6 +8,7 @@ export default function TopGroupFrame({ children }: { children: React.ReactNode 
           flexDirection: 'column',
           gap: 2,
           marginVertical: 2,
+          paddingBottom: 2,
           borderBottom: '0.5pt solid gray',
         }}
       >

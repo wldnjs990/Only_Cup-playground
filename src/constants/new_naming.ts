@@ -308,7 +308,7 @@ export const FORM_SCHEMA_MOCK: EvaluationRootSchema = {
     },
   ],
   total_evaluation: {
-    title: '최종',
+    title: '전체적 인상',
     extrinsic_attributes: {
       comment: {
         type: 'textarea',

@@ -74,7 +74,7 @@ export function formatEvaluationForSubmit(form: EvaluationRootSchema): Evaluatio
     extrinsic_attributes_comment: String(
       form.total_evaluation?.extrinsic_attributes?.comment?.value ?? '',
     ),
-    affective_assessments_title: String(form.total_evaluation?.affective_assessment?.title ?? ''),
+    affective_assessments_title: String(form.total_evaluation?.title ?? ''),
     affective_assessments: mapAffective(form.total_evaluation?.affective_assessment?.assessments),
     affective_comment: String(form.total_evaluation?.affective_assessment?.comment?.value ?? ''),
     cup_defect_items: cupSingles.map<CupDefectItems>((s) => ({

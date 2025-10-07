@@ -1,4 +1,4 @@
-import { FormProvider, useForm } from 'react-hook-form';
+import { FormProvider, useForm, type FieldValues } from 'react-hook-form';
 import type { EvaluationRootSchema } from '@/types/new_naming';
 import { FORM_SCHEMA_MOCK } from '@/constants/new_naming';
 import ScaInfoFrame from './components/ScaInfoFrame';
@@ -8,11 +8,13 @@ import TotalEvaluationTest from './components/TotalEvaluationTest';
 import { formatEvaluationForSubmit } from '@/utils/formatEvaluationForSubmit';
 import { useNavigate } from 'react-router';
 
+interface EvaluationRootSchemaValues extends FieldValues, EvaluationRootSchema {}
+
 export default function FormTest() {
   const navigate = useNavigate();
 
   // RHF 사용
-  const methods = useForm<EvaluationRootSchema>({
+  const methods = useForm<EvaluationRootSchemaValues>({
     defaultValues: FORM_SCHEMA_MOCK,
     shouldUnregister: false,
   });
@@ -31,12 +33,14 @@ export default function FormTest() {
           const docListJson = localStorage.getItem('docList');
           const docList: EvaluationRoot[] = docListJson ? JSON.parse(docListJson) : [];
           docList.push(request);
+          // pdf 페이지 리다이렉션시 조회할 pdf 번호
+          const pdfIdx = docList.length - 1;
           // 다시 localStorage에 담기
           localStorage.setItem('docList', JSON.stringify(docList));
           alert('평가 완료!');
-          navigate('/pdf');
+          navigate(`/pdf/${pdfIdx}`);
         })}
-        className="flex min-h-0 flex-1"
+        className="flex min-h-[100svh] w-full overflow-hidden"
       >
         <section className="flex min-h-0 flex-1 flex-col p-5">
           {/* 기본 정보지 */}

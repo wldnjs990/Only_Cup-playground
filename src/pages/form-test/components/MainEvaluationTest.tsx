@@ -1,7 +1,7 @@
 import MainEvaluation from './MainEvaluation';
 import type { EvaluationRootSchema } from '@/types/new_naming';
 import { useCallback, useState } from 'react';
-import { useFormContext, type FieldPath } from 'react-hook-form';
+import { useFormContext, type FieldArrayPath, type FieldPath } from 'react-hook-form';
 import { AnimatePresence, motion } from 'motion/react';
 import TestFrame from './TestFrame';
 import SequenceButton from './SequenceButton';
@@ -12,7 +12,7 @@ export default function MainEvaluationTest({
   setSequence: React.Dispatch<React.SetStateAction<1 | 2 | 3>>;
 }) {
   // 현재 주소
-  const nowPath = 'main_evaluations';
+  const nowPath: FieldArrayPath<EvaluationRootSchema> = 'main_evaluations';
   // useFormContext 가져오기
   const { getValues } = useFormContext<EvaluationRootSchema>();
   // 메인 평가지 배열(참조용)
@@ -26,11 +26,9 @@ export default function MainEvaluationTest({
   const getNowCheckedPaths = useCallback(() => {
     const paths: FieldPath<EvaluationRootSchema>[] = [];
     mainEvaluations.forEach((mainEvaluation, idx) => {
-      const savePath = `${nowPath}.${idx}` as FieldPath<EvaluationRootSchema>;
+      const savePath: FieldPath<EvaluationRootSchema> = `${nowPath}.${idx}`;
       mainEvaluation.multiple_selections.forEach((_, idx) => {
-        paths.push(
-          `${savePath}.multiple_selections.${idx}.now_checked` as FieldPath<EvaluationRootSchema>,
-        );
+        paths.push(`${savePath}.multiple_selections.${idx}.now_checked`);
       });
     });
     return paths;
@@ -48,8 +46,10 @@ export default function MainEvaluationTest({
       if (Number(now_checked) < 1) return true;
     });
     if (errorPath) {
+      // 어러가 발생한 경로의 제목만 빼내고 싶은데 인덱스로 추적해야 해서 path를 배열로 잘라서 인덱스 부분만 가져와서 재조합함..
       const pathArr = errorPath.split('.');
-      const rootPath = `${pathArr[0]}.${pathArr[1]}.title` as FieldPath<EvaluationRootSchema>;
+      const targetIdx = Number(pathArr[1]);
+      const rootPath: FieldPath<EvaluationRootSchema> = `${nowPath}.${targetIdx}.title`;
       const errorTitle = getValues(rootPath);
       alert(`${errorTitle} 평가를 완료해주세요!`);
       return false;
@@ -58,10 +58,10 @@ export default function MainEvaluationTest({
   };
 
   return (
-    <TestFrame className={'flex-col md:flex-row-reverse'}>
+    <TestFrame className={'relative flex-col pb-15 md:flex-row-reverse md:pb-0'}>
       {/* 메인 폼 네비게이션 */}
       {/* TODO : 네비게이션 바 렌더링 최적화 하기(selectedTab 상태를 사용하는게 문제인거 같은데..) */}
-      <nav className="flex w-full flex-col gap-1 bg-[#fdfdfd] p-0 text-xs shadow-2xs sm:text-[16px] md:h-full md:w-auto md:justify-between md:gap-0 md:p-2 md:text-sm md:shadow-none">
+      <nav className="flex w-full flex-col gap-1 p-0 text-xs shadow-2xs sm:text-[16px] md:h-full md:w-auto md:justify-between md:gap-0 md:bg-[#fdfdfd] md:p-2 md:text-sm md:shadow-none">
         <ul className="flex w-full flex-row md:w-40 md:flex-col">
           {mainEvaluations?.map((item, idx) => {
             const { id, title } = item;
@@ -81,7 +81,8 @@ export default function MainEvaluationTest({
             );
           })}
         </ul>
-        <article className="flex flex-1 flex-row items-center gap-1 text-sm sm:text-[16px] md:flex-auto md:flex-col md:items-stretch md:justify-end">
+        {/* absolute bottom-2.5 left-1/2 md:bottom-0 md:left-0 md: md:relative */}
+        <article className="absolute bottom-3 left-0 flex w-full flex-1 flex-row items-center gap-1 px-5 text-sm sm:text-[16px] md:relative md:bottom-0 md:left-0 md:flex-auto md:translate-0 md:flex-col md:items-stretch md:justify-end md:px-0">
           <SequenceButton
             className="flex-1 md:flex-none"
             text="이전"

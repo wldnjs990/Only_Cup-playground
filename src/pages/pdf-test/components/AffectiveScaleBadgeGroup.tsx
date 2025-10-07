@@ -12,7 +12,7 @@ export default function AffectiveScaleBadgeGroup({
   return (
     <TopGroupFrame>
       {affective_assessments_title && (
-        <Text style={{ fontSize: 7, fontWeight: 700, marginLeft: 2 }}>
+        <Text style={{ fontSize: 7, fontWeight: 700, marginLeft: 1 }}>
           {affective_assessments_title}
         </Text>
       )}

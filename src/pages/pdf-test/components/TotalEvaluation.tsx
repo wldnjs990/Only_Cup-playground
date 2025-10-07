@@ -14,6 +14,7 @@ export default function TotalEvaluation({
 }: Omit<TotalEvaluation, 'extrinsic_attributes_comment'>) {
   return (
     <>
+      {/* 정동평가 영역 */}
       <AffectiveScaleBadgeGroup
         affective_assessments={affective_assessments}
         affective_assessments_title={affective_assessments_title}
@@ -26,7 +27,7 @@ export default function TotalEvaluation({
           <CupDefectsGroup cup_defect_items={cup_defect_items} />
         </View>
         {/* 커피 결점 */}
-        <View style={{ flex: 1 }}>
+        <View style={{ flex: 2 / 3 }}>
           <CoffeeDefectsGroup
             coffee_defect_title={coffee_defect_title}
             coffee_defect_items={coffee_defect_items}

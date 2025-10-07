@@ -26,7 +26,7 @@ export default function SlideSelection({
   let slideSelection;
   // 0개도 가능한 경우)
   // TODO : 0개 선택 가능한 요소임을 검증하는 boolean값 json에 추가해서 리팩토링 하기)
-  let zeroAble = false;
+  let min = 1;
   switch (slider_range) {
     case 9:
       slideSelection = useWatch({ control: control, name: nowPath }) as AssessmentsSchema;
@@ -34,7 +34,7 @@ export default function SlideSelection({
     case 5:
       slideSelection = useWatch({ control: control, name: nowPath }) as CupDefectItemsSchema;
       // 지금 컵 결점 선택은 0개도 가능한데, 그걸 검증하는 방법이 따로 없어서 이렇게 하드코딩식으로 변수를 넣었는데 리팩토링 해야함
-      zeroAble = true;
+      min = 0;
       break;
     case 3:
       slideSelection = useWatch({ control: control, name: nowPath }) as SingleSelectionSchema;
@@ -58,11 +58,11 @@ export default function SlideSelection({
 
       <SliderCn
         max={range}
-        min={0}
+        min={min}
         step={1}
         value={[selected]}
         onValueChange={(val) => {
-          if (!zeroAble && val[0] < 1) return;
+          // if (!zeroAble && val[0] < 1) return;
           setValue(selectedPath, val[0]);
         }}
       />

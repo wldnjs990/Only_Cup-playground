@@ -2,7 +2,7 @@
 @import 'tw-animate-css';
 
 body {
-  overflow: hidden;
+  height: 100dvh;
 }
 
 @custom-variant dark (&:is(.dark *));

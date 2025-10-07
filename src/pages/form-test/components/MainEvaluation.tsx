@@ -24,7 +24,7 @@ export default function MainEvaluation({
     <main>
       {/* 타이틀 영역 */}
       <section className="flex flex-col gap-2">
-        <h1 className="h1-style md:h1-md-style">{title}</h1>
+        <h1 className="h1-style md:h1-md-style">감각 묘사 평가 - {title}</h1>
         <p className="text-sm font-semibold md:text-[16px]">{explanation}</p>
       </section>
       <section className="mt-5 flex flex-col gap-10">

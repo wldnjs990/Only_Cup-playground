@@ -1,4 +1,4 @@
-import { Document, Page, View, Font, Text } from '@react-pdf/renderer';
+import { Document, Page, View, Font, Text, Image } from '@react-pdf/renderer';
 import IntensityScaleBarGroup from './IntensityScaleBarGroup';
 import MultiSelectionGroup from './MuitiSelectionGroup';
 import EvaluationTitle from './EvaluationTitle';
@@ -33,7 +33,6 @@ const PdfDocument = ({ pdfDoc }: { pdfDoc: EvaluationRoot }) => {
       {/* 페이지 레이아웃 */}
       <Page size="A4" style={{ padding: 30, fontFamily: 'Pretendard', fontWeight: 400 }}>
         {/* 스키마 버전 정보 */}
-
         <Text
           style={{
             position: 'absolute',
@@ -46,9 +45,28 @@ const PdfDocument = ({ pdfDoc }: { pdfDoc: EvaluationRoot }) => {
           Ver.{version}
         </Text>
         {/* 최상단 결합평가양식 텍스트 부분 */}
-        <View style={{ marginBottom: 20 }}>
-          <Text style={{ fontSize: 12, fontWeight: 600 }}>SCA 커피 가치 평가</Text>
-          <Text style={{ fontSize: 24, fontWeight: 700 }}>결합 평가 양식</Text>
+        <View
+          style={{
+            marginBottom: 20,
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}
+        >
+          <View>
+            <Text style={{ fontSize: 12, fontWeight: 600 }}>SCA 커피 가치 평가</Text>
+            <Text style={{ fontSize: 24, fontWeight: 700 }}>결합 평가 양식</Text>
+          </View>
+          {/* Sca 로고 이미지 */}
+          <View>
+            <Image
+              src={'/SCA_logo_header.jpg'}
+              style={{
+                width: 70,
+                marginRight: 10,
+              }}
+            />
+          </View>
         </View>
         {/* 상단 이름, 날짜 등 정보 + 품질에 대한 인상 온보딩 부분 */}
         <ScaInfoFrame
