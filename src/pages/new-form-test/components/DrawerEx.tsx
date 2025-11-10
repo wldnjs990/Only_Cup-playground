@@ -15,7 +15,7 @@ import {
 } from '@/components/ui/drawer';
 
 export function DrawerEx({ title }: { title: string }) {
-  const [count, setCount] = React.useState(0);
+  const [count, setCount] = React.useState(1);
 
   function onClick(adjustment: number) {
     setCount(Math.max(1, Math.min(15, count + adjustment)));
