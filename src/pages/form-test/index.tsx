@@ -1,6 +1,6 @@
 import { FormProvider, useForm, type FieldValues } from 'react-hook-form';
-import type { EvaluationRootSchema } from '@/types/new_naming';
-import { FORM_SCHEMA_MOCK } from '@/constants/new_naming';
+import type { EvaluationRootSchema } from '@/types/form_schema_mock';
+import { FORM_SCHEMA_MOCK } from '@/constants/form_schema_mock';
 import ScaInfoFrame from './components/ScaInfoFrame';
 import MainEvaluationTest from './components/MainEvaluationTest';
 import { useState } from 'react';

@@ -1,4 +1,4 @@
-import type { EvaluationRootSchema, TreeSelectionParentItemSchema } from '@/types/new_naming';
+import type { EvaluationRootSchema, TreeSelectionParentItemSchema } from '@/types/form_schema_mock';
 import { useFormContext, useWatch, type FieldPath } from 'react-hook-form';
 import CheckBox from './CheckBox';
 import { useMemo } from 'react';

@@ -1,4 +1,4 @@
-import type { EvaluationRootSchema, MainEvaluation } from '@/types/new_naming';
+import type { EvaluationRootSchema, MainEvaluation } from '@/types/form_schema_mock';
 import { useFormContext, type FieldPath } from 'react-hook-form';
 import SingleSelectionFrame from './SingleSelectionFrame';
 import MultipleSelectionFrame from './MultipleSelectionFrame';

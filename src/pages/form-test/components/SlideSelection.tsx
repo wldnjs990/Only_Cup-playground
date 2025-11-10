@@ -4,7 +4,7 @@ import type {
   CupDefectItemsSchema,
   EvaluationRootSchema,
   SingleSelectionSchema,
-} from '@/types/new_naming';
+} from '@/types/form_schema_mock';
 import { useFormContext, useWatch, type FieldPath } from 'react-hook-form';
 
 export default function SlideSelection({

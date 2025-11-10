@@ -1,5 +1,5 @@
 import { TextareaCn } from '@/components/ui/textarea_cn';
-import type { EvaluationRootSchema, TextareaField } from '@/types/new_naming';
+import type { EvaluationRootSchema, TextareaField } from '@/types/form_schema_mock';
 import { useFormContext, useWatch, type FieldPath } from 'react-hook-form';
 
 export default function Textarea({ parentPath }: { parentPath: FieldPath<EvaluationRootSchema> }) {

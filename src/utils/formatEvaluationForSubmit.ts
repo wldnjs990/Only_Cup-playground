@@ -5,7 +5,7 @@ import type {
   MultipleSelectionSchema,
   AssessmentsSchema,
   SelectionItemSchema,
-} from '@/types/new_naming';
+} from '@/types/form_schema_mock';
 
 // sort 필드가 있으면 정렬
 const sortBy = <T extends { sort?: number }>(arr?: T[]) =>

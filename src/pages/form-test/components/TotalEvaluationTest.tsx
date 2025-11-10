@@ -1,7 +1,7 @@
 import { useFormContext } from 'react-hook-form';
 import SequenceButton from './SequenceButton';
 import TestFrame from './TestFrame';
-import type { EvaluationRootSchema } from '@/types/new_naming';
+import type { EvaluationRootSchema } from '@/types/form_schema_mock';
 import Textarea from './Textarea';
 import AffectiveAssessmentFrame from './AffectiveAssessmentFrame';
 import SingleSelectionFrame from './SingleSelectionFrame';

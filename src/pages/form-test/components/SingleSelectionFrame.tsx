@@ -1,4 +1,4 @@
-import type { EvaluationRootSchema, SingleSelectionSchema } from '@/types/new_naming';
+import type { EvaluationRootSchema, SingleSelectionSchema } from '@/types/form_schema_mock';
 import { useFormContext, type FieldPath } from 'react-hook-form';
 import SlideSelection from './SlideSelection';
 

@@ -1,5 +1,5 @@
 import MainEvaluation from './MainEvaluation';
-import type { EvaluationRootSchema } from '@/types/new_naming';
+import type { EvaluationRootSchema } from '@/types/form_schema_mock';
 import { useCallback, useState } from 'react';
 import { useFormContext, type FieldArrayPath, type FieldPath } from 'react-hook-form';
 import { AnimatePresence, motion } from 'motion/react';

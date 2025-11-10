@@ -1,7 +1,5 @@
 // src/hooks/useFormResult.ts (or a dedicated types file)
 
-import type { number } from 'motion/react';
-
 // 제네릭 + 재귀를 활용한 동적 enum값
 // A['length'] : 배열 A의 현재 길이 (ex. [1, 2] == 2)
 // A[number] : 배열 안 요소들을 유니온 타입으로 변환 (ex. [1, 2]면 1 | 2

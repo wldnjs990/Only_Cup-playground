@@ -1,5 +1,5 @@
 import { CheckboxCn } from '@/components/ui/checkbox_cn';
-import type { EvaluationRootSchema } from '@/types/new_naming';
+import type { EvaluationRootSchema } from '@/types/form_schema_mock';
 import type { CheckedState } from '@radix-ui/react-checkbox';
 import clsx from 'clsx';
 import { useFormContext, useWatch, type FieldPath } from 'react-hook-form';

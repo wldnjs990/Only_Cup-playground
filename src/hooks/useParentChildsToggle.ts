@@ -1,6 +1,6 @@
 import { useFormContext, useWatch, type FieldPath } from 'react-hook-form';
 import type { CheckedState } from '@radix-ui/react-checkbox';
-import type { EvaluationRootSchema } from '@/types/new_naming';
+import type { EvaluationRootSchema } from '@/types/form_schema_mock';
 
 type UseParentChildToggleParams = {
   /** 부모 체크박스 경로: e.g. `${base}.items.${parentIdx}.checked` */

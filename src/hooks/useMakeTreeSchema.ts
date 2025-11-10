@@ -1,4 +1,4 @@
-import type { SelectionItemSchema, TreeSelectionParentItemSchema } from '@/types/new_naming';
+import type { SelectionItemSchema, TreeSelectionParentItemSchema } from '@/types/form_schema_mock';
 import { useMemo } from 'react';
 
 export const useMakeTreeListSchema = (items: SelectionItemSchema[]) => {

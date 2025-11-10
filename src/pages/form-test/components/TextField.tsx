@@ -1,5 +1,5 @@
 import { InputCn } from '@/components/ui/input_cn';
-import type { EvaluationRootSchema } from '@/types/new_naming';
+import type { EvaluationRootSchema } from '@/types/form_schema_mock';
 import clsx from 'clsx';
 import { useController, useFormContext, type FieldPathByValue } from 'react-hook-form';
 import { twMerge } from 'tailwind-merge';

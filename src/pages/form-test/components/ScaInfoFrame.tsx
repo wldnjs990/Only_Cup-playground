@@ -1,6 +1,6 @@
 import { useController, useFormContext } from 'react-hook-form';
 import TestFrame from './TestFrame';
-import type { EvaluationRootSchema } from '@/types/new_naming';
+import type { EvaluationRootSchema } from '@/types/form_schema_mock';
 import { InputCn } from '@/components/ui/input_cn';
 import SequenceButton from './SequenceButton';
 import { twMerge } from 'tailwind-merge';

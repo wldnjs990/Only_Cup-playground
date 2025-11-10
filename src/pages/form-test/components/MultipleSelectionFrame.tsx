@@ -1,4 +1,4 @@
-import type { EvaluationRootSchema, MultipleSelectionSchema } from '@/types/new_naming';
+import type { EvaluationRootSchema, MultipleSelectionSchema } from '@/types/form_schema_mock';
 import { useFormContext, type FieldPath } from 'react-hook-form';
 import MultipleSelection from './MultipleSelection';
 
