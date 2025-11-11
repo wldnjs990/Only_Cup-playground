@@ -1,4 +1,3 @@
-import { id } from 'zod/v4/locales';
 import { FORMATTED as FORMATED_DATE } from './now_date';
 
 // 원두, 목적은 사장님이 그때그때 추가하실거니, 따로 API로 관리해야함
@@ -22,10 +21,11 @@ const cascaderTree = [
   {
     id: 1,
     label: '꽃',
+    value: 'aroma_floral',
     children: [
       {
         id: 1,
-        label: '흰 꽃',
+        label: '화이트 플라워',
         children: [
           { id: 1, label: '자스민', value: 'aroma_floral_white_jasmine' },
           { id: 2, label: '백합', value: 'aroma_floral_white_lily' },
@@ -38,44 +38,44 @@ const cascaderTree = [
         id: 2,
         label: '장미',
         children: [
-          { id: 1, label: '샤리파 아스마', value: 'aroma_floral_white_jasmine' },
-          { id: 2, label: '포시즌스', value: 'aroma_floral_white_lily' },
-          { id: 3, label: '박하', value: 'aroma_floral_white_mint' },
-          { id: 4, label: '민들레', value: 'aroma_floral_white_dandelion' },
-          { id: 5, label: '동백', value: 'aroma_floral_white_camellia' },
+          { id: 1, label: '에덴', value: 'aroma_floral_rose_eden' },
+          { id: 2, label: '아이스버그', value: 'aroma_floral_rose_iceberg' },
+          { id: 3, label: '엘', value: 'aroma_floral_rose_elle' },
+          { id: 4, label: '센티멘털', value: 'aroma_floral_rose_scentimental' },
+          { id: 5, label: '로열', value: 'aroma_floral_rose_royal' },
         ],
       },
       {
         id: 3,
-        label: '화이트 플라워',
+        label: '자스민',
         children: [
-          { id: 1, label: '자스민', value: 'aroma_floral_white_jasmine' },
-          { id: 2, label: '백합', value: 'aroma_floral_white_lily' },
-          { id: 3, label: '박하', value: 'aroma_floral_white_mint' },
-          { id: 4, label: '민들레', value: 'aroma_floral_white_dandelion' },
-          { id: 5, label: '동백', value: 'aroma_floral_white_camellia' },
+          { id: 1, label: '아라비안 자스민', value: 'aroma_floral_jasmine_arabian' },
+          { id: 2, label: '그랜드 자스민', value: 'aroma_floral_jasmine_grand' },
+          { id: 3, label: '피카케 자스민', value: 'aroma_floral_jasmine_pikake' },
+          { id: 4, label: '화이트 자스민', value: 'aroma_floral_jasmine_white' },
+          { id: 5, label: '사라 자스민', value: 'aroma_floral_jasmine_sara' },
         ],
       },
       {
         id: 4,
-        label: '화이트 플라워',
+        label: '플라워',
         children: [
-          { id: 1, label: '자스민', value: 'aroma_floral_white_jasmine' },
-          { id: 2, label: '백합', value: 'aroma_floral_white_lily' },
-          { id: 3, label: '박하', value: 'aroma_floral_white_mint' },
-          { id: 4, label: '민들레', value: 'aroma_floral_white_dandelion' },
-          { id: 5, label: '동백', value: 'aroma_floral_white_camellia' },
+          { id: 1, label: '라벤더', value: 'aroma_floral_flower_lavender' },
+          { id: 2, label: '프리지아', value: 'aroma_floral_flower_freesia' },
+          { id: 3, label: '아이리스', value: 'aroma_floral_flower_iris' },
+          { id: 4, label: '라일락', value: 'aroma_floral_flower_lilac' },
+          { id: 5, label: '데이지', value: 'aroma_floral_flower_daisy' },
         ],
       },
       {
         id: 5,
-        label: '화이트 플라워',
+        label: '허벌·그린',
         children: [
-          { id: 1, label: '자스민', value: 'aroma_floral_white_jasmine' },
-          { id: 2, label: '백합', value: 'aroma_floral_white_lily' },
-          { id: 3, label: '박하', value: 'aroma_floral_white_mint' },
-          { id: 4, label: '민들레', value: 'aroma_floral_white_dandelion' },
-          { id: 5, label: '동백', value: 'aroma_floral_white_camellia' },
+          { id: 1, label: '민트', value: 'aroma_floral_herbal_mint' },
+          { id: 2, label: '로즈메리', value: 'aroma_floral_herbal_rosemary' },
+          { id: 3, label: '세이지', value: 'aroma_floral_herbal_sage' },
+          { id: 4, label: '바질', value: 'aroma_floral_herbal_basil' },
+          { id: 5, label: '유칼립투스', value: 'aroma_floral_herbal_eucalyptus' },
         ],
       },
     ],
