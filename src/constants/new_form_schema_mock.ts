@@ -1,86 +1,6 @@
+import { categoryTree } from './category_tree';
+import { optionsList } from './options_list';
 import { FORMATTED as FORMATED_DATE } from './now_date';
-
-// 원두, 목적은 사장님이 그때그때 추가하실거니, 따로 API로 관리해야함
-// value는 서버에 전송할 값
-// label은 UI로 보여줄 텍스트
-const optionsList = {
-  coffeeTitleOptions: [
-    { id: 1, label: '에티오피아 예가체프', value: 'ethiopia_yirgacheffe' },
-    { id: 2, label: '콜롬비아 수프리모', value: 'colombia_supremo' },
-    { id: 3, label: '케냐 AA', value: 'kenya_aa' },
-    { id: 4, label: '브라질 산토스', value: 'brazil_santos' },
-  ],
-  purposeOptions: [
-    { id: 1, label: '커핑 입문', value: 'basic' },
-    { id: 2, label: '전문 커피 감별', value: 'expert' },
-  ],
-};
-
-// cascaderTree
-const cascaderTree = [
-  {
-    id: 1,
-    label: '꽃',
-    value: 'aroma_floral',
-    children: [
-      {
-        id: 1,
-        label: '화이트 플라워',
-        children: [
-          { id: 1, label: '자스민', value: 'aroma_floral_white_jasmine' },
-          { id: 2, label: '백합', value: 'aroma_floral_white_lily' },
-          { id: 3, label: '박하', value: 'aroma_floral_white_mint' },
-          { id: 4, label: '민들레', value: 'aroma_floral_white_dandelion' },
-          { id: 5, label: '동백', value: 'aroma_floral_white_camellia' },
-        ],
-      },
-      {
-        id: 2,
-        label: '장미',
-        children: [
-          { id: 1, label: '에덴', value: 'aroma_floral_rose_eden' },
-          { id: 2, label: '아이스버그', value: 'aroma_floral_rose_iceberg' },
-          { id: 3, label: '엘', value: 'aroma_floral_rose_elle' },
-          { id: 4, label: '센티멘털', value: 'aroma_floral_rose_scentimental' },
-          { id: 5, label: '로열', value: 'aroma_floral_rose_royal' },
-        ],
-      },
-      {
-        id: 3,
-        label: '자스민',
-        children: [
-          { id: 1, label: '아라비안 자스민', value: 'aroma_floral_jasmine_arabian' },
-          { id: 2, label: '그랜드 자스민', value: 'aroma_floral_jasmine_grand' },
-          { id: 3, label: '피카케 자스민', value: 'aroma_floral_jasmine_pikake' },
-          { id: 4, label: '화이트 자스민', value: 'aroma_floral_jasmine_white' },
-          { id: 5, label: '사라 자스민', value: 'aroma_floral_jasmine_sara' },
-        ],
-      },
-      {
-        id: 4,
-        label: '플라워',
-        children: [
-          { id: 1, label: '라벤더', value: 'aroma_floral_flower_lavender' },
-          { id: 2, label: '프리지아', value: 'aroma_floral_flower_freesia' },
-          { id: 3, label: '아이리스', value: 'aroma_floral_flower_iris' },
-          { id: 4, label: '라일락', value: 'aroma_floral_flower_lilac' },
-          { id: 5, label: '데이지', value: 'aroma_floral_flower_daisy' },
-        ],
-      },
-      {
-        id: 5,
-        label: '허벌·그린',
-        children: [
-          { id: 1, label: '민트', value: 'aroma_floral_herbal_mint' },
-          { id: 2, label: '로즈메리', value: 'aroma_floral_herbal_rosemary' },
-          { id: 3, label: '세이지', value: 'aroma_floral_herbal_sage' },
-          { id: 4, label: '바질', value: 'aroma_floral_herbal_basil' },
-          { id: 5, label: '유칼립투스', value: 'aroma_floral_herbal_eucalyptus' },
-        ],
-      },
-    ],
-  },
-];
 
 export const NEW_FORM_SCHEMA = {
   // 필요한거
@@ -120,20 +40,78 @@ export const NEW_FORM_SCHEMA = {
     {
       id: 1,
       title: '향',
-      label: '커피를 음미했을때 느껴지는 향을 알려주세요.',
+      label: '커피에서 무슨 향이 나나요?',
       // 연쇄 선택 ui 데이터
       category: {
         type: 'cascader',
-        cascaderTree: cascaderTree,
+        required: true,
+        cascaderTree: categoryTree.aroma,
+      },
+      // 카테고리 선택시 동적으로 생성되는 스키마(강도평가, 정동평가)
+      detailEvaluation: {
+        label: '선택하신 카테고리를 더 자세히 평가해주세요!',
+        category_evaluations: [],
       },
     },
     // 맛
-    {},
+    {
+      id: 2,
+      title: '맛',
+      label: '커피에서 어떤 맛이 느껴지시나요?',
+      category: {
+        type: 'cascader',
+        required: true,
+        cascaderTree: categoryTree.taste,
+      },
+      detailEvaluation: {
+        label: '선택하신 카테고리를 더 자세히 평가해주세요!',
+        category_evaluations: [],
+      },
+    },
     // 산미
-    {},
+    {
+      id: 3,
+      title: '산미',
+      label: '커피에서 산미가 느껴지시나요?',
+      category: {
+        type: 'cascader',
+        required: true,
+        cascaderTree: categoryTree.acidity,
+      },
+      detailEvaluation: {
+        label: '선택하신 카테고리를 더 자세히 평가해주세요!',
+        category_evaluations: [],
+      },
+    },
     // 단 맛
-    {},
+    {
+      id: 4,
+      title: '단 맛',
+      label: '커피에서 느껴지는 단 맛이 있나요?',
+      category: {
+        type: 'cascader',
+        required: true,
+        cascaderTree: categoryTree.switness,
+      },
+      detailEvaluation: {
+        label: '선택하신 카테고리를 더 자세히 평가해주세요!',
+        category_evaluations: [],
+      },
+    },
     // 마우스필
-    {},
+    {
+      id: 5,
+      title: '마우스필',
+      label: '커피를 마신 후 느껴지는 여운이 있나요?',
+      category: {
+        type: 'cascader',
+        required: true,
+        cascaderTree: categoryTree.mouthfeel,
+      },
+      detailEvaluation: {
+        label: '선택하신 카테고리를 더 자세히 평가해주세요!',
+        category_evaluations: [],
+      },
+    },
   ],
 };
