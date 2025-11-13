@@ -13,7 +13,7 @@ export const category_evaluations = (category: string, categoryName: string) => 
       tooltip: '선택하신 카테고리가 감각적으로 얼마나 뚜렷하고 강하게 느껴지는지를 평가해주세요.',
     },
     // 정동 평가
-    affective_score: {
+    affectiveScore: {
       title: '개인 점수',
       type: 'slider',
       required: false,
@@ -24,7 +24,7 @@ export const category_evaluations = (category: string, categoryName: string) => 
     },
     // 정동 평가(서술)
     // 평가 다 끝나고 추가 가능한데, 일단 만들어놓기만
-    affective_note: {
+    affectiveNote: {
       title: '세부 묘사',
       type: 'text',
       required: false,

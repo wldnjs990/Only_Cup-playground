@@ -1,8 +1,8 @@
+import type { CuppingFormSchema } from '@/types/new/new_form_schema';
 import { categoryTree } from './category_tree';
 import { optionsList } from './options_list';
-import { FORMATTED as FORMATED_DATE } from './now_date';
 
-export const NEW_FORM_SCHEMA = {
+export const NEW_FORM_SCHEMA: CuppingFormSchema = {
   // 필요한거
   // 1. 3뎁스 카테고리
   // 2. 카테고리 강도 평가(낮음, 중간, 높음) + 툴팁
@@ -19,23 +19,22 @@ export const NEW_FORM_SCHEMA = {
   basicInfo: {
     // 커피 이름,
     title: {
-      type: 'dropdown',
+      inputType: 'dropdown',
       label: '평가할 원두를 선택해주세요!',
       value: '',
       required: true,
-      options: optionsList.coffeeTitleOptions,
+      optionList: optionsList.coffeeTitleOptions,
     },
     purpose: {
-      type: 'dropdown',
+      inputType: 'dropdown',
       label: '무슨 목적으로 커핑에 참여하시나요?',
       value: '',
       required: false,
-      options: optionsList.purposeOptions,
+      optionList: optionsList.purposeOptions,
     },
-    createdAt: FORMATED_DATE,
   },
   // 평가 스키마
-  evaluations: [
+  evaluationList: [
     // 향
     {
       id: 1,
@@ -43,7 +42,7 @@ export const NEW_FORM_SCHEMA = {
       label: '커피에서 무슨 향이 나나요?',
       // 연쇄 선택 ui 데이터
       category: {
-        type: 'cascader',
+        inputType: 'cascader',
         required: true,
         cascaderTree: categoryTree.aroma,
       },
@@ -59,7 +58,7 @@ export const NEW_FORM_SCHEMA = {
       title: '맛',
       label: '커피에서 어떤 맛이 느껴지시나요?',
       category: {
-        type: 'cascader',
+        inputType: 'cascader',
         required: true,
         cascaderTree: categoryTree.taste,
       },
@@ -74,7 +73,7 @@ export const NEW_FORM_SCHEMA = {
       title: '산미',
       label: '커피에서 산미가 느껴지시나요?',
       category: {
-        type: 'cascader',
+        inputType: 'cascader',
         required: true,
         cascaderTree: categoryTree.acidity,
       },
@@ -89,7 +88,7 @@ export const NEW_FORM_SCHEMA = {
       title: '단 맛',
       label: '커피에서 느껴지는 단 맛이 있나요?',
       category: {
-        type: 'cascader',
+        inputType: 'cascader',
         required: true,
         cascaderTree: categoryTree.switness,
       },
@@ -104,7 +103,7 @@ export const NEW_FORM_SCHEMA = {
       title: '마우스필',
       label: '커피를 마신 후 느껴지는 여운이 있나요?',
       category: {
-        type: 'cascader',
+        inputType: 'cascader',
         required: true,
         cascaderTree: categoryTree.mouthfeel,
       },

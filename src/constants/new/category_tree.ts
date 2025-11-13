@@ -1,5 +1,7 @@
+import type { CategoryTree } from "@/types/new/new_form_schema";
+
 // cascaderTree
-export const categoryTree = {
+export const categoryTree:CategoryTree  = {
   aroma: [
     {
       id: 1,
