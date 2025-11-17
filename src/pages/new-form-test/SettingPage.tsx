@@ -33,7 +33,7 @@ export default function SettingPage() {
         })}
       </ul>
 
-      <DrawerUI>
+      <DrawerUI increaseFunc={CuppingFormIncrease} decreaseFunc={CuppingFormDecrease}>
         <ButtonCn>커핑 갯수 설정</ButtonCn>
       </DrawerUI>
     </section>
