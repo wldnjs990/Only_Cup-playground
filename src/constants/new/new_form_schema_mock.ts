@@ -1,8 +1,8 @@
-import type { CuppingFormSchema } from '@/types/new/new_form_schema';
+import type { TCuppingFormSchema } from '@/types/new/new_form_schema';
 import { categoryTree } from './category_tree';
 import { optionsList } from './options_list';
 
-export const NEW_FORM_SCHEMA: CuppingFormSchema = {
+export const NEW_FORM_SCHEMA: TCuppingFormSchema = {
   // 필요한거
   // 1. 3뎁스 카테고리
   // 2. 카테고리 강도 평가(낮음, 중간, 높음) + 툴팁

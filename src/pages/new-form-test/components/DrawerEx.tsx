@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useState, type ReactNode } from 'react';
 import { Minus, Plus } from 'lucide-react';
 
 import { ButtonCn } from '@/components/ui/button_cn';
@@ -14,8 +14,8 @@ import {
   DrawerTrigger,
 } from '@/components/ui/drawer';
 
-export function DrawerEx({ title }: { title: string }) {
-  const [count, setCount] = React.useState(1);
+export function DrawerUI({ children }: { children: ReactNode }) {
+  const [count, setCount] = useState(1);
 
   function onClick(adjustment: number) {
     setCount(Math.max(1, Math.min(15, count + adjustment)));
@@ -24,9 +24,7 @@ export function DrawerEx({ title }: { title: string }) {
   return (
     <Drawer>
       {/* Drawer 버튼 */}
-      <DrawerTrigger asChild>
-        <ButtonCn variant="outline">{title}</ButtonCn>
-      </DrawerTrigger>
+      <DrawerTrigger asChild>{children}</DrawerTrigger>
       {/* Drawer 컨텐츠 */}
       <DrawerContent>
         <div className="mx-auto w-full max-w-sm">

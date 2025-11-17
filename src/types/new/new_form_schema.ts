@@ -1,3 +1,5 @@
+import { zodResolver } from '@hookform/resolvers/zod';
+import type { FieldValues } from 'react-hook-form';
 import z from 'zod';
 
 // 공용 타입
@@ -54,18 +56,10 @@ const CategoryFirstNode = z.object({
   children: z.array(CategorySecondNode),
 });
 
-const CategoryTree = z.object({
-  aroma: z.array(CategoryFirstNode),
-  taste: z.array(CategoryFirstNode),
-  acidity: z.array(CategoryFirstNode),
-  switness: z.array(CategoryFirstNode),
-  mouthfeel: z.array(CategoryFirstNode),
-});
-
 const Category = z.object({
   inputType: InputType,
   required: z.boolean(),
-  cascaderTree: CategoryTree,
+  cascaderTree: z.array(CategoryFirstNode),
 });
 
 // 상세평가
@@ -135,6 +129,25 @@ const CuppingFormSchema = z.object({
   evaluationList: z.array(Evaluation),
 });
 
-export type CuppingFormSchema = z.infer<typeof CuppingFormSchema>;
+// 루트 스키마
+const RootCuppingFormSchema = z.object({
+  root: z.array(CuppingFormSchema),
+});
+
+// RHF 상속 스키마
+export type TRootCuppingFormSchema = FieldValues & z.infer<typeof RootCuppingFormSchema>;
+// zod validation용 resolver 스키마
+export const RootCuppingFormSchemaZodResolver = zodResolver(RootCuppingFormSchema);
+
+// select 옵선들 전용 타입
 export type OptionLists = z.infer<typeof OptionLists>;
+
+// 카테고리 트리 데이터 전용 타입
+const CategoryTree = z.object({
+  aroma: z.array(CategoryFirstNode),
+  taste: z.array(CategoryFirstNode),
+  acidity: z.array(CategoryFirstNode),
+  switness: z.array(CategoryFirstNode),
+  mouthfeel: z.array(CategoryFirstNode),
+});
 export type CategoryTree = z.infer<typeof CategoryTree>;
