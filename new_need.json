@@ -1,0 +1,138 @@
+{
+  "root": [
+    {
+      "basicInfo": {
+        "title": {
+          "inputType": "dropdown", // type: enum('text', 'radio', 'dropdown', 'cascader', 'slider')
+          "label": "커피명", // type: string
+          "value": "ethiopia_yirgacheffe", // type: string
+          "required": true, // type: boolean
+          "optionList": [ 
+            {
+              "id": 1, // number
+              "label": "에티오피아 예가체프", // string
+              "value": "ethiopia_yirgacheffe" // string
+            },
+            {
+              "id": 2,
+              "label": "콜롬비아 수프리모",
+              "value": "colombia_suprimo"
+            }
+          ]
+        },
+        "purpose": {
+          "inputType": "dropdown", // type: enum('text', 'radio', 'dropdown', 'cascader', 'slider')
+          "label": "커핑 목적", // string
+          "value": "buying_evaluation", // string
+          "required": true, // boolean
+          "optionList": [
+            {
+              "id": 1,
+              "label": "생두 구매 평가",
+              "value": "buying_evaluation"
+            },
+            {
+              "id": 2,
+              "label": "로스팅 프로파일 테스트",
+              "value": "roasting_profile_test"
+            }
+          ]
+        }
+      },
+
+      "evaluationList": [ 
+        {
+          "id": 1, // number
+          "title": "향", // string
+          "label": "커피 향 평가", // string
+
+          "category": {
+            "inputType": "cascader", // type: enum('text', 'radio', 'dropdown', 'cascader', 'slider')
+            "required": true, // boolean
+            "cascaderTree": [
+              {
+                "id": 1, // number
+                "label": "플로럴", // string
+                "value": "aroma_floral", // string
+                "children": [ 
+                  {
+                    "id": 1,
+                    "label": "화이트 플라워",
+                    "value": "aroma_floral_white_flower",
+                    "children": [ 
+                      {
+                        "id": 1,
+                        "label": "자스민",
+                        "value": "aroma_floral_white_jasmine"
+                      },
+                      {
+                        "id": 2,
+                        "label": "백합",
+                        "value": "aroma_floral_white_lily"
+                      }
+                    ]
+                  },
+                  {
+                    "id": 2,
+                    "label": "로즈",
+                    "value": "aroma_floral_rose",
+                    "children": [
+                      {
+                        "id": 1,
+                        "label": "다마스크 로즈",
+                        "value": "aroma_floral_rose_damask"
+                      },
+                      {
+                        "id": 2,
+                        "label": "티 로즈",
+                        "value": "aroma_floral_rose_tea"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+
+          "detailEvaluation": {
+            "label": "향 상세 평가", // string
+
+            "category_evaluations": [
+              {
+                "title": "플로럴 - 자스민", // string
+                "value": "aroma_floral_white_jasmine", // string
+
+                "intensity": {
+                  "title": "강도", // string
+                  "inputType": "radio", // type: enum('text', 'radio', 'dropdown', 'cascader', 'slider')
+                  "required": true, // boolean
+                  "value": 2, // number
+                  "label": "중간", // '낮음' | '중간' | '높음'
+                  "tooltip": "선택한 카테고리 향의 강도를 선택하세요." // string
+                },
+
+                "affectiveScore": {
+                  "title": "호감도", // string
+                  "inputType": "slider", // type: enum('text', 'radio', 'dropdown', 'cascader', 'slider')
+                  "required": true, // boolean
+                  "tooltip": "해당 향에 대한 전반적인 선호도를 1~10으로 평가하세요.", // string
+                  "value": 7, // number
+                  "min": 1, // number
+                  "max": 10 // number
+                },
+
+                "affectiveNote": {
+                  "title": "서술 평가", // string
+                  "inputType": "text",// type: enum('text', 'radio', 'dropdown', 'cascader', 'slider')
+                  "required": false, // boolean
+                  "tooltip": "향에 대한 느낌을 자유롭게 서술해주세요.", // string
+                  "value": "깨끗한 자스민 향이 강하지만 과하지 않고 상쾌함." // string
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

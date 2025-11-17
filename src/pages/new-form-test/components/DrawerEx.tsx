@@ -14,7 +14,15 @@ import {
   DrawerTrigger,
 } from '@/components/ui/drawer';
 
-export function DrawerUI({ children }: { children: ReactNode }) {
+export function DrawerUI({
+  children,
+  increaseFunc,
+  decreaseFunc,
+}: {
+  children: ReactNode;
+  increaseFunc: () => void;
+  decreaseFunc: (idx: number) => void;
+}) {
   const [count, setCount] = useState(1);
 
   function onClick(adjustment: number) {
@@ -38,7 +46,10 @@ export function DrawerUI({ children }: { children: ReactNode }) {
                 variant="outline"
                 size="icon"
                 className="h-8 w-8 shrink-0 rounded-full"
-                onClick={() => onClick(-1)}
+                onClick={() => {
+                  decreaseFunc(count)
+                  onClick(-1)
+                }}
                 disabled={count <= 1}
               >
                 <Minus />
@@ -51,7 +62,10 @@ export function DrawerUI({ children }: { children: ReactNode }) {
                 variant="outline"
                 size="icon"
                 className="h-8 w-8 shrink-0 rounded-full"
-                onClick={() => onClick(1)}
+                onClick={() => {
+                  onClick(1)
+                  increaseFunc()
+                }}
                 disabled={count >= 15}
               >
                 <Plus />

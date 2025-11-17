@@ -17,22 +17,26 @@ const OptionLists = z.object({
   purposeOptions: z.array(Option),
 });
 
+const SelectInput = z.object({
+  inputType: InputType,
+  label: z.string(),
+  value: z.string(),
+  required: z.boolean(),
+  optionList: z.array(Option),
+});
+
+const TextInput = z.object({
+  inputType: InputType,
+  label: z.string(),
+  value: z.string(),
+  required: z.boolean(),
+  optionList: z.array(Option),
+});
+
 // 기본 정보
 const BasicInfo = z.object({
-  title: z.object({
-    inputType: InputType,
-    label: z.string(),
-    value: z.string(),
-    required: z.boolean(),
-    optionList: z.array(Option),
-  }),
-  purpose: z.object({
-    inputType: InputType,
-    label: z.string(),
-    value: z.string(),
-    required: z.boolean(),
-    optionList: z.array(Option),
-  }),
+  title: SelectInput,
+  purpose: TextInput,
 });
 
 // 카테고리
@@ -77,7 +81,7 @@ const Intensity = z.object({
 // 정동 평가
 const AffectiveScore = z.object({
   title: z.string(),
-  type: InputType,
+  inputType: InputType,
   required: z.boolean(),
   tooltip: z.string(),
   value: z.number(),
@@ -135,9 +139,16 @@ const RootCuppingFormSchema = z.object({
 });
 
 // RHF 상속 스키마
-export type TRootCuppingFormSchema = FieldValues & z.infer<typeof RootCuppingFormSchema>;
+export type TRootCuppingFormSchema = z.infer<typeof RootCuppingFormSchema>;
+export type TCuppingFormSchema = z.infer<typeof CuppingFormSchema>;
 // zod validation용 resolver 스키마
 export const RootCuppingFormSchemaZodResolver = zodResolver(RootCuppingFormSchema);
+
+// select 전용 타입
+export type SelectInput = z.infer<typeof SelectInput>;
+
+// text 전용 타입
+export type TextInput = z.infer<typeof TextInput>
 
 // select 옵선들 전용 타입
 export type OptionLists = z.infer<typeof OptionLists>;
