@@ -9,7 +9,7 @@ export default function CuppingInfoItem({ idx }: { idx: number }) {
   const basicInfoPurposePath: FieldPath<TRootCuppingFormSchema> = `root.${idx}.basicInfo.purpose`;
 
   return (
-    <li className="flex flex-1/2 flex-col items-center justify-center gap-4 p-4">
+    <li className="flex flex-1/2 flex-col items-center justify-center p-4">
       <img src={onlycup_logo_200} alt="커핑 이미지" className="h-40 w-40 rounded-full border" />
       <SelectInput<TRootCuppingFormSchema> path={basicInfoTitlePath} />
       <TextInput<TRootCuppingFormSchema> path={basicInfoPurposePath} />

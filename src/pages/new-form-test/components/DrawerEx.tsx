@@ -47,8 +47,8 @@ export function DrawerUI({
                 size="icon"
                 className="h-8 w-8 shrink-0 rounded-full"
                 onClick={() => {
-                  decreaseFunc(count)
-                  onClick(-1)
+                  decreaseFunc(count);
+                  onClick(-1);
                 }}
                 disabled={count <= 1}
               >
@@ -63,8 +63,8 @@ export function DrawerUI({
                 size="icon"
                 className="h-8 w-8 shrink-0 rounded-full"
                 onClick={() => {
-                  onClick(1)
-                  increaseFunc()
+                  onClick(1);
+                  increaseFunc();
                 }}
                 disabled={count >= 15}
               >

@@ -1,4 +1,9 @@
-import { useForm, type FieldValues, type SubmitErrorHandler, type SubmitHandler } from 'react-hook-form';
+import {
+  useForm,
+  type FieldValues,
+  type SubmitErrorHandler,
+  type SubmitHandler,
+} from 'react-hook-form';
 import TestFrame from './components/TestFrame';
 import SettingPage from './SettingPage';
 import {
@@ -13,13 +18,15 @@ interface RHFRootCuppingFormSchema extends FieldValues, TRootCuppingFormSchema {
 
 export default function NewFormTest() {
   // 폼 초기값
-  const defaultCuppingFormSchema = { root: [NEW_FORM_SCHEMA] };
+  const defaultCuppingFormSchema = {
+    root: [NEW_FORM_SCHEMA],
+  };
   // RHF 폼 스키마 생성
   const methods = useForm<RHFRootCuppingFormSchema>({
     defaultValues: defaultCuppingFormSchema,
     resolver: RootCuppingFormSchemaZodResolver,
   });
-  console.log(defaultCuppingFormSchema)
+  console.log(defaultCuppingFormSchema);
 
   const onSubmit: SubmitHandler<TRootCuppingFormSchema> = (data) => {
     console.log(data);

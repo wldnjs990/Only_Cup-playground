@@ -1,5 +1,4 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import type { FieldValues } from 'react-hook-form';
 import z from 'zod';
 
 // 공용 타입
@@ -148,7 +147,7 @@ export const RootCuppingFormSchemaZodResolver = zodResolver(RootCuppingFormSchem
 export type SelectInput = z.infer<typeof SelectInput>;
 
 // text 전용 타입
-export type TextInput = z.infer<typeof TextInput>
+export type TextInput = z.infer<typeof TextInput>;
 
 // select 옵선들 전용 타입
 export type OptionLists = z.infer<typeof OptionLists>;

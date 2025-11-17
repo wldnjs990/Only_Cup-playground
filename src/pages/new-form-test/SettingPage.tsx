@@ -26,16 +26,21 @@ export default function SettingPage() {
     remove(idx);
   };
   return (
-    <section className="flex flex-1 flex-col items-center justify-center">
-      <ul className="flex w-full flex-wrap">
-        {F_root.map((_, idx) => {
-          return <CuppingInfoItem key={idx} idx={idx} />;
-        })}
-      </ul>
+    <section className="flex h-full min-h-0 w-full flex-1 flex-col overflow-hidden">
+      <div className="min-h-0 flex-1 overflow-y-auto">
+        <ul className="flex w-full flex-wrap">
+          {F_root.map((_, idx) => {
+            return <CuppingInfoItem key={idx} idx={idx} />;
+          })}
+        </ul>
+      </div>
 
-      <DrawerUI increaseFunc={CuppingFormIncrease} decreaseFunc={CuppingFormDecrease}>
-        <ButtonCn>커핑 갯수 설정</ButtonCn>
-      </DrawerUI>
+      <div className="flex flex-col gap-4">
+        <DrawerUI increaseFunc={CuppingFormIncrease} decreaseFunc={CuppingFormDecrease}>
+          <ButtonCn>커핑 갯수 설정</ButtonCn>
+        </DrawerUI>
+        <ButtonCn onClick={() => {}}>시작!</ButtonCn>
+      </div>
     </section>
   );
 }

@@ -30,7 +30,7 @@ export default function RHFContext<TFieldValues extends FieldValues = FieldValue
     <FormProvider {...methods}>
       <form
         onSubmit={methods.handleSubmit(onSubmit, onError)}
-        className={twMerge('w-full', className)}
+        className={twMerge('flex min-h-0 min-w-0 flex-1', className)}
       >
         {children}
       </form>
