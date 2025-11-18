@@ -74,9 +74,8 @@ export function DrawerUI({
             </div>
           </div>
           <DrawerFooter>
-            <ButtonCn>결정</ButtonCn>
             <DrawerClose asChild>
-              <ButtonCn variant="outline">취소</ButtonCn>
+              <ButtonCn variant="outline">결정</ButtonCn>
             </DrawerClose>
           </DrawerFooter>
         </div>

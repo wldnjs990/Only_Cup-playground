@@ -19,7 +19,8 @@ const OptionLists = z.object({
 const SelectInput = z.object({
   inputType: InputType,
   label: z.string(),
-  value: z.string(),
+  value: z.string().refine((val) => val !== '', { error: '선택되지 않았어요!' }),
+  selectedName: z.string(),
   required: z.boolean(),
   optionList: z.array(Option),
 });
@@ -151,6 +152,9 @@ export type TextInput = z.infer<typeof TextInput>;
 
 // select 옵선들 전용 타입
 export type OptionLists = z.infer<typeof OptionLists>;
+
+// evaluation 전용 타입
+export type Evaluation = z.infer<typeof Evaluation>
 
 // 카테고리 트리 데이터 전용 타입
 const CategoryTree = z.object({

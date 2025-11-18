@@ -22,6 +22,7 @@ export const NEW_FORM_SCHEMA: TCuppingFormSchema = {
       inputType: 'dropdown',
       label: '평가할 원두를 선택해주세요!',
       value: '',
+      selectedName: '',
       required: true,
       optionList: optionsList.coffeeTitleOptions,
     },
