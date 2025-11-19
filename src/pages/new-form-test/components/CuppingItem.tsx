@@ -26,7 +26,7 @@ export default function CuppingItem({ idx }: { idx: number }) {
         basicInfoTitlePath={basicInfoTitlePath}
         evaluationListPath={evaluationListPath}
       />
-      {step == 2 && <div>{title.selectedName}</div>}
+      {step == 2 && <span className="font-bold">{title.selectedName}</span>}
       {step == 1 && <SelectInput<TRootCuppingFormSchema> path={basicInfoTitlePath} />}
       {step == 1 && <TextInput<TRootCuppingFormSchema> path={basicInfoPurposePath} />}
     </li>

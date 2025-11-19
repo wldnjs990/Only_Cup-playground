@@ -1,0 +1,34 @@
+import type { OptionalCascader, TRootCuppingFormSchema } from '@/types/new/new_form_schema';
+import type { Dispatch } from 'react';
+import { useFormContext, type FieldPath } from 'react-hook-form';
+
+export default function Cascader({
+  cascaderTreePath,
+  // cascader 뎁스
+  childPath,
+  setChildPath,
+}: {
+  cascaderTreePath: `root.${number}.evaluationList.${number}.category.cascaderTree`;
+  childPath: string;
+  setChildPath: Dispatch<React.SetStateAction<string>>;
+}) {
+  const { getValues } = useFormContext<TRootCuppingFormSchema>();
+
+  // cascader는 타입 단언밖에 방법이 안 떠오르네..
+  // TODO : 버그 터질 가능성 높은 코드인데, 어떻게 해결할 수 있을까
+  const nowCascaderListPath = (cascaderTreePath + childPath) as FieldPath<TRootCuppingFormSchema>;
+  const nowCascaderList = getValues(nowCascaderListPath) as OptionalCascader[];
+
+  return (
+    <article className="flex flex-wrap">
+      {nowCascaderList.map((nowCascader) => {
+        const { id, label, value, children } = nowCascader;
+        return (
+          <button key={id} className="border p-2">
+            {label}
+          </button>
+        );
+      })}
+    </article>
+  );
+}

@@ -44,12 +44,13 @@ export const NEW_FORM_SCHEMA: TCuppingFormSchema = {
       // 연쇄 선택 ui 데이터
       category: {
         inputType: 'cascader',
+        label: '해당되는 기술어를 선택해주세요!',
         required: true,
         cascaderTree: categoryTree.aroma,
       },
       // 카테고리 선택시 동적으로 생성되는 스키마(강도평가, 정동평가)
       detailEvaluation: {
-        label: '선택하신 카테고리를 더 자세히 평가해주세요!',
+        label: '선택하신 기술어에 대해 자세히 평가해주세요!',
         category_evaluations: [],
       },
     },
@@ -60,11 +61,12 @@ export const NEW_FORM_SCHEMA: TCuppingFormSchema = {
       label: '커피에서 어떤 맛이 느껴지시나요?',
       category: {
         inputType: 'cascader',
+        label: '해당되는 기술어를 선택해주세요!',
         required: true,
         cascaderTree: categoryTree.taste,
       },
       detailEvaluation: {
-        label: '선택하신 카테고리를 더 자세히 평가해주세요!',
+        label: '선택하신 기술어에 대해 자세히 평가해주세요!',
         category_evaluations: [],
       },
     },
@@ -75,11 +77,12 @@ export const NEW_FORM_SCHEMA: TCuppingFormSchema = {
       label: '커피에서 산미가 느껴지시나요?',
       category: {
         inputType: 'cascader',
+        label: '해당되는 기술어를 선택해주세요!',
         required: true,
         cascaderTree: categoryTree.acidity,
       },
       detailEvaluation: {
-        label: '선택하신 카테고리를 더 자세히 평가해주세요!',
+        label: '선택하신 기술어에 대해 자세히 평가해주세요!',
         category_evaluations: [],
       },
     },
@@ -90,11 +93,12 @@ export const NEW_FORM_SCHEMA: TCuppingFormSchema = {
       label: '커피에서 느껴지는 단 맛이 있나요?',
       category: {
         inputType: 'cascader',
+        label: '해당되는 기술어를 선택해주세요!',
         required: true,
         cascaderTree: categoryTree.switness,
       },
       detailEvaluation: {
-        label: '선택하신 카테고리를 더 자세히 평가해주세요!',
+        label: '선택하신 기술어에 대해 자세히 평가해주세요!',
         category_evaluations: [],
       },
     },
@@ -105,11 +109,12 @@ export const NEW_FORM_SCHEMA: TCuppingFormSchema = {
       label: '커피를 마신 후 느껴지는 여운이 있나요?',
       category: {
         inputType: 'cascader',
+        label: '해당되는 기술어를 선택해주세요!',
         required: true,
         cascaderTree: categoryTree.mouthfeel,
       },
       detailEvaluation: {
-        label: '선택하신 카테고리를 더 자세히 평가해주세요!',
+        label: '선택하신 기술어에 대해 자세히 평가해주세요!',
         category_evaluations: [],
       },
     },

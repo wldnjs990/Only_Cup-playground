@@ -4,16 +4,14 @@ import {
   Drawer,
   DrawerClose,
   DrawerContent,
-  DrawerDescription,
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
 } from '@/components/ui/drawer';
 import useNewFormStore from '@/store/newFormStore';
-import type { Evaluation, SelectInput, TRootCuppingFormSchema } from '@/types/new/new_form_schema';
-import { useState } from 'react';
-import { useFormContext, type FieldPath } from 'react-hook-form';
+import type { TRootCuppingFormSchema } from '@/types/new/new_form_schema';
+import { useFormContext } from 'react-hook-form';
 import EvaluationContent from './EvaluationContent';
 
 export function EvaluationDrawer({
@@ -22,19 +20,14 @@ export function EvaluationDrawer({
   evaluationListPath,
 }: {
   imgPath: string;
-  basicInfoTitlePath: FieldPath<TRootCuppingFormSchema>;
-  evaluationListPath: FieldPath<TRootCuppingFormSchema>;
+  basicInfoTitlePath: `root.${number}.basicInfo.title`;
+  evaluationListPath: `root.${number}.evaluationList`;
 }) {
   const { getValues } = useFormContext<TRootCuppingFormSchema>();
 
   const step = useNewFormStore((state) => state.step);
 
-  const BasicInfoTitle = getValues(basicInfoTitlePath) as SelectInput;
-  const evaluationList = getValues(evaluationListPath) as Evaluation[];
-
-  // 일단 평가순서는 고정요소로 박아두자
-  const [eIdx, setEIdx] = useState<number>(0);
-  const nowEvaluationPath = `${evaluationListPath}.${eIdx}` as const;
+  const BasicInfoTitle = getValues(basicInfoTitlePath);
 
   return (
     <Drawer>
@@ -53,7 +46,7 @@ export function EvaluationDrawer({
             <DrawerTitle>{BasicInfoTitle.selectedName}</DrawerTitle>
           </DrawerHeader>
           <div className="p-4 pb-0">
-            <EvaluationContent nowEvaluationPath={nowEvaluationPath} />
+            <EvaluationContent evaluationListPath={evaluationListPath} />
           </div>
           <DrawerFooter>
             <DrawerClose asChild>
