@@ -1,5 +1,4 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import type { FieldValues } from 'react-hook-form';
 import z from 'zod';
 
 // 공용 타입
@@ -20,7 +19,8 @@ const OptionLists = z.object({
 const SelectInput = z.object({
   inputType: InputType,
   label: z.string(),
-  value: z.string(),
+  value: z.string().refine((val) => val !== '', { error: '선택되지 않았어요!' }),
+  selectedName: z.string(),
   required: z.boolean(),
   optionList: z.array(Option),
 });
@@ -53,6 +53,14 @@ const CategorySecondNode = z.object({
   children: z.array(CategoryThirdNode),
 });
 
+// cascader 폼 전용 타입 스키마
+const OptionalCascader = z.object({
+  id: z.number(),
+  label: z.string(),
+  value: z.string(),
+  children: z.optional(z.array(CategorySecondNode)),
+});
+
 const CategoryFirstNode = z.object({
   id: z.number(),
   label: z.string(),
@@ -62,6 +70,7 @@ const CategoryFirstNode = z.object({
 
 const Category = z.object({
   inputType: InputType,
+  label: z.string(),
   required: z.boolean(),
   cascaderTree: z.array(CategoryFirstNode),
 });
@@ -138,6 +147,8 @@ const RootCuppingFormSchema = z.object({
   root: z.array(CuppingFormSchema),
 });
 
+// 타입 export --------------------------------------------------------------------------------------
+
 // RHF 상속 스키마
 export type TRootCuppingFormSchema = z.infer<typeof RootCuppingFormSchema>;
 export type TCuppingFormSchema = z.infer<typeof CuppingFormSchema>;
@@ -148,10 +159,16 @@ export const RootCuppingFormSchemaZodResolver = zodResolver(RootCuppingFormSchem
 export type SelectInput = z.infer<typeof SelectInput>;
 
 // text 전용 타입
-export type TextInput = z.infer<typeof TextInput>
+export type TextInput = z.infer<typeof TextInput>;
 
 // select 옵선들 전용 타입
 export type OptionLists = z.infer<typeof OptionLists>;
+
+// evaluation 전용 타입
+export type Evaluation = z.infer<typeof Evaluation>;
+
+// cascader 전용 타입
+export type OptionalCascader = z.infer<typeof OptionalCascader>;
 
 // 카테고리 트리 데이터 전용 타입
 const CategoryTree = z.object({
