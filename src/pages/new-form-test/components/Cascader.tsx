@@ -1,3 +1,4 @@
+import { ButtonCn } from '@/components/ui/button_cn';
 import type { OptionalCascader, TRootCuppingFormSchema } from '@/types/new/new_form_schema';
 import type { Dispatch } from 'react';
 import { useFormContext, type FieldPath } from 'react-hook-form';
@@ -19,14 +20,16 @@ export default function Cascader({
   const nowCascaderListPath = (cascaderTreePath + childPath) as FieldPath<TRootCuppingFormSchema>;
   const nowCascaderList = getValues(nowCascaderListPath) as OptionalCascader[];
 
+  // cascader는 control로 통째로 관리하면서 리프노드의 value만 따로 업데이트 하도록 결정
+
   return (
     <article className="flex flex-wrap">
       {nowCascaderList.map((nowCascader) => {
-        const { id, label, value, children } = nowCascader;
+        const { id, label, children } = nowCascader;
         return (
-          <button key={id} className="border p-2">
+          <ButtonCn key={id} className="border p-2">
             {label}
-          </button>
+          </ButtonCn>
         );
       })}
     </article>
