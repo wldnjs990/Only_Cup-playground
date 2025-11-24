@@ -49,7 +49,6 @@ const CategoryThirdNode = z.object({
 const CategorySecondNode = z.object({
   id: z.number(),
   label: z.string(),
-  value: z.string(),
   children: z.array(CategoryThirdNode),
 });
 
@@ -57,14 +56,12 @@ const CategorySecondNode = z.object({
 const OptionalCascader = z.object({
   id: z.number(),
   label: z.string(),
-  value: z.string(),
   children: z.optional(z.array(CategorySecondNode)),
 });
 
 const CategoryFirstNode = z.object({
   id: z.number(),
   label: z.string(),
-  value: z.string(),
   children: z.array(CategorySecondNode),
 });
 
@@ -73,6 +70,8 @@ const Category = z.object({
   label: z.string(),
   required: z.boolean(),
   cascaderTree: z.array(CategoryFirstNode),
+  // cascader 결과 담는 배열
+  value: z.array(z.string()),
 });
 
 // 상세평가
