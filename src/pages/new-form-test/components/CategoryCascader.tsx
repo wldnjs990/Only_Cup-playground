@@ -1,5 +1,5 @@
 import type { TRootCuppingFormSchema } from '@/types/new/new_form_schema';
-import { Controller, useFormContext } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 import CategoryList from './CategoryList';
 
 export default function CategoryCascader({
@@ -7,7 +7,7 @@ export default function CategoryCascader({
 }: {
   nowCategoryPath: `root.${number}.evaluationList.${number}.category`;
 }) {
-  const { getValues, control } = useFormContext<TRootCuppingFormSchema>();
+  const { getValues } = useFormContext<TRootCuppingFormSchema>();
 
   // 라벨만 따로 빼기
   const categoryLabel = getValues(`${nowCategoryPath}.label`);
@@ -20,7 +20,7 @@ export default function CategoryCascader({
         {required && <span className="text-red-600">*</span>}
       </div>
       <article className="flex flex-wrap">
-        <CategoryList nowCategoryPath={nowCategoryPath}/>
+        <CategoryList nowCategoryPath={nowCategoryPath} />
       </article>
     </article>
   );
