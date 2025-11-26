@@ -48,7 +48,7 @@ export const NEW_FORM_SCHEMA: TCuppingFormSchema = {
         required: true,
         cascaderTree: categoryTree.aroma,
         // 최종적으로 담을 value path
-        value: [],
+        valueList: [],
       },
       // 카테고리 선택시 동적으로 생성되는 스키마(강도평가, 정동평가)
       detailEvaluation: {
@@ -66,7 +66,7 @@ export const NEW_FORM_SCHEMA: TCuppingFormSchema = {
         label: '해당되는 기술어를 선택해주세요!',
         required: true,
         cascaderTree: categoryTree.taste,
-        value: [],
+        valueList: [],
       },
       detailEvaluation: {
         label: '선택하신 기술어에 대해 자세히 평가해주세요!',
@@ -83,7 +83,7 @@ export const NEW_FORM_SCHEMA: TCuppingFormSchema = {
         label: '해당되는 기술어를 선택해주세요!',
         required: true,
         cascaderTree: categoryTree.acidity,
-        value: [],
+        valueList: [],
       },
       detailEvaluation: {
         label: '선택하신 기술어에 대해 자세히 평가해주세요!',
@@ -100,7 +100,7 @@ export const NEW_FORM_SCHEMA: TCuppingFormSchema = {
         label: '해당되는 기술어를 선택해주세요!',
         required: true,
         cascaderTree: categoryTree.switness,
-        value: [],
+        valueList: [],
       },
       detailEvaluation: {
         label: '선택하신 기술어에 대해 자세히 평가해주세요!',
@@ -117,7 +117,7 @@ export const NEW_FORM_SCHEMA: TCuppingFormSchema = {
         label: '해당되는 기술어를 선택해주세요!',
         required: true,
         cascaderTree: categoryTree.mouthfeel,
-        value: [],
+        valueList: []
       },
       detailEvaluation: {
         label: '선택하신 기술어에 대해 자세히 평가해주세요!',

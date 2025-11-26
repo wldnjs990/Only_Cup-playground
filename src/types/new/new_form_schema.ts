@@ -40,27 +40,23 @@ const BasicInfo = z.object({
 });
 
 // 카테고리
-const CategoryThirdNode = z.object({
+const CategoryLeafNode = z.object({
   id: z.number(),
+  selected: z.boolean(),
   label: z.string(),
   value: z.string(),
 });
 
 const CategorySecondNode = z.object({
   id: z.number(),
+  selected: z.boolean(),
   label: z.string(),
-  children: z.array(CategoryThirdNode),
-});
-
-// cascader 폼 전용 타입 스키마
-const OptionalCascader = z.object({
-  id: z.number(),
-  label: z.string(),
-  children: z.optional(z.array(CategorySecondNode)),
+  children: z.array(CategoryLeafNode),
 });
 
 const CategoryFirstNode = z.object({
   id: z.number(),
+  selected: z.boolean(),
   label: z.string(),
   children: z.array(CategorySecondNode),
 });
@@ -71,7 +67,7 @@ const Category = z.object({
   required: z.boolean(),
   cascaderTree: z.array(CategoryFirstNode),
   // cascader 결과 담는 배열
-  value: z.array(z.string()),
+  valueList: z.array(z.string()),
 });
 
 // 상세평가
@@ -166,8 +162,8 @@ export type OptionLists = z.infer<typeof OptionLists>;
 // evaluation 전용 타입
 export type Evaluation = z.infer<typeof Evaluation>;
 
-// cascader 전용 타입
-export type OptionalCascader = z.infer<typeof OptionalCascader>;
+// 카테고리 cascader 전용 타입
+export type Category = z.infer<typeof Category>;
 
 // 카테고리 트리 데이터 전용 타입
 const CategoryTree = z.object({
@@ -177,4 +173,8 @@ const CategoryTree = z.object({
   switness: z.array(CategoryFirstNode),
   mouthfeel: z.array(CategoryFirstNode),
 });
+
 export type CategoryTree = z.infer<typeof CategoryTree>;
+export type CategoryFirstNode = z.infer<typeof CategoryFirstNode>;
+export type CategorySecondNode = z.infer<typeof CategorySecondNode>;
+export type CategoryLeafNode = z.infer<typeof CategoryLeafNode>;
