@@ -8,6 +8,7 @@ import { twMerge } from 'tailwind-merge';
 export default function CategoryNd({
   ndNodeListPath,
   setLeafNodeListPath,
+  valueListPath,
 }: {
   ndNodeListPath: `root.${number}.evaluationList.${number}.category.cascaderTree.${number}.children`;
   setLeafNodeListPath: React.Dispatch<
@@ -16,15 +17,15 @@ export default function CategoryNd({
       | null
     >
   >;
+  valueListPath: `root.${number}.evaluationList.${number}.category.valueList`;
 }) {
-  const { setValue, control, resetField } = useFormContext<TRootCuppingFormSchema>();
+  const { setValue, control, resetField, register } = useFormContext<TRootCuppingFormSchema>();
 
   const ndNodeList = useWatch({ name: ndNodeListPath, control });
 
   // 2뎁스 selected 핸들러
   const handleNdSelected = (
     ndNodeListPath: `root.${number}.evaluationList.${number}.category.cascaderTree.${number}.children`,
-    ndNodePath: `root.${number}.evaluationList.${number}.category.cascaderTree.${number}.children.${number}`,
     selectedPath: `root.${number}.evaluationList.${number}.category.cascaderTree.${number}.children.${number}.selected`,
     childrenPath: `root.${number}.evaluationList.${number}.category.cascaderTree.${number}.children.${number}.children`,
     selected: boolean,
@@ -32,28 +33,35 @@ export default function CategoryNd({
   ) => {
     // 현재 선택된 노드가 있는지 체크
     const currentSelected = ndNodeList.findIndex((node) => node.selected);
-    console.log(currentSelected, selectedIdx);
-    // 선택된 노드 외에 활성화된 노드가 있으면 있으면 해당 노드 리셋
+
+    // valueList 초기화
+
+    register(valueListPath);
+    resetField(valueListPath);
+
+    // 선택된 노드 외에 활성화된 노드가 있으면 있으면 해당 노드 리셋하고 현재 노드 선택
     if (currentSelected !== selectedIdx && currentSelected >= 0) {
-      console.log(`${ndNodeListPath}.${currentSelected}.selected`);
-      resetField(`${ndNodeListPath}.${currentSelected}`);
+      register(ndNodeListPath);
+      resetField(ndNodeListPath);
+      setValue(selectedPath, !selected);
+      setLeafNodeListPath(childrenPath);
+    }
+    // 이미 선택된 노드면 리셋
+    else if (selected) {
+      register(ndNodeListPath);
+      resetField(ndNodeListPath);
       setLeafNodeListPath(null);
     }
-
-    // 이미 선택된 노드면 리셋, 아니면 활성화
-    if (selected) {
-      resetField(selectedPath);
-      resetField(childrenPath);
-      setLeafNodeListPath(null);
-    } else {
+    // 아니면 활성화
+    else {
       setValue(selectedPath, !selected);
       setLeafNodeListPath(childrenPath);
     }
   };
+
   return (
     <article className="flex gap-1">
       {ndNodeList.map(({ id, label, selected }, idx) => {
-        const ndNodePath = `${ndNodeListPath}.${idx}` as const;
         const selectedPath = `${ndNodeListPath}.${idx}.selected` as const;
         const childrenPath = `${ndNodeListPath}.${idx}.children` as const;
 
@@ -62,14 +70,7 @@ export default function CategoryNd({
             key={id}
             className={twMerge(clsx(selected && 'bg-amber-200'), 'border p-2')}
             onClick={() =>
-              handleNdSelected(
-                ndNodeListPath,
-                ndNodePath,
-                selectedPath,
-                childrenPath,
-                selected,
-                idx,
-              )
+              handleNdSelected(ndNodeListPath, selectedPath, childrenPath, selected, idx)
             }
           >
             {label}

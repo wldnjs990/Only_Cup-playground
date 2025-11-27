@@ -55,14 +55,31 @@ export default function CategoryList({
   return (
     <>
       {/* 루트 노드 */}
-      {<CategorySt stNodeListPath={stNodeListPath} setNdNodeListPath={setNdNodeListPath} />}
+      {
+        <CategorySt
+          stNodeListPath={stNodeListPath}
+          setNdNodeListPath={setNdNodeListPath}
+          setLeafNodeListPath={setLeafNodeListPath}
+          valueListPath={valueListPath}
+        />
+      }
       {/* 두번째 노드 */}
       {ndNodeListPath && (
-        <CategoryNd ndNodeListPath={ndNodeListPath} setLeafNodeListPath={setLeafNodeListPath} />
+        <CategoryNd
+          key={ndNodeListPath}
+          ndNodeListPath={ndNodeListPath}
+          setLeafNodeListPath={setLeafNodeListPath}
+          valueListPath={valueListPath}
+        />
       )}
       {/* 리프 노드 */}
       {leafNodeListPath && (
-        <CategoryLeaf leafNodeListPath={leafNodeListPath} valueListPath={valueListPath} />
+        <CategoryLeaf
+          // leafNodeListPath가 바뀌면 다른 필드를 보게 되므로 key로 강제 리마운트(useWatch 새 경로 구독)
+          key={leafNodeListPath}
+          leafNodeListPath={leafNodeListPath}
+          valueListPath={valueListPath}
+        />
       )}
     </>
   );

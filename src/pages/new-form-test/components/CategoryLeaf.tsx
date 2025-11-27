@@ -25,11 +25,15 @@ export default function CategoryLeaf({
             key={id}
             className={twMerge(clsx(selected && 'bg-amber-200'), 'border p-2')}
             onClick={() => {
-              const exist = valueList.findIndex((cur) => cur === value);
-              const updateValueList = valueList.filter((_, idx) => (idx === exist ? true : false));
-              if (exist === -1) updateValueList.push(value);
+              if (selected) {
+                setValue(
+                  valueListPath,
+                  valueList.filter((cur) => value !== cur),
+                );
+              } else {
+                setValue(valueListPath, [...valueList, value]);
+              }
               setValue(selectedPath, !selected);
-              setValue(valueListPath, updateValueList);
             }}
           >
             {label}
