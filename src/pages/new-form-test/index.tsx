@@ -26,7 +26,6 @@ export default function NewFormTest() {
     defaultValues: defaultCuppingFormSchema,
     resolver: RootCuppingFormSchemaZodResolver,
   });
-  console.log(defaultCuppingFormSchema);
 
   const onSubmit: SubmitHandler<TRootCuppingFormSchema> = (data) => {
     console.log(data);

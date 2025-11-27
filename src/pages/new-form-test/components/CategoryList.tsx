@@ -34,12 +34,22 @@ export default function CategoryList({
 
   useEffect(() => {
     // 1뎁스 선택됐는지 확인
-    const selectedIndex = stNodeList.findIndex((stNodeList) => stNodeList.selected);
+    const stSelectedIndex = stNodeList.findIndex((NodeList) => NodeList.selected);
     // 선택된 체크박스 있으면 업데이트 해주기
-    if (selectedIndex !== -1) {
-      setNdNodeListPath(`${stNodeListPath}.${selectedIndex}.children`);
+    if (stSelectedIndex !== -1) {
+      setNdNodeListPath(`${stNodeListPath}.${stSelectedIndex}.children`);
+
+      // useEffect 안에서 다른 훅 사용이 가능하나..? 왜 되는거지? 시점이 안 겹치나?
+      const ndNodeList = getValues(`${stNodeListPath}.${stSelectedIndex}.children`);
+      // 2뎁스 선택됐는지 확인
+      const ndSelectedIndex = ndNodeList.findIndex((NodeList) => NodeList.selected);
+      // 선택된 체크박스 있으면 업데이트 해주기
+      if (ndSelectedIndex !== -1) {
+        setLeafNodeListPath(
+          `${stNodeListPath}.${stSelectedIndex}.children.${ndSelectedIndex}.children`,
+        );
+      }
     }
-    // 2뎁스 선택됐는지 확인
   }, []);
 
   return (

@@ -5,7 +5,6 @@ export const categoryTree: CategoryTree = {
   aroma: [
     {
       id: 1,
-
       selected: false,
       label: '꽃',
       children: [
