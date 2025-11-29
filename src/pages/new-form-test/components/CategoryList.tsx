@@ -12,6 +12,9 @@ export default function CategoryList({
 }) {
   const { getValues } = useFormContext<TRootCuppingFormSchema>();
 
+  // 현재 카테고리명
+  const categoryName = getValues(`${nowCategoryPath}.name`);
+
   // valueList 경로
   const valueListPath = `${nowCategoryPath}.valueList` as const;
 
@@ -22,6 +25,8 @@ export default function CategoryList({
   const [ndNodeListPath, setNdNodeListPath] = useState<
     `root.${number}.evaluationList.${number}.category.cascaderTree.${number}.children` | null
   >(null);
+  // 2뎁스 노드 인덱스(초기화용으로 사용)
+  const [stNodeIdx, setStNodeIdx] = useState<number>(0);
 
   // 리프 노드 주소
   const [leafNodeListPath, setLeafNodeListPath] = useState<
@@ -38,8 +43,10 @@ export default function CategoryList({
     // 선택된 체크박스 있으면 업데이트 해주기
     if (stSelectedIndex !== -1) {
       setNdNodeListPath(`${stNodeListPath}.${stSelectedIndex}.children`);
+      setStNodeIdx(stSelectedIndex);
 
       // useEffect 안에서 다른 훅 사용이 가능하나..? 왜 되는거지? 시점이 안 겹치나?
+      // 생각해보니 커스텀훅 반환값이라서 그냥 메서드일 뿐이겠다.
       const ndNodeList = getValues(`${stNodeListPath}.${stSelectedIndex}.children`);
       // 2뎁스 선택됐는지 확인
       const ndSelectedIndex = ndNodeList.findIndex((NodeList) => NodeList.selected);
@@ -57,16 +64,19 @@ export default function CategoryList({
       {/* 루트 노드 */}
       {
         <CategorySt
+          categoryName={categoryName}
+          setStNodeIdx={setStNodeIdx}
           stNodeListPath={stNodeListPath}
           setNdNodeListPath={setNdNodeListPath}
           setLeafNodeListPath={setLeafNodeListPath}
-          valueListPath={valueListPath}
         />
       }
       {/* 두번째 노드 */}
       {ndNodeListPath && (
         <CategoryNd
-          key={ndNodeListPath}
+          key={ndNodeListPath + stNodeIdx}
+          stNodeIdx={stNodeIdx}
+          categoryName={categoryName}
           ndNodeListPath={ndNodeListPath}
           setLeafNodeListPath={setLeafNodeListPath}
           valueListPath={valueListPath}

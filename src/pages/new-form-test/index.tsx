@@ -33,7 +33,6 @@ export default function NewFormTest() {
   const onError: SubmitErrorHandler<TRootCuppingFormSchema> = (error) => {
     console.error(error);
   };
-
   return (
     <TestFrame>
       <RHFContext methods={methods} onSubmit={onSubmit} onError={onError}>

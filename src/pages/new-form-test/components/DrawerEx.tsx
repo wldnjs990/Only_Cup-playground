@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from 'react';
+import { type ReactNode } from 'react';
 import { Minus, Plus } from 'lucide-react';
 
 import { ButtonCn } from '@/components/ui/button_cn';
@@ -16,19 +16,15 @@ import {
 
 export function DrawerUI({
   children,
+  cuppingCount,
   increaseFunc,
   decreaseFunc,
 }: {
   children: ReactNode;
+  cuppingCount: number;
   increaseFunc: () => void;
   decreaseFunc: (idx: number) => void;
 }) {
-  const [count, setCount] = useState(1);
-
-  function onClick(adjustment: number) {
-    setCount(Math.max(1, Math.min(15, count + adjustment)));
-  }
-
   return (
     <Drawer>
       {/* Drawer 버튼 */}
@@ -47,26 +43,24 @@ export function DrawerUI({
                 size="icon"
                 className="h-8 w-8 shrink-0 rounded-full"
                 onClick={() => {
-                  decreaseFunc(count);
-                  onClick(-1);
+                  decreaseFunc(cuppingCount);
                 }}
-                disabled={count <= 1}
+                disabled={cuppingCount <= 1}
               >
                 <Minus />
                 <span className="sr-only">Decrease</span>
               </ButtonCn>
               <div className="flex-1 text-center">
-                <div className="text-7xl font-bold tracking-tighter">{count}</div>
+                <div className="text-7xl font-bold tracking-tighter">{cuppingCount}</div>
               </div>
               <ButtonCn
                 variant="outline"
                 size="icon"
                 className="h-8 w-8 shrink-0 rounded-full"
                 onClick={() => {
-                  onClick(1);
                   increaseFunc();
                 }}
-                disabled={count >= 15}
+                disabled={cuppingCount >= 15}
               >
                 <Plus />
                 <span className="sr-only">Increase</span>

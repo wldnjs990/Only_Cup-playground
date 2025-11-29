@@ -22,7 +22,7 @@ export default function CategoryLeaf({
 
         return (
           <ButtonCn
-            key={id}
+            key={id + label}
             className={twMerge(clsx(selected && 'bg-amber-200'), 'border p-2')}
             onClick={() => {
               if (selected) {

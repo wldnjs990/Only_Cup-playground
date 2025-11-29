@@ -1,15 +1,19 @@
 import { ButtonCn } from '@/components/ui/button_cn';
-import type { TRootCuppingFormSchema } from '@/types/new/new_form_schema';
+import { categoryTree } from '@/constants/new/category_tree';
+import type { CategoryName, TRootCuppingFormSchema } from '@/types/new/new_form_schema';
 import clsx from 'clsx';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { twMerge } from 'tailwind-merge';
 
 export default function CategorySt({
+  categoryName,
+  setStNodeIdx,
   stNodeListPath,
   setNdNodeListPath,
   setLeafNodeListPath,
-  valueListPath,
 }: {
+  categoryName: CategoryName;
+  setStNodeIdx: React.Dispatch<React.SetStateAction<number>>;
   stNodeListPath: `root.${number}.evaluationList.${number}.category.cascaderTree`;
   setNdNodeListPath: React.Dispatch<
     React.SetStateAction<
@@ -22,9 +26,8 @@ export default function CategorySt({
       | null
     >
   >;
-  valueListPath: `root.${number}.evaluationList.${number}.category.valueList`;
 }) {
-  const { setValue, control, register, resetField } = useFormContext<TRootCuppingFormSchema>();
+  const { setValue, control } = useFormContext<TRootCuppingFormSchema>();
 
   const stNodeList = useWatch({ name: stNodeListPath, control });
 
@@ -36,33 +39,32 @@ export default function CategorySt({
     selected: boolean,
     selectedIdx: number,
   ) => {
+    // 초기화용 categoryTree 상수
+    const initialCategory = categoryTree[categoryName];
+
     // 현재 선택된 노드가 있는지 체크
     const currentSelected = stNodeList.findIndex((node) => node.selected);
-
-    // valueList 초기화
-    register(valueListPath);
-    resetField(valueListPath);
 
     // leafNode 초기화
     setLeafNodeListPath(null);
 
     // 선택된 노드 외에 활성화된 노드가 있으면 있으면 해당 노드 리셋하고 현재 노드 선택
     if (currentSelected !== selectedIdx && currentSelected >= 0) {
-      register(stNodeListPath);
-      resetField(stNodeListPath);
+      setValue(stNodeListPath, initialCategory);
       setValue(selectedPath, !selected);
       setNdNodeListPath(childrenPath);
+      setStNodeIdx(selectedIdx);
     }
     // 이미 선택된 노드면 리셋
     else if (selected) {
-      register(stNodeListPath);
-      resetField(stNodeListPath);
+      setValue(stNodeListPath, initialCategory);
       setNdNodeListPath(null);
     }
     // 아니면 활성화
     else {
       setValue(selectedPath, !selected);
       setNdNodeListPath(childrenPath);
+      setStNodeIdx(selectedIdx);
     }
   };
 
@@ -74,7 +76,7 @@ export default function CategorySt({
 
         return (
           <ButtonCn
-            key={id}
+            key={id + label + categoryName}
             className={twMerge(clsx(selected && 'bg-amber-200'), 'border p-2')}
             onClick={() =>
               handleStSelected(stNodeListPath, selectedPath, childrenPath, selected, idx)

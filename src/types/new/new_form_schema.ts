@@ -61,8 +61,11 @@ const CategoryFirstNode = z.object({
   children: z.array(CategorySecondNode),
 });
 
+const CategoryName = z.enum(['aroma', 'taste', 'acidity', 'switness', 'mouthfeel']);
+
 const Category = z.object({
   inputType: InputType,
+  name: CategoryName,
   label: z.string(),
   required: z.boolean(),
   cascaderTree: z.array(CategoryFirstNode),
@@ -178,3 +181,5 @@ export type CategoryTree = z.infer<typeof CategoryTree>;
 export type CategoryFirstNode = z.infer<typeof CategoryFirstNode>;
 export type CategorySecondNode = z.infer<typeof CategorySecondNode>;
 export type CategoryLeafNode = z.infer<typeof CategoryLeafNode>;
+
+export type CategoryName = z.infer<typeof CategoryName>;
