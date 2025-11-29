@@ -10,7 +10,6 @@ export default function EvaluationContent({
   evaluationListPath: `root.${number}.evaluationList`;
 }) {
   const { getValues } = useFormContext<TRootCuppingFormSchema>();
-  console.log(getValues());
 
   // 일단 평가순서는 고정요소로 박아두자
   const [eIdx, setEIdx] = useState<number>(0);

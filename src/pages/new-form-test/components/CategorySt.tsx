@@ -5,13 +5,17 @@ import clsx from 'clsx';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { twMerge } from 'tailwind-merge';
 
-export default function CategorySt({
-  categoryName,
-  setStNodeIdx,
-  stNodeListPath,
-  setNdNodeListPath,
-  setLeafNodeListPath,
-}: {
+// 1뎁스 selected 핸들러 타입
+type T_HandleStNodeClick = (
+  stNodeListPath: `root.${number}.evaluationList.${number}.category.cascaderTree`,
+  selectedPath: `root.${number}.evaluationList.${number}.category.cascaderTree.${number}.selected`,
+  childrenPath: `root.${number}.evaluationList.${number}.category.cascaderTree.${number}.children`,
+  selected: boolean,
+  selectedIdx: number,
+) => void;
+
+// props 타입
+interface T_CategorySt {
   categoryName: CategoryName;
   setStNodeIdx: React.Dispatch<React.SetStateAction<number>>;
   stNodeListPath: `root.${number}.evaluationList.${number}.category.cascaderTree`;
@@ -26,18 +30,26 @@ export default function CategorySt({
       | null
     >
   >;
-}) {
+}
+
+export default function CategorySt({
+  categoryName,
+  setStNodeIdx,
+  stNodeListPath,
+  setNdNodeListPath,
+  setLeafNodeListPath,
+}: T_CategorySt) {
   const { setValue, control } = useFormContext<TRootCuppingFormSchema>();
 
   const stNodeList = useWatch({ name: stNodeListPath, control });
 
   // 1뎁스 selected 핸들러
-  const handleStSelected = (
-    stNodeListPath: `root.${number}.evaluationList.${number}.category.cascaderTree`,
-    selectedPath: `root.${number}.evaluationList.${number}.category.cascaderTree.${number}.selected`,
-    childrenPath: `root.${number}.evaluationList.${number}.category.cascaderTree.${number}.children`,
-    selected: boolean,
-    selectedIdx: number,
+  const handleStNodeClick: T_HandleStNodeClick = (
+    stNodeListPath,
+    selectedPath,
+    childrenPath,
+    selected,
+    selectedIdx,
   ) => {
     // 초기화용 categoryTree 상수
     const initialCategory = categoryTree[categoryName];
@@ -79,7 +91,7 @@ export default function CategorySt({
             key={id + label + categoryName}
             className={twMerge(clsx(selected && 'bg-amber-200'), 'border p-2')}
             onClick={() =>
-              handleStSelected(stNodeListPath, selectedPath, childrenPath, selected, idx)
+              handleStNodeClick(stNodeListPath, selectedPath, childrenPath, selected, idx)
             }
           >
             {label}

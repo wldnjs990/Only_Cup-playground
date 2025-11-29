@@ -2,17 +2,20 @@ import { ButtonCn } from '@/components/ui/button_cn';
 import { categoryTree } from '@/constants/new/category_tree';
 import type { CategoryName, TRootCuppingFormSchema } from '@/types/new/new_form_schema';
 import clsx from 'clsx';
-import React, { useEffect } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { twMerge } from 'tailwind-merge';
 
-export default function CategoryNd({
-  stNodeIdx,
-  categoryName,
-  ndNodeListPath,
-  setLeafNodeListPath,
-  valueListPath,
-}: {
+// 2뎁스 selected 핸들러 타입
+type T_HandleNdNodeClick = (
+  ndNodeListPath: `root.${number}.evaluationList.${number}.category.cascaderTree.${number}.children`,
+  selectedPath: `root.${number}.evaluationList.${number}.category.cascaderTree.${number}.children.${number}.selected`,
+  childrenPath: `root.${number}.evaluationList.${number}.category.cascaderTree.${number}.children.${number}.children`,
+  selected: boolean,
+  selectedIdx: number,
+) => void;
+
+// props 타입
+interface T_CategoryNd {
   stNodeIdx: number;
   categoryName: CategoryName;
   ndNodeListPath: `root.${number}.evaluationList.${number}.category.cascaderTree.${number}.children`;
@@ -23,21 +26,26 @@ export default function CategoryNd({
     >
   >;
   valueListPath: `root.${number}.evaluationList.${number}.category.valueList`;
-}) {
-  useEffect(() => {
-    console.log(stNodeIdx);
-  });
+}
+
+export default function CategoryNd({
+  stNodeIdx,
+  categoryName,
+  ndNodeListPath,
+  setLeafNodeListPath,
+  valueListPath,
+}: T_CategoryNd) {
   const { setValue, control } = useFormContext<TRootCuppingFormSchema>();
 
   const ndNodeList = useWatch({ name: ndNodeListPath, control });
 
   // 2뎁스 selected 핸들러
-  const handleNdSelected = (
-    ndNodeListPath: `root.${number}.evaluationList.${number}.category.cascaderTree.${number}.children`,
-    selectedPath: `root.${number}.evaluationList.${number}.category.cascaderTree.${number}.children.${number}.selected`,
-    childrenPath: `root.${number}.evaluationList.${number}.category.cascaderTree.${number}.children.${number}.children`,
-    selected: boolean,
-    selectedIdx: number,
+  const handleNdNodeClick: T_HandleNdNodeClick = (
+    ndNodeListPath,
+    selectedPath,
+    childrenPath,
+    selected,
+    selectedIdx,
   ) => {
     // 초기화용 categoryTree 상수
     const initialCategory = categoryTree[categoryName][stNodeIdx].children;
@@ -84,7 +92,7 @@ export default function CategoryNd({
             key={id + label + categoryName}
             className={twMerge(clsx(selected && 'bg-amber-200'), 'border p-2')}
             onClick={() =>
-              handleNdSelected(ndNodeListPath, selectedPath, childrenPath, selected, idx)
+              handleNdNodeClick(ndNodeListPath, selectedPath, childrenPath, selected, idx)
             }
           >
             {label}
