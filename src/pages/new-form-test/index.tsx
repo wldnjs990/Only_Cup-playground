@@ -26,7 +26,6 @@ export default function NewFormTest() {
     defaultValues: defaultCuppingFormSchema,
     resolver: RootCuppingFormSchemaZodResolver,
   });
-  console.log(defaultCuppingFormSchema);
 
   const onSubmit: SubmitHandler<TRootCuppingFormSchema> = (data) => {
     console.log(data);
@@ -34,7 +33,6 @@ export default function NewFormTest() {
   const onError: SubmitErrorHandler<TRootCuppingFormSchema> = (error) => {
     console.error(error);
   };
-
   return (
     <TestFrame>
       <RHFContext methods={methods} onSubmit={onSubmit} onError={onError}>

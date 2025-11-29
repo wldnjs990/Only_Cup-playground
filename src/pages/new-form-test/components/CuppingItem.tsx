@@ -2,9 +2,8 @@ import onlycup_logo_200 from '@/assets/images/onlycup_logo_200.png';
 import { SelectInput } from '@/components/SelectInput';
 import TextInput from '@/components/TextInput';
 import type { TRootCuppingFormSchema } from '@/types/new/new_form_schema';
-import { useFormContext, type FieldPath } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 import { EvaluationDrawer } from './EvaluationDrawer';
-import EvaluationContent from './EvaluationContent';
 import useNewFormStore from '@/store/newFormStore';
 
 export default function CuppingItem({ idx }: { idx: number }) {

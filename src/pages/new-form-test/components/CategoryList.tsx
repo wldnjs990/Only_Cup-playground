@@ -1,58 +1,96 @@
-import { ButtonCn } from '@/components/ui/button_cn';
-import type {
-  CategoryFirstNode,
-  CategoryLeafNode,
-  CategorySecondNode,
-  TRootCuppingFormSchema,
-} from '@/types/new/new_form_schema';
-import { useState } from 'react';
+import type { TRootCuppingFormSchema } from '@/types/new/new_form_schema';
+import { useEffect, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
+import CategorySt from './CategorySt';
+import CategoryNd from './CategoryNd';
+import CategoryLeaf from './CategoryLeaf';
 
 export default function CategoryList({
   nowCategoryPath,
 }: {
   nowCategoryPath: `root.${number}.evaluationList.${number}.category`;
 }) {
-  const categoryType = ['aroma', 'taste', 'acidity', 'switness', 'mouthfeel'] as const;
-
-  // 현재 카테고리
-  const [nowCategory, setNowCategory] = useState<number>(0);
-
   const { getValues } = useFormContext<TRootCuppingFormSchema>();
 
-  const stNodeListPath = `${nowCategoryPath}.cascaderTree.${categoryType[nowCategory]}` as const;
+  // 현재 카테고리명
+  const categoryName = getValues(`${nowCategoryPath}.name`);
+
+  // valueList 경로
+  const valueListPath = `${nowCategoryPath}.valueList` as const;
+
+  // 1뎁스 노드 주소
+  const stNodeListPath = `${nowCategoryPath}.cascaderTree` as const;
+
+  // 2뎁스 노드 주소
+  const [ndNodeListPath, setNdNodeListPath] = useState<
+    `root.${number}.evaluationList.${number}.category.cascaderTree.${number}.children` | null
+  >(null);
+  // 2뎁스 노드 인덱스(초기화용으로 사용)
+  const [stNodeIdx, setStNodeIdx] = useState<number>(0);
+
+  // 리프 노드 주소
+  const [leafNodeListPath, setLeafNodeListPath] = useState<
+    | `root.${number}.evaluationList.${number}.category.cascaderTree.${number}.children.${number}.children`
+    | null
+  >(null);
+
+  // selected 확인용 1뎁스 노드
   const stNodeList = getValues(stNodeListPath);
-  const {} = stNodeList;
+
+  useEffect(() => {
+    // 1뎁스 선택됐는지 확인
+    const stSelectedIndex = stNodeList.findIndex((NodeList) => NodeList.selected);
+    // 선택된 체크박스 있으면 업데이트 해주기
+    if (stSelectedIndex !== -1) {
+      setNdNodeListPath(`${stNodeListPath}.${stSelectedIndex}.children`);
+      setStNodeIdx(stSelectedIndex);
+
+      // useEffect 안에서 다른 훅 사용이 가능하나..? 왜 되는거지? 시점이 안 겹치나?
+      // 생각해보니 커스텀훅 반환값이라서 그냥 메서드일 뿐이겠다.
+      const ndNodeList = getValues(`${stNodeListPath}.${stSelectedIndex}.children`);
+      // 2뎁스 선택됐는지 확인
+      const ndSelectedIndex = ndNodeList.findIndex((NodeList) => NodeList.selected);
+      // 선택된 체크박스 있으면 업데이트 해주기
+      if (ndSelectedIndex !== -1) {
+        setLeafNodeListPath(
+          `${stNodeListPath}.${stSelectedIndex}.children.${ndSelectedIndex}.children`,
+        );
+      }
+    }
+  }, []);
 
   return (
     <>
       {/* 루트 노드 */}
-      {stNodeList.map(({ id, label, children }) => {
-        return (
-          <ButtonCn key={id} className="border p-2" onClick={() => setNdNodeList(children)}>
-            {label}
-          </ButtonCn>
-        );
-      })}
+      {
+        <CategorySt
+          categoryName={categoryName}
+          setStNodeIdx={setStNodeIdx}
+          stNodeListPath={stNodeListPath}
+          setNdNodeListPath={setNdNodeListPath}
+          setLeafNodeListPath={setLeafNodeListPath}
+        />
+      }
       {/* 두번째 노드 */}
-      {ndNodeList &&
-        !leafNodeList &&
-        ndNodeList.map(({ id, label, children }) => {
-          return (
-            <ButtonCn key={id} className="border p-2" onClick={() => setLeafNodeList(children)}>
-              {label}
-            </ButtonCn>
-          );
-        })}
+      {ndNodeListPath && (
+        <CategoryNd
+          key={ndNodeListPath + stNodeIdx}
+          stNodeIdx={stNodeIdx}
+          categoryName={categoryName}
+          ndNodeListPath={ndNodeListPath}
+          setLeafNodeListPath={setLeafNodeListPath}
+          valueListPath={valueListPath}
+        />
+      )}
       {/* 리프 노드 */}
-      {leafNodeList &&
-        leafNodeList.map(({ id, label, value }) => {
-          return (
-            <ButtonCn key={id} className={'border p-2'} onClick={() => handleLeafValue(value)}>
-              {label}
-            </ButtonCn>
-          );
-        })}
+      {leafNodeListPath && (
+        <CategoryLeaf
+          // leafNodeListPath가 바뀌면 다른 필드를 보게 되므로 key로 강제 리마운트(useWatch 새 경로 구독)
+          key={leafNodeListPath}
+          leafNodeListPath={leafNodeListPath}
+          valueListPath={valueListPath}
+        />
+      )}
     </>
   );
 }

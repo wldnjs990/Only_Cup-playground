@@ -33,7 +33,7 @@ export default function SettingPage() {
     increaseCuppingCount();
   };
   const CuppingFormDecrease = (idx: number) => {
-    remove(idx);
+    remove(idx - 1);
     decreaseCuppingCount();
   };
 
@@ -65,7 +65,11 @@ export default function SettingPage() {
 
       <div className="flex flex-col gap-4">
         {step == 1 && (
-          <DrawerUI increaseFunc={CuppingFormIncrease} decreaseFunc={CuppingFormDecrease}>
+          <DrawerUI
+            cuppingCount={cuppingCount}
+            increaseFunc={CuppingFormIncrease}
+            decreaseFunc={CuppingFormDecrease}
+          >
             <ButtonCn>커핑 갯수 설정</ButtonCn>
           </DrawerUI>
         )}

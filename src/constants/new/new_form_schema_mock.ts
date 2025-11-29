@@ -44,6 +44,7 @@ export const NEW_FORM_SCHEMA: TCuppingFormSchema = {
       // 연쇄 선택 ui 데이터
       category: {
         inputType: 'cascader',
+        name: 'aroma',
         label: '해당되는 기술어를 선택해주세요!',
         required: true,
         cascaderTree: categoryTree.aroma,
@@ -63,6 +64,7 @@ export const NEW_FORM_SCHEMA: TCuppingFormSchema = {
       label: '커피에서 어떤 맛이 느껴지시나요?',
       category: {
         inputType: 'cascader',
+        name: 'taste',
         label: '해당되는 기술어를 선택해주세요!',
         required: true,
         cascaderTree: categoryTree.taste,
@@ -80,6 +82,7 @@ export const NEW_FORM_SCHEMA: TCuppingFormSchema = {
       label: '커피에서 산미가 느껴지시나요?',
       category: {
         inputType: 'cascader',
+        name: 'acidity',
         label: '해당되는 기술어를 선택해주세요!',
         required: true,
         cascaderTree: categoryTree.acidity,
@@ -97,6 +100,7 @@ export const NEW_FORM_SCHEMA: TCuppingFormSchema = {
       label: '커피에서 느껴지는 단 맛이 있나요?',
       category: {
         inputType: 'cascader',
+        name: 'switness',
         label: '해당되는 기술어를 선택해주세요!',
         required: true,
         cascaderTree: categoryTree.switness,
@@ -114,10 +118,11 @@ export const NEW_FORM_SCHEMA: TCuppingFormSchema = {
       label: '커피를 마신 후 느껴지는 여운이 있나요?',
       category: {
         inputType: 'cascader',
+        name: 'mouthfeel',
         label: '해당되는 기술어를 선택해주세요!',
         required: true,
         cascaderTree: categoryTree.mouthfeel,
-        valueList: []
+        valueList: [],
       },
       detailEvaluation: {
         label: '선택하신 기술어에 대해 자세히 평가해주세요!',
