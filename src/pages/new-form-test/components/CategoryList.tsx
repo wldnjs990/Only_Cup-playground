@@ -7,8 +7,10 @@ import CategoryLeaf from './CategoryLeaf';
 
 export default function CategoryList({
   nowCategoryPath,
+  nowDetailPath,
 }: {
   nowCategoryPath: `root.${number}.evaluationList.${number}.category`;
+  nowDetailPath: `root.${number}.evaluationList.${number}.detailEvaluation`;
 }) {
   const { getValues } = useFormContext<TRootCuppingFormSchema>();
 
@@ -36,6 +38,9 @@ export default function CategoryList({
 
   // selected 확인용 1뎁스 노드
   const stNodeList = getValues(stNodeListPath);
+
+  // 카테고리 상세평가 경로(초기화용)
+  const nowCategoryEvaluationListPath = `${nowDetailPath}.categoryEvaluationList` as const;
 
   useEffect(() => {
     // 1뎁스 선택됐는지 확인
@@ -69,6 +74,7 @@ export default function CategoryList({
           stNodeListPath={stNodeListPath}
           setNdNodeListPath={setNdNodeListPath}
           setLeafNodeListPath={setLeafNodeListPath}
+          nowCategoryEvaluationListPath={nowCategoryEvaluationListPath}
         />
       }
       {/* 두번째 노드 */}
@@ -80,6 +86,7 @@ export default function CategoryList({
           ndNodeListPath={ndNodeListPath}
           setLeafNodeListPath={setLeafNodeListPath}
           valueListPath={valueListPath}
+          nowCategoryEvaluationListPath={nowCategoryEvaluationListPath}
         />
       )}
       {/* 리프 노드 */}
@@ -89,6 +96,7 @@ export default function CategoryList({
           key={leafNodeListPath}
           leafNodeListPath={leafNodeListPath}
           valueListPath={valueListPath}
+          nowCategoryEvaluationListPath={nowCategoryEvaluationListPath}
         />
       )}
     </>

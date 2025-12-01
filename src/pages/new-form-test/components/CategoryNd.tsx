@@ -26,6 +26,7 @@ interface T_CategoryNd {
     >
   >;
   valueListPath: `root.${number}.evaluationList.${number}.category.valueList`;
+  nowCategoryEvaluationListPath: `root.${number}.evaluationList.${number}.detailEvaluation.categoryEvaluationList`;
 }
 
 export default function CategoryNd({
@@ -34,6 +35,7 @@ export default function CategoryNd({
   ndNodeListPath,
   setLeafNodeListPath,
   valueListPath,
+  nowCategoryEvaluationListPath,
 }: T_CategoryNd) {
   const { setValue, control } = useFormContext<TRootCuppingFormSchema>();
 
@@ -55,6 +57,8 @@ export default function CategoryNd({
 
     // valueList 필드 초기화
     setValue(valueListPath, []);
+    // CategoryEvaluationList 필드 초기화
+    setValue(nowCategoryEvaluationListPath, []);
 
     // 선택된 노드 외에 활성화된 노드가 있으면 있으면 해당 노드 리셋하고 현재 노드 선택
     if (currentSelected !== selectedIdx && currentSelected >= 0) {

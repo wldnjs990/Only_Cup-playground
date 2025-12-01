@@ -5,13 +5,13 @@ import {
   type SubmitHandler,
 } from 'react-hook-form';
 import TestFrame from './components/TestFrame';
-import SettingPage from './SettingPage';
 import {
   RootCuppingFormSchemaZodResolver,
   type TRootCuppingFormSchema,
 } from '@/types/new/new_form_schema';
 import RHFContext from '@/components/RHFContext';
 import { NEW_FORM_SCHEMA } from '@/constants/new/new_form_schema_mock';
+import CuppingPage from './CuppingPage';
 
 // useForm 사용시 타입추론을 위해 TRootCuppingFormSchema 타입을 FieldValues와 합쳐 추론 가능한 스키마 타입으로 만들어줌
 interface RHFRootCuppingFormSchema extends FieldValues, TRootCuppingFormSchema {}
@@ -28,6 +28,7 @@ export default function NewFormTest() {
   });
 
   const onSubmit: SubmitHandler<TRootCuppingFormSchema> = (data) => {
+    console.log('submit 발동됨.');
     console.log(data);
   };
   const onError: SubmitErrorHandler<TRootCuppingFormSchema> = (error) => {
@@ -36,7 +37,7 @@ export default function NewFormTest() {
   return (
     <TestFrame>
       <RHFContext methods={methods} onSubmit={onSubmit} onError={onError}>
-        <SettingPage />
+        <CuppingPage />
       </RHFContext>
     </TestFrame>
   );

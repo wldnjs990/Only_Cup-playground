@@ -1,14 +1,13 @@
 import { useFieldArray, useFormContext, type FieldPath } from 'react-hook-form';
-import { DrawerUI } from './components/DrawerEx';
+import { SettingDrawer } from './components/SettingDrawerEx';
 import type { TRootCuppingFormSchema } from '@/types/new/new_form_schema';
 import CuppingItem from './components/CuppingItem';
 import { ButtonCn } from '@/components/ui/button_cn';
 import { NEW_FORM_SCHEMA } from '@/constants/new/new_form_schema_mock';
 import useNewFormStore from '@/store/newFormStore';
 
-export default function SettingPage() {
-  const { control, trigger } = useFormContext<TRootCuppingFormSchema>();
-
+export default function CuppingPage() {
+  // store
   const step = useNewFormStore((state) => state.step);
   const nextstep = useNewFormStore((state) => state.nextstep);
   const prevstep = useNewFormStore((state) => state.prevstep);
@@ -17,7 +16,10 @@ export default function SettingPage() {
   const increaseCuppingCount = useNewFormStore((state) => state.increaseCuppingCount);
   const decreaseCuppingCount = useNewFormStore((state) => state.decreaseCuppingCount);
 
-  // 동적 스키마 필드
+  // rhf context
+  const { control, trigger } = useFormContext<TRootCuppingFormSchema>();
+
+  // rhf 동적 스키마 필드
   const {
     fields: F_root,
     append,
@@ -37,7 +39,9 @@ export default function SettingPage() {
     decreaseCuppingCount();
   };
 
-  const validateAndGoNextStep = async () => {
+  // 커핑 기본 정보 검증 후 다음 스텝 이동
+  // TODO : 따로 함수 ts 파일에 분리해두기
+  const validateBasicInfoAndGoNextStep = async () => {
     // TODO: 않이 이거 타입 맞는데 왜이래 타입단언해야하나.. => 타입단언했는데 무슨 해결책 없나
     const pathArr = new Array(cuppingCount)
       .fill(0)
@@ -63,19 +67,21 @@ export default function SettingPage() {
         </ul>
       </div>
 
+      {/* 버튼 영역 */}
       <div className="flex flex-col gap-4">
+        {/* 1페이지 */}
         {step == 1 && (
-          <DrawerUI
+          <SettingDrawer
             cuppingCount={cuppingCount}
             increaseFunc={CuppingFormIncrease}
             decreaseFunc={CuppingFormDecrease}
           >
             <ButtonCn>커핑 갯수 설정</ButtonCn>
-          </DrawerUI>
+          </SettingDrawer>
         )}
-        {/* 1페이지 */}
-        {step == 1 && <ButtonCn onClick={validateAndGoNextStep}>시작!</ButtonCn>}
+        {step == 1 && <ButtonCn onClick={validateBasicInfoAndGoNextStep}>시작!</ButtonCn>}
         {/* 2페이지 */}
+        {step == 2 && <ButtonCn>평가 완료!</ButtonCn>}
         {step == 2 && <ButtonCn onClick={goPrevStep}>뒤로가기</ButtonCn>}
       </div>
     </section>

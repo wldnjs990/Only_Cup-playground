@@ -1,4 +1,4 @@
-import { type ReactNode } from 'react';
+import { useRef, type ReactNode } from 'react';
 import { Minus, Plus } from 'lucide-react';
 
 import { ButtonCn } from '@/components/ui/button_cn';
@@ -14,7 +14,7 @@ import {
   DrawerTrigger,
 } from '@/components/ui/drawer';
 
-export function DrawerUI({
+export function SettingDrawer({
   children,
   cuppingCount,
   increaseFunc,
@@ -25,8 +25,26 @@ export function DrawerUI({
   increaseFunc: () => void;
   decreaseFunc: (idx: number) => void;
 }) {
+  const firstFocusRef = useRef<HTMLButtonElement | null>(null);
+
+  const openChangeHandler = (open: boolean) => {
+    // Vaul이 만든 drawer 라이브러리엔 접근성 관련해서 버그가 있음
+    // drawer가 켜질때, focus를 drawer로 고정해야 하기 때문에 #root 영역에 aria-hidden을 걸고, drawer는 body 바깥에 활성화시킴
+    // 그런데, body 안에 존재하는 shadcn의 버튼 컴포넌트가 focus를 계속 가지고 있어서 치명적인 접근성 오류를 발생시킴(drawer 올라왔는데도, 가려져야할 버튼이 포커싱됨)
+    // 그래서 아래처럼 drawer를 열때, 강제로 focus를 drawer로 맞춰주는 함수를 집어넣는 방법이 있음
+    if (open) {
+      // 1. 기존 포커스(트리거 등) blur
+      const active = document.activeElement as HTMLElement | null;
+      active?.blur();
+      // 2. 드로어 안의 특정 요소로 포커스 이동
+      queueMicrotask(() => {
+        firstFocusRef.current?.focus();
+      });
+    }
+  };
+
   return (
-    <Drawer>
+    <Drawer onOpenChange={openChangeHandler}>
       {/* Drawer 버튼 */}
       <DrawerTrigger asChild>{children}</DrawerTrigger>
       {/* Drawer 컨텐츠 */}
@@ -38,7 +56,9 @@ export function DrawerUI({
           </DrawerHeader>
           <div className="p-4 pb-0">
             <div className="flex items-center justify-center space-x-2">
+              {/* 가장 첫 번째 포커스를 이곳으로 지정하기 위한 ref 객체 */}
               <ButtonCn
+                ref={firstFocusRef}
                 variant="outline"
                 size="icon"
                 className="h-8 w-8 shrink-0 rounded-full"
