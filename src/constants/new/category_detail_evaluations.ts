@@ -1,21 +1,28 @@
-export const category_evaluations = (category: string, categoryName: string) => {
-  const detail_evaluations = {
+import type { CategoryEvaluations } from '@/types/new/new_form_schema';
+
+const createDetailEvaluations = (category: string, categoryName: string) => {
+  const detailEvaluations: CategoryEvaluations = {
     // 선택한 카테고리 이름
     title: categoryName,
     value: category,
     // 강도 평가
     intensity: {
       title: '강도(Intensity)',
-      type: 'radio',
+      inputType: 'radio',
       required: false,
-      value: 1,
-      label: '낮음',
+      value: 'mid',
+      optionList: [
+        // shadCn의 radio-group은 value를 문자열만 취급함
+        { label: '낮음', value: 'low' },
+        { label: '중간', value: 'mid' },
+        { label: '높음', value: 'high' },
+      ],
       tooltip: '선택하신 카테고리가 감각적으로 얼마나 뚜렷하고 강하게 느껴지는지를 평가해주세요.',
     },
     // 정동 평가
     affectiveScore: {
       title: '개인 점수',
-      type: 'slider',
+      inputType: 'slider',
       required: false,
       tooltip: '선택하신 카테고리에 대한 개인적인 선호도를 평가해주세요.',
       value: 5,
@@ -26,12 +33,14 @@ export const category_evaluations = (category: string, categoryName: string) => 
     // 평가 다 끝나고 추가 가능한데, 일단 만들어놓기만
     affectiveNote: {
       title: '세부 묘사',
-      type: 'text',
+      inputType: 'text',
       required: false,
       tooltip: '선택하신 카테고리의 세부적인 느낌을 적는 공간압니다.',
       value: '',
     },
   };
 
-  return detail_evaluations;
+  return detailEvaluations;
 };
+
+export default createDetailEvaluations;

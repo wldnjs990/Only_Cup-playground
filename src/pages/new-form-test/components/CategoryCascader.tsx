@@ -1,11 +1,14 @@
 import type { TRootCuppingFormSchema } from '@/types/new/new_form_schema';
 import { useFormContext } from 'react-hook-form';
 import CategoryList from './CategoryList';
+import RequiredIcon from '@/components/RequiredIcon';
 
 export default function CategoryCascader({
   nowCategoryPath,
+  nowDetailPath,
 }: {
   nowCategoryPath: `root.${number}.evaluationList.${number}.category`;
+  nowDetailPath: `root.${number}.evaluationList.${number}.detailEvaluation`;
 }) {
   const { getValues } = useFormContext<TRootCuppingFormSchema>();
 
@@ -17,10 +20,10 @@ export default function CategoryCascader({
     <article>
       <div className="flex gap-2">
         <h3>{categoryLabel}</h3>
-        {required && <span className="text-red-600">*</span>}
+        <RequiredIcon required={required} />
       </div>
       <article className="flex flex-wrap">
-        <CategoryList nowCategoryPath={nowCategoryPath} />
+        <CategoryList nowCategoryPath={nowCategoryPath} nowDetailPath={nowDetailPath} />
       </article>
     </article>
   );

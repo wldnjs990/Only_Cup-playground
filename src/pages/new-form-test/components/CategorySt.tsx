@@ -30,6 +30,7 @@ interface T_CategorySt {
       | null
     >
   >;
+  nowCategoryEvaluationListPath: `root.${number}.evaluationList.${number}.detailEvaluation.categoryEvaluationList`;
 }
 
 export default function CategorySt({
@@ -38,6 +39,7 @@ export default function CategorySt({
   stNodeListPath,
   setNdNodeListPath,
   setLeafNodeListPath,
+  nowCategoryEvaluationListPath,
 }: T_CategorySt) {
   const { setValue, control } = useFormContext<TRootCuppingFormSchema>();
 
@@ -59,6 +61,8 @@ export default function CategorySt({
 
     // leafNode 초기화
     setLeafNodeListPath(null);
+    // CategoryEvaluationList 필드 초기화
+    setValue(nowCategoryEvaluationListPath, []);
 
     // 선택된 노드 외에 활성화된 노드가 있으면 있으면 해당 노드 리셋하고 현재 노드 선택
     if (currentSelected !== selectedIdx && currentSelected >= 0) {

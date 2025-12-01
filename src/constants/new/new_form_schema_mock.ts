@@ -54,7 +54,7 @@ export const NEW_FORM_SCHEMA: TCuppingFormSchema = {
       // 카테고리 선택시 동적으로 생성되는 스키마(강도평가, 정동평가)
       detailEvaluation: {
         label: '선택하신 기술어에 대해 자세히 평가해주세요!',
-        category_evaluations: [],
+        categoryEvaluationList: [],
       },
     },
     // 맛
@@ -72,7 +72,7 @@ export const NEW_FORM_SCHEMA: TCuppingFormSchema = {
       },
       detailEvaluation: {
         label: '선택하신 기술어에 대해 자세히 평가해주세요!',
-        category_evaluations: [],
+        categoryEvaluationList: [],
       },
     },
     // 산미
@@ -90,7 +90,7 @@ export const NEW_FORM_SCHEMA: TCuppingFormSchema = {
       },
       detailEvaluation: {
         label: '선택하신 기술어에 대해 자세히 평가해주세요!',
-        category_evaluations: [],
+        categoryEvaluationList: [],
       },
     },
     // 단 맛
@@ -108,7 +108,7 @@ export const NEW_FORM_SCHEMA: TCuppingFormSchema = {
       },
       detailEvaluation: {
         label: '선택하신 기술어에 대해 자세히 평가해주세요!',
-        category_evaluations: [],
+        categoryEvaluationList: [],
       },
     },
     // 마우스필
@@ -126,7 +126,7 @@ export const NEW_FORM_SCHEMA: TCuppingFormSchema = {
       },
       detailEvaluation: {
         label: '선택하신 기술어에 대해 자세히 평가해주세요!',
-        category_evaluations: [],
+        categoryEvaluationList: [],
       },
     },
   ],
