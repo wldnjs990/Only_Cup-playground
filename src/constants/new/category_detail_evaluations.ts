@@ -1,4 +1,5 @@
 import type { CategoryEvaluations } from '@/types/new/new_form_schema';
+import { affectiveExplainList } from './affectiveExplainList';
 
 const createDetailEvaluations = (category: string, categoryName: string) => {
   const detailEvaluations: CategoryEvaluations = {
@@ -25,6 +26,7 @@ const createDetailEvaluations = (category: string, categoryName: string) => {
       inputType: 'slider',
       required: false,
       tooltip: '선택하신 카테고리에 대한 개인적인 선호도를 평가해주세요.',
+      explainList: affectiveExplainList,
       value: 5,
       min: 1,
       max: 10,

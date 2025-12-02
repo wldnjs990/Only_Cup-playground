@@ -93,12 +93,21 @@ const Intensity = z.object({
   optionList: IntensityOptionList,
   tooltip: z.string(),
 });
+
+const AffectiveExplain = z.object({
+  color: z.string(),
+  explain: z.string(),
+});
+
+const AffectiveExplainList = z.array(AffectiveExplain);
+
 // 정동 평가
 const AffectiveScore = z.object({
   title: z.string(),
   inputType: InputType,
   required: z.boolean(),
   tooltip: z.string(),
+  explainList: AffectiveExplainList,
   value: z.number(),
   min: z.number(),
   max: z.number(),
@@ -195,3 +204,5 @@ export type CategoryLeafNode = z.infer<typeof CategoryLeafNode>;
 export type CategoryName = z.infer<typeof CategoryName>;
 
 export type CategoryEvaluations = z.infer<typeof CategoryEvaluations>;
+
+export type AffectiveExplainList = z.infer<typeof AffectiveExplainList>;
