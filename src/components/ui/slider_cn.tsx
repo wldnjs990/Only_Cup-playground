@@ -2,6 +2,13 @@ import * as React from 'react';
 import * as SliderPrimitive from '@radix-ui/react-slider';
 
 import { cn } from '@/lib/utils';
+import { twMerge } from 'tailwind-merge';
+import clsx from 'clsx';
+
+// props 커스텀
+interface CustomProps {
+  trackColor?: string;
+}
 
 function SliderCn({
   className,
@@ -9,8 +16,9 @@ function SliderCn({
   value,
   min = 0,
   max = 100,
+  trackColor = '',
   ...props
-}: React.ComponentProps<typeof SliderPrimitive.Root>) {
+}: React.ComponentProps<typeof SliderPrimitive.Root> & CustomProps) {
   const _values = React.useMemo(
     () => (Array.isArray(value) ? value : Array.isArray(defaultValue) ? defaultValue : [min, max]),
     [value, defaultValue, min, max],
@@ -37,8 +45,11 @@ function SliderCn({
       >
         <SliderPrimitive.Range
           data-slot="slider-range"
-          className={cn(
-            'bg-primary absolute data-[orientation=horizontal]:h-full data-[orientation=vertical]:w-full',
+          className={twMerge(
+            cn(
+              'bg-primary absolute data-[orientation=horizontal]:h-full data-[orientation=vertical]:w-full',
+            ),
+            clsx(trackColor && `bg-[${trackColor}]`),
           )}
         />
       </SliderPrimitive.Track>

@@ -1,7 +1,7 @@
 import type { TRootCuppingFormSchema } from '@/types/new/new_form_schema';
 import { useFormContext } from 'react-hook-form';
 import CategoryList from './CategoryList';
-import RequiredIcon from '@/components/RequiredIcon';
+import ContentTitle from './ContentTitle';
 
 export default function CategoryCascader({
   nowCategoryPath,
@@ -18,10 +18,7 @@ export default function CategoryCascader({
 
   return (
     <article>
-      <div className="flex gap-2">
-        <h3>{categoryLabel}</h3>
-        <RequiredIcon required={required} />
-      </div>
+      <ContentTitle title={categoryLabel} required={required} />
       <article className="flex flex-wrap">
         <CategoryList nowCategoryPath={nowCategoryPath} nowDetailPath={nowDetailPath} />
       </article>

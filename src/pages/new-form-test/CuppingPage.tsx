@@ -21,7 +21,7 @@ export default function CuppingPage() {
 
   // rhf 동적 스키마 필드
   const {
-    fields: F_root,
+    fields: root,
     append,
     remove,
   } = useFieldArray({
@@ -61,7 +61,7 @@ export default function CuppingPage() {
     <section className="flex h-full min-h-0 w-full flex-1 flex-col overflow-hidden">
       <div className="min-h-0 flex-1 overflow-y-auto">
         <ul className="flex w-full flex-wrap">
-          {F_root.map((_, idx) => {
+          {root.map((_, idx) => {
             return <CuppingItem key={idx} idx={idx} />;
           })}
         </ul>

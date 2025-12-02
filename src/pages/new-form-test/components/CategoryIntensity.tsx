@@ -1,9 +1,9 @@
-import RequiredIcon from '@/components/RequiredIcon';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group_cn';
 import type { TRootCuppingFormSchema } from '@/types/new/new_form_schema';
 
 import { useFormContext, useWatch } from 'react-hook-form';
+import ContentTitle from './ContentTitle';
 
 export default function CategoryEvaluation({
   categoryEvaluationPath,
@@ -26,10 +26,7 @@ export default function CategoryEvaluation({
   return (
     <article>
       {/* 평가 대상 */}
-      <div>
-        <span>{title}</span>
-        <RequiredIcon required={required} />
-      </div>
+      <ContentTitle title={title} required={required} tooltip={tooltip} />
       {/* 강도 평가 라디오 버튼 */}
       <RadioGroup
         defaultValue={value}
