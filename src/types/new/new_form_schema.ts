@@ -107,7 +107,6 @@ const AffectiveScore = z.object({
   inputType: InputType,
   required: z.boolean(),
   tooltip: z.string(),
-  explainList: AffectiveExplainList,
   value: z.number(),
   min: z.number(),
   max: z.number(),

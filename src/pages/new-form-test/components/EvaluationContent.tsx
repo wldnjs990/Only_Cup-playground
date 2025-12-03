@@ -16,19 +16,19 @@ export default function EvaluationContent({
   // TODO : 이거 순서대로 체크하는게 아니라 맛, 향... 5개 버튼을 만들어서 선택한 애 보여주는걸로 해야겠는디
   const [eIdx, setEIdx] = useState<number>(0);
 
-  // 현재 평가(맛, 향, 산미, 단맛, 마우스필) 경로
+  // 현재 평가 경로
   const [nowEvaluationPath, setNowEvaluationPath] =
     useState<`root.${number}.evaluationList.${number}`>(`${evaluationListPath}.${eIdx}`);
 
   useWatch({ name: nowEvaluationPath, control });
 
-  // 현재 평가(맛, 향, 산미, 단맛, 마우스필) 경로
+  // 현재 평가 라벨(맛, 향, 산미, 단맛, 마우스필) 경로
   const [nowEvaluationLabelPath, setNowEvaluationLabelPath] =
     useState<`root.${number}.evaluationList.${number}.label`>(
       `${evaluationListPath}.${eIdx}.label`,
     );
 
-  // 현재 평가(맛, 향, 산미, 단맛, 마우스필)
+  // 현재 평가 라벨(맛, 향, 산미, 단맛, 마우스필)
   const nowEvaluationLabel = getValues(nowEvaluationLabelPath);
 
   // 현재 평가 카테고리 경로
@@ -66,7 +66,9 @@ export default function EvaluationContent({
         nowDetailPath={nowDetailPath}
       />
       {/* 선택한 카테고리 평가 */}
-      <DetailEvaluation key={nowEvaluationPath} nowDetailPath={nowDetailPath} setEIdx={setEIdx} />
+      {nowDetailPath && (
+        <DetailEvaluation key={nowEvaluationPath} nowDetailPath={nowDetailPath} setEIdx={setEIdx} />
+      )}
     </div>
   );
 }
