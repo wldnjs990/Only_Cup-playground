@@ -4,10 +4,12 @@ import * as SliderPrimitive from '@radix-ui/react-slider';
 import { cn } from '@/lib/utils';
 import { twMerge } from 'tailwind-merge';
 import clsx from 'clsx';
+import { affectiveExplainList } from '@/constants/new/affectiveExplainList';
 
 // props 커스텀
 interface CustomProps {
-  trackColor?: string;
+  canChangeTrackColor?: boolean;
+  trackColorIndex?: number;
 }
 
 function SliderCn({
@@ -16,7 +18,8 @@ function SliderCn({
   value,
   min = 0,
   max = 100,
-  trackColor = '',
+  canChangeTrackColor = false,
+  trackColorIndex = 0,
   ...props
 }: React.ComponentProps<typeof SliderPrimitive.Root> & CustomProps) {
   const _values = React.useMemo(
@@ -49,7 +52,7 @@ function SliderCn({
             cn(
               'bg-primary absolute data-[orientation=horizontal]:h-full data-[orientation=vertical]:w-full',
             ),
-            clsx(trackColor && `bg-[${trackColor}]`),
+            clsx(canChangeTrackColor && affectiveExplainList[trackColorIndex].color),
           )}
         />
       </SliderPrimitive.Track>

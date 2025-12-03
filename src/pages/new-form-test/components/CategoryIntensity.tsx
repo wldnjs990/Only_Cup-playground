@@ -6,8 +6,10 @@ import { useFormContext, useWatch } from 'react-hook-form';
 import ContentTitle from './ContentTitle';
 
 export default function CategoryEvaluation({
+  categoryTitle,
   categoryEvaluationPath,
 }: {
+  categoryTitle: string;
   categoryEvaluationPath: `root.${number}.evaluationList.${number}.detailEvaluation.categoryEvaluationList.${number}`;
 }) {
   const { getValues, setValue, control } = useFormContext<TRootCuppingFormSchema>();
@@ -35,8 +37,11 @@ export default function CategoryEvaluation({
         {optionList.map((option) => {
           return (
             <div key={option.value} className="flex items-center gap-3">
-              <RadioGroupItem value={option.value} id={`intensity${option.value}`} />
-              <Label htmlFor={`intensity${option.value}`}>{option.label}</Label>
+              <RadioGroupItem
+                value={option.value}
+                id={`intensity${categoryTitle}${option.value}`}
+              />
+              <Label htmlFor={`intensity${categoryTitle}${option.value}`}>{option.label}</Label>
             </div>
           );
         })}
