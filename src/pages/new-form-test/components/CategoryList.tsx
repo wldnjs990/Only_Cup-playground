@@ -4,13 +4,19 @@ import { useFormContext } from 'react-hook-form';
 import CategorySt from './CategorySt';
 import CategoryNd from './CategoryNd';
 import CategoryLeaf from './CategoryLeaf';
+import clsx from 'clsx';
+import { twMerge } from 'tailwind-merge';
 
 export default function CategoryList({
   nowCategoryPath,
   nowDetailPath,
+  nowDepth,
+  setNowDepth,
 }: {
   nowCategoryPath: `root.${number}.evaluationList.${number}.category`;
   nowDetailPath: `root.${number}.evaluationList.${number}.detailEvaluation`;
+  nowDepth: number;
+  setNowDepth: React.Dispatch<React.SetStateAction<number>>;
 }) {
   const { getValues } = useFormContext<TRootCuppingFormSchema>();
 
@@ -49,6 +55,7 @@ export default function CategoryList({
     if (stSelectedIndex !== -1) {
       setNdNodeListPath(`${stNodeListPath}.${stSelectedIndex}.children`);
       setStNodeIdx(stSelectedIndex);
+      setNowDepth(2);
 
       // useEffect 안에서 다른 훅 사용이 가능하나..? 왜 되는거지? 시점이 안 겹치나?
       // 생각해보니 커스텀훅 반환값이라서 그냥 메서드일 뿐이겠다.
@@ -60,45 +67,65 @@ export default function CategoryList({
         setLeafNodeListPath(
           `${stNodeListPath}.${stSelectedIndex}.children.${ndSelectedIndex}.children`,
         );
+        setNowDepth(3);
       }
+    } else {
+      setNowDepth(1);
     }
   }, []);
 
+  const handlePrevButtonClick = () => {
+    setNowDepth((cur) => Math.max(cur - 1, 1));
+  };
+
+  const categoryButtonStyle = (selected: boolean) =>
+    twMerge(clsx(selected && 'bg-amber-200'), 'border p-2');
+
   return (
-    <>
-      {/* 루트 노드 */}
-      {
-        <CategorySt
-          categoryName={categoryName}
-          setStNodeIdx={setStNodeIdx}
-          stNodeListPath={stNodeListPath}
-          setNdNodeListPath={setNdNodeListPath}
-          setLeafNodeListPath={setLeafNodeListPath}
-          nowCategoryEvaluationListPath={nowCategoryEvaluationListPath}
-        />
-      }
-      {/* 두번째 노드 */}
-      {ndNodeListPath && (
-        <CategoryNd
-          key={ndNodeListPath + stNodeIdx}
-          stNodeIdx={stNodeIdx}
-          categoryName={categoryName}
-          ndNodeListPath={ndNodeListPath}
-          setLeafNodeListPath={setLeafNodeListPath}
-          valueListPath={valueListPath}
-          nowCategoryEvaluationListPath={nowCategoryEvaluationListPath}
-        />
-      )}
-      {/* 리프 노드 */}
-      {leafNodeListPath && (
-        <CategoryLeaf
-          // leafNodeListPath가 바뀌면 다른 필드를 보게 되므로 key로 강제 리마운트(useWatch 새 경로 구독)
-          key={leafNodeListPath}
-          leafNodeListPath={leafNodeListPath}
-          valueListPath={valueListPath}
-          nowCategoryEvaluationListPath={nowCategoryEvaluationListPath}
-        />
-      )}
-    </>
+    <section className="w-full flex-1">
+      {/* 이전 단계 버튼 */}
+      <button className="text-sm" onClick={handlePrevButtonClick}>{`< 이전 단계`}</button>
+      {/* cascader 노드 */}
+      <article className="flex flex-wrap justify-around gap-1">
+        {/* 루트 노드 */}
+        {nowDepth === 1 && (
+          <CategorySt
+            categoryButtonStyle={categoryButtonStyle}
+            categoryName={categoryName}
+            valueListPath={valueListPath}
+            stNodeListPath={stNodeListPath}
+            nowCategoryEvaluationListPath={nowCategoryEvaluationListPath}
+            setNowDepth={setNowDepth}
+            setStNodeIdx={setStNodeIdx}
+            setNdNodeListPath={setNdNodeListPath}
+          />
+        )}
+        {/* 두번째 노드 */}
+        {nowDepth === 2 && ndNodeListPath && (
+          <CategoryNd
+            key={ndNodeListPath + stNodeIdx}
+            categoryButtonStyle={categoryButtonStyle}
+            stNodeIdx={stNodeIdx}
+            categoryName={categoryName}
+            ndNodeListPath={ndNodeListPath}
+            setNowDepth={setNowDepth}
+            setLeafNodeListPath={setLeafNodeListPath}
+            valueListPath={valueListPath}
+            nowCategoryEvaluationListPath={nowCategoryEvaluationListPath}
+          />
+        )}
+        {/* 리프 노드 */}
+        {nowDepth === 3 && leafNodeListPath && (
+          <CategoryLeaf
+            // leafNodeListPath가 바뀌면 다른 필드를 보게 되므로 key로 강제 리마운트(useWatch 새 경로 구독)
+            key={leafNodeListPath}
+            categoryButtonStyle={categoryButtonStyle}
+            leafNodeListPath={leafNodeListPath}
+            valueListPath={valueListPath}
+            nowCategoryEvaluationListPath={nowCategoryEvaluationListPath}
+          />
+        )}
+      </article>
+    </section>
   );
 }

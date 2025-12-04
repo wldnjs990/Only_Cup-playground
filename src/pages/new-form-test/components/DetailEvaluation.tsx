@@ -4,6 +4,7 @@ import { useFormContext } from 'react-hook-form';
 import CategoryIntensity from './CategoryIntensity';
 import CategoryAffectiveScore from './CategoryAffectiveScore';
 import { ButtonCn } from '@/components/ui/button_cn';
+import ContentTitle from './ContentTitle';
 
 export default function DetailEvaluation({
   nowDetailPath,
@@ -18,7 +19,6 @@ export default function DetailEvaluation({
 
   const handleNextButtonClick = () => {
     setEIdx((val) => {
-      console.log(val);
       return Math.min(val + 1, 4);
     });
   };
@@ -29,23 +29,27 @@ export default function DetailEvaluation({
   }
 
   return (
-    <article>
-      <h3>{label}</h3>
-      {categoryEvaluationList.map((categoryEvaluation, idx) => {
-        const categoryEvaluationPath = `${nowDetailPath}.categoryEvaluationList.${idx}` as const;
-        return (
-          <article key={categoryEvaluation.value}>
-            <h4 className="font-bold">{categoryEvaluation.title}</h4>
-            <hr />
-            <CategoryIntensity
-              categoryEvaluationPath={categoryEvaluationPath}
-              categoryTitle={categoryEvaluation.title}
-            />
-            <CategoryAffectiveScore categoryEvaluationPath={categoryEvaluationPath} />
-          </article>
-        );
-      })}
+    <section className="flex flex-col gap-3">
+      <ContentTitle title={label} />
+
+      <article className="flex flex-col gap-3">
+        {categoryEvaluationList.map((categoryEvaluation, idx) => {
+          const categoryEvaluationPath = `${nowDetailPath}.categoryEvaluationList.${idx}` as const;
+          return (
+            <article key={categoryEvaluation.value}>
+              <h4 className="font-bold">{categoryEvaluation.title}</h4>
+              <hr />
+              <CategoryIntensity
+                categoryEvaluationPath={categoryEvaluationPath}
+                categoryTitle={categoryEvaluation.title}
+              />
+              <CategoryAffectiveScore categoryEvaluationPath={categoryEvaluationPath} />
+            </article>
+          );
+        })}
+      </article>
+
       <ButtonCn onClick={handleNextButtonClick}>다음으로 이동</ButtonCn>
-    </article>
+    </section>
   );
 }

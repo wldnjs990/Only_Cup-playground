@@ -95,7 +95,8 @@ const Intensity = z.object({
 });
 
 const AffectiveExplain = z.object({
-  color: z.string(),
+  colorClass: z.string(),
+  bgClass: z.string(),
   explain: z.string(),
 });
 
