@@ -3,20 +3,20 @@ import { Slot } from '@radix-ui/react-slot';
 import { cva, type VariantProps } from 'class-variance-authority';
 
 import { cn } from '@/lib/utils';
+import clsx from 'clsx';
 
 const buttonVariants = cva(
   "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
   {
     variants: {
       variant: {
-        default: 'bg-primary text-primary-foreground hover:bg-primary/90',
+        default: 'bg-primary text-primary-foreground',
         destructive:
-          'bg-destructive text-white hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60',
-        outline:
-          'border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50',
-        secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80',
-        ghost: 'hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50',
-        link: 'text-primary underline-offset-4 hover:underline',
+          'bg-destructive text-white focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60',
+        outline: 'border bg-background shadow-xs dark:bg-input/30 dark:border-input',
+        secondary: 'bg-secondary text-secondary-foreground',
+        ghost: '',
+        link: 'text-primary underline-offset-4',
       },
       size: {
         default: 'h-9 px-4 py-2 has-[>svg]:px-3',
@@ -34,22 +34,42 @@ const buttonVariants = cva(
   },
 );
 
+interface ButtonCnProps {
+  asChild?: boolean;
+  hoverEffect?: boolean;
+}
+
 function ButtonCn({
   className,
   variant,
   size,
+  hoverEffect = true,
   asChild = false,
   ...props
-}: React.ComponentProps<'button'> &
-  VariantProps<typeof buttonVariants> & {
-    asChild?: boolean;
-  }) {
+}: React.ComponentProps<'button'> & VariantProps<typeof buttonVariants> & ButtonCnProps) {
   const Comp = asChild ? Slot : 'button';
+
+  // 버튼 hoverEffect 커스텀 (cva 적용)
+  const buttonHoverEffect = cva('', {
+    variants: {
+      variant: {
+        default: 'hover:bg-primary/90',
+        destructive: 'hover:bg-destructive/90',
+        outline: 'hover:brightness-95',
+        secondary: 'hover:bg-secondary/80',
+        ghost: 'hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50',
+        link: 'hover:underline',
+      },
+    },
+  });
 
   return (
     <Comp
       data-slot="button"
-      className={cn(buttonVariants({ variant, size, className }))}
+      className={cn(
+        buttonVariants({ variant, size, className }),
+        clsx(hoverEffect && buttonHoverEffect({ variant })),
+      )}
       {...props}
     />
   );

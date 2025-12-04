@@ -2,8 +2,7 @@ import type { TRootCuppingFormSchema } from '@/types/new/new_form_schema';
 import { useEffect, useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import CategoryCascader from './CategoryCascader';
-import DetailEvaluation from './DetailEvaluation';
-import { ButtonCn } from '@/components/ui/button_cn';
+import EvaluationNav from './EvaluationNav';
 
 export default function EvaluationContent({
   evaluationListPath,
@@ -51,24 +50,21 @@ export default function EvaluationContent({
   }, [eIdx]);
 
   return (
-    <div>
+    <>
       {/* 버튼 리스트 */}
-      <ButtonCn onClick={() => setEIdx(0)}>1</ButtonCn>
-      <ButtonCn onClick={() => setEIdx(1)}>2</ButtonCn>
-      <ButtonCn onClick={() => setEIdx(2)}>3</ButtonCn>
-      <ButtonCn onClick={() => setEIdx(3)}>4</ButtonCn>
-      <ButtonCn onClick={() => setEIdx(4)}>5</ButtonCn>
+      <EvaluationNav
+        evaluationListPath={evaluationListPath}
+        nowEvaluationLabelPath={nowEvaluationLabelPath}
+        setEIdx={setEIdx}
+      />
       <h2 className="h2-style">{`step.${eIdx + 1} ${nowEvaluationLabel}`}</h2>
       {/* 카테고리 선택 */}
       <CategoryCascader
         key={nowCategoryPath}
         nowCategoryPath={nowCategoryPath}
         nowDetailPath={nowDetailPath}
+        setEIdx={setEIdx}
       />
-      {/* 선택한 카테고리 평가 */}
-      {nowDetailPath && (
-        <DetailEvaluation key={nowEvaluationPath} nowDetailPath={nowDetailPath} setEIdx={setEIdx} />
-      )}
-    </div>
+    </>
   );
 }

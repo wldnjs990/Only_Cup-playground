@@ -51,7 +51,7 @@ export function EvaluationDrawer({
             </DrawerDescription>
           </DrawerHeader>
           {/* 컨텐츠 (카테고리 - 강도 평가 - 정동평가) */}
-          <div className="max-h-120 overflow-y-scroll p-4 pb-0">
+          <div className="h-80 overflow-y-scroll p-4 pb-0">
             <EvaluationContent evaluationListPath={evaluationListPath} />
           </div>
           {/* 컨텐츠 */}

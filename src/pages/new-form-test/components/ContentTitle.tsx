@@ -14,7 +14,7 @@ export default function ContentTitle({
   return (
     <article className="flex justify-between">
       <article className="flex gap-2">
-        <span>{title}</span>
+        <span className="font-bold">{title}</span>
         {required && <span className="text-red-600">*</span>}
       </article>
       {tooltip && <ToolTip tooltipText={tooltip} />}

@@ -52,7 +52,10 @@ function SliderCn({
             cn(
               'bg-primary absolute data-[orientation=horizontal]:h-full data-[orientation=vertical]:w-full',
             ),
-            clsx(canChangeTrackColor && affectiveExplainList[trackColorIndex].color),
+            clsx(
+              canChangeTrackColor &&
+                `transition duration-300 ${affectiveExplainList[trackColorIndex].bgClass}`,
+            ),
           )}
         />
       </SliderPrimitive.Track>

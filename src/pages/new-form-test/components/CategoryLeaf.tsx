@@ -1,9 +1,7 @@
 import { ButtonCn } from '@/components/ui/button_cn';
 import createDetailEvaluations from '@/constants/new/category_detail_evaluations';
 import type { TRootCuppingFormSchema } from '@/types/new/new_form_schema';
-import clsx from 'clsx';
 import { useFieldArray, useFormContext, useWatch } from 'react-hook-form';
-import { twMerge } from 'tailwind-merge';
 
 // 리프 selected 핸들러 타입
 type T_HandleLeafNodeClick = (
@@ -15,12 +13,14 @@ type T_HandleLeafNodeClick = (
 
 // props 타입
 interface T_CategoryFeaf {
+  categoryButtonStyle: (selected: boolean) => string;
   leafNodeListPath: `root.${number}.evaluationList.${number}.category.cascaderTree.${number}.children.${number}.children`;
   valueListPath: `root.${number}.evaluationList.${number}.category.valueList`;
   nowCategoryEvaluationListPath: `root.${number}.evaluationList.${number}.detailEvaluation.categoryEvaluationList`;
 }
 
 export default function CategoryLeaf({
+  categoryButtonStyle,
   leafNodeListPath,
   valueListPath,
   nowCategoryEvaluationListPath,
@@ -60,14 +60,14 @@ export default function CategoryLeaf({
   };
 
   return (
-    <article className="flex gap-1">
+    <>
       {leafNodeList.map(({ id, label, selected, value }, idx) => {
         const selectedPath = `${leafNodeListPath}.${idx}.selected` as const;
 
         return (
           <ButtonCn
             key={id + label}
-            className={twMerge(clsx(selected && 'bg-amber-200'), 'border p-2')}
+            className={categoryButtonStyle(selected)}
             onClick={() => {
               handleLeafNodeClick(selected, value, label, selectedPath);
             }}
@@ -76,6 +76,6 @@ export default function CategoryLeaf({
           </ButtonCn>
         );
       })}
-    </article>
+    </>
   );
 }

@@ -1,9 +1,7 @@
 import { ButtonCn } from '@/components/ui/button_cn';
 import { categoryTree } from '@/constants/new/category_tree';
 import type { CategoryName, TRootCuppingFormSchema } from '@/types/new/new_form_schema';
-import clsx from 'clsx';
 import { useFormContext, useWatch } from 'react-hook-form';
-import { twMerge } from 'tailwind-merge';
 
 // 1뎁스 selected 핸들러 타입
 type T_HandleStNodeClick = (
@@ -16,30 +14,29 @@ type T_HandleStNodeClick = (
 
 // props 타입
 interface T_CategorySt {
+  categoryButtonStyle: (selected: boolean) => string;
   categoryName: CategoryName;
-  setStNodeIdx: React.Dispatch<React.SetStateAction<number>>;
+  valueListPath: `root.${number}.evaluationList.${number}.category.valueList`;
   stNodeListPath: `root.${number}.evaluationList.${number}.category.cascaderTree`;
+  nowCategoryEvaluationListPath: `root.${number}.evaluationList.${number}.detailEvaluation.categoryEvaluationList`;
+  setNowDepth: React.Dispatch<React.SetStateAction<number>>;
+  setStNodeIdx: React.Dispatch<React.SetStateAction<number>>;
   setNdNodeListPath: React.Dispatch<
     React.SetStateAction<
       `root.${number}.evaluationList.${number}.category.cascaderTree.${number}.children` | null
     >
   >;
-  setLeafNodeListPath: React.Dispatch<
-    React.SetStateAction<
-      | `root.${number}.evaluationList.${number}.category.cascaderTree.${number}.children.${number}.children`
-      | null
-    >
-  >;
-  nowCategoryEvaluationListPath: `root.${number}.evaluationList.${number}.detailEvaluation.categoryEvaluationList`;
 }
 
 export default function CategorySt({
+  categoryButtonStyle,
   categoryName,
-  setStNodeIdx,
+  valueListPath,
   stNodeListPath,
-  setNdNodeListPath,
-  setLeafNodeListPath,
   nowCategoryEvaluationListPath,
+  setNowDepth,
+  setStNodeIdx,
+  setNdNodeListPath,
 }: T_CategorySt) {
   const { setValue, control } = useFormContext<TRootCuppingFormSchema>();
 
@@ -56,36 +53,27 @@ export default function CategorySt({
     // 초기화용 categoryTree 상수
     const initialCategory = categoryTree[categoryName];
 
-    // 현재 선택된 노드가 있는지 체크
-    const currentSelected = stNodeList.findIndex((node) => node.selected);
+    // 이미 선택된 노드면 다음 뎁스 이동
+    if (selected) {
+      setNowDepth((cur) => cur + 1);
+      return;
+    }
 
-    // leafNode 초기화
-    setLeafNodeListPath(null);
+    // valueList 필드 초기화
+    setValue(valueListPath, []);
     // CategoryEvaluationList 필드 초기화
     setValue(nowCategoryEvaluationListPath, []);
 
     // 선택된 노드 외에 활성화된 노드가 있으면 있으면 해당 노드 리셋하고 현재 노드 선택
-    if (currentSelected !== selectedIdx && currentSelected >= 0) {
-      setValue(stNodeListPath, initialCategory);
-      setValue(selectedPath, !selected);
-      setNdNodeListPath(childrenPath);
-      setStNodeIdx(selectedIdx);
-    }
-    // 이미 선택된 노드면 리셋
-    else if (selected) {
-      setValue(stNodeListPath, initialCategory);
-      setNdNodeListPath(null);
-    }
-    // 아니면 활성화
-    else {
-      setValue(selectedPath, !selected);
-      setNdNodeListPath(childrenPath);
-      setStNodeIdx(selectedIdx);
-    }
+    setValue(stNodeListPath, initialCategory);
+    setValue(selectedPath, !selected);
+    setNdNodeListPath(childrenPath);
+    setStNodeIdx(selectedIdx);
+    setNowDepth((cur) => cur + 1);
   };
 
   return (
-    <article>
+    <>
       {stNodeList.map(({ id, label, selected }, idx) => {
         const childrenPath = `${stNodeListPath}.${idx}.children` as const;
         const selectedPath = `${stNodeListPath}.${idx}.selected` as const;
@@ -93,7 +81,7 @@ export default function CategorySt({
         return (
           <ButtonCn
             key={id + label + categoryName}
-            className={twMerge(clsx(selected && 'bg-amber-200'), 'border p-2')}
+            className={categoryButtonStyle(selected)}
             onClick={() =>
               handleStNodeClick(stNodeListPath, selectedPath, childrenPath, selected, idx)
             }
@@ -102,6 +90,6 @@ export default function CategorySt({
           </ButtonCn>
         );
       })}
-    </article>
+    </>
   );
 }
