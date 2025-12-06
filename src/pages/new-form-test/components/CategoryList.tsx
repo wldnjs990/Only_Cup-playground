@@ -7,6 +7,8 @@ import CategoryLeaf from './CategoryLeaf';
 import clsx from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
+import { AnimatePresence, motion } from 'motion/react';
+
 export default function CategoryList({
   nowCategoryPath,
   nowDetailPath,
@@ -82,50 +84,69 @@ export default function CategoryList({
     twMerge(clsx(selected && 'bg-amber-200'), 'border p-2');
 
   return (
-    <section className="w-full flex-1">
+    <section className="w-full flex-1 overflow-hidden">
       {/* 이전 단계 버튼 */}
       <button className="text-sm" onClick={handlePrevButtonClick}>{`< 이전 단계`}</button>
+
       {/* cascader 노드 */}
-      <article className="flex flex-wrap justify-around gap-1">
-        {/* 루트 노드 */}
-        {nowDepth === 1 && (
-          <CategorySt
-            categoryButtonStyle={categoryButtonStyle}
-            categoryName={categoryName}
-            valueListPath={valueListPath}
-            stNodeListPath={stNodeListPath}
-            nowCategoryEvaluationListPath={nowCategoryEvaluationListPath}
-            setNowDepth={setNowDepth}
-            setStNodeIdx={setStNodeIdx}
-            setNdNodeListPath={setNdNodeListPath}
-          />
-        )}
-        {/* 두번째 노드 */}
-        {nowDepth === 2 && ndNodeListPath && (
-          <CategoryNd
-            key={ndNodeListPath + stNodeIdx}
-            categoryButtonStyle={categoryButtonStyle}
-            stNodeIdx={stNodeIdx}
-            categoryName={categoryName}
-            ndNodeListPath={ndNodeListPath}
-            setNowDepth={setNowDepth}
-            setLeafNodeListPath={setLeafNodeListPath}
-            valueListPath={valueListPath}
-            nowCategoryEvaluationListPath={nowCategoryEvaluationListPath}
-          />
-        )}
-        {/* 리프 노드 */}
-        {nowDepth === 3 && leafNodeListPath && (
-          <CategoryLeaf
-            // leafNodeListPath가 바뀌면 다른 필드를 보게 되므로 key로 강제 리마운트(useWatch 새 경로 구독)
-            key={leafNodeListPath}
-            categoryButtonStyle={categoryButtonStyle}
-            leafNodeListPath={leafNodeListPath}
-            valueListPath={valueListPath}
-            nowCategoryEvaluationListPath={nowCategoryEvaluationListPath}
-          />
-        )}
-      </article>
+      <AnimatePresence
+        mode="wait"
+        initial={false}
+        // onExitComplete={()=>{
+        //   if (nextStep !== null) {
+        //     setStep(nextStep);   // exit 끝난 뒤에 실제로 step 변경
+        //     setNextStep(null);
+        //   }
+        // }}
+      >
+        <motion.article
+          key={nowDepth}
+          className="flex flex-wrap justify-around gap-1"
+          initial={{ x: 100 }}
+          animate={{ x: 0 }}
+          exit={{ x: -100 }}
+          transition={{ duration: 0.2, ease: 'easeInOut' }}
+        >
+          {/* 루트 노드 */}
+          {nowDepth === 1 && (
+            <CategorySt
+              categoryButtonStyle={categoryButtonStyle}
+              categoryName={categoryName}
+              valueListPath={valueListPath}
+              stNodeListPath={stNodeListPath}
+              nowCategoryEvaluationListPath={nowCategoryEvaluationListPath}
+              setNowDepth={setNowDepth}
+              setStNodeIdx={setStNodeIdx}
+              setNdNodeListPath={setNdNodeListPath}
+            />
+          )}
+          {/* 두번째 노드 */}
+          {nowDepth === 2 && ndNodeListPath && (
+            <CategoryNd
+              key={ndNodeListPath + stNodeIdx}
+              categoryButtonStyle={categoryButtonStyle}
+              stNodeIdx={stNodeIdx}
+              categoryName={categoryName}
+              ndNodeListPath={ndNodeListPath}
+              setNowDepth={setNowDepth}
+              setLeafNodeListPath={setLeafNodeListPath}
+              valueListPath={valueListPath}
+              nowCategoryEvaluationListPath={nowCategoryEvaluationListPath}
+            />
+          )}
+          {/* 리프 노드 */}
+          {nowDepth === 3 && leafNodeListPath && (
+            <CategoryLeaf
+              // leafNodeListPath가 바뀌면 다른 필드를 보게 되므로 key로 강제 리마운트(useWatch 새 경로 구독)
+              key={leafNodeListPath}
+              categoryButtonStyle={categoryButtonStyle}
+              leafNodeListPath={leafNodeListPath}
+              valueListPath={valueListPath}
+              nowCategoryEvaluationListPath={nowCategoryEvaluationListPath}
+            />
+          )}
+        </motion.article>
+      </AnimatePresence>
     </section>
   );
 }

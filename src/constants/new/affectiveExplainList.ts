@@ -1,5 +1,7 @@
 import type { AffectiveExplainList } from '@/types/new/new_form_schema';
 
+// 이건 프론트에서 관리하는 데이터(서버에서 받지 말자)
+
 export const affectiveExplainList: AffectiveExplainList = [
   {
     colorClass: 'text-[#D32F2F]', // 강한 빨강
