@@ -89,22 +89,12 @@ export default function CategoryList({
       <button className="text-sm" onClick={handlePrevButtonClick}>{`< 이전 단계`}</button>
 
       {/* cascader 노드 */}
-      <AnimatePresence
-        mode="wait"
-        initial={false}
-        // onExitComplete={()=>{
-        //   if (nextStep !== null) {
-        //     setStep(nextStep);   // exit 끝난 뒤에 실제로 step 변경
-        //     setNextStep(null);
-        //   }
-        // }}
-      >
+      <AnimatePresence mode="wait" initial={false}>
         <motion.article
           key={nowDepth}
           className="flex flex-wrap justify-around gap-1"
-          initial={{ x: 100 }}
-          animate={{ x: 0 }}
-          exit={{ x: -100 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
           transition={{ duration: 0.2, ease: 'easeInOut' }}
         >
           {/* 루트 노드 */}
