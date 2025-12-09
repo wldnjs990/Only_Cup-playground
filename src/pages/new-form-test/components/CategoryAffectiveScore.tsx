@@ -29,7 +29,7 @@ export default function CategoryAffectiveScore({
   return (
     <article>
       {/* 평가 대상 */}
-      <ContentTitle title={title} required={required} tooltip={tooltip} />
+      <ContentTitle title={title} required={required} tooltip={tooltip} as="h3" />
 
       <article>
         <SliderCn
@@ -41,7 +41,7 @@ export default function CategoryAffectiveScore({
           canChangeTrackColor={true}
           trackColorIndex={value - 1}
         />
-        {/* 이건 motion 넣어서 깜빡깜빡 등장하게 만들까 */}
+
         <p className={twMerge('text-xs', clsx(`transition duration-300 ${colorClass}`))}>
           {explain}
         </p>

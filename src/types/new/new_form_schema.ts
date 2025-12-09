@@ -187,6 +187,9 @@ export type Evaluation = z.infer<typeof Evaluation>;
 // 카테고리 cascader 전용 타입
 export type Category = z.infer<typeof Category>;
 
+// 카테고리 name 전용 타입
+export type InputType = z.infer<typeof InputType>;
+
 // 카테고리 트리 데이터 전용 타입
 const CategoryTree = z.object({
   aroma: z.array(CategoryFirstNode),

@@ -58,9 +58,9 @@ export default function CuppingPage() {
   };
 
   return (
-    <section className="flex h-full min-h-0 w-full flex-1 flex-col overflow-hidden">
-      <div className="min-h-0 flex-1 overflow-y-auto">
-        <ul className="flex w-full flex-wrap">
+    <section className="flex h-full min-h-0 w-full flex-1 flex-col gap-2 overflow-hidden">
+      <div className="h-full min-h-0 flex-1 overflow-y-auto">
+        <ul className="flex flex-col flex-wrap sm:flex-row">
           {root.map((_, idx) => {
             return <CuppingItem key={idx} idx={idx} />;
           })}

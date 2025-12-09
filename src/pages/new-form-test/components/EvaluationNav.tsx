@@ -1,25 +1,21 @@
 import { ButtonCn } from '@/components/ui/button_cn';
+import { useCuppingEvaluationContext } from '@/contexts/CuppingEvaluationContext';
 import type { TRootCuppingFormSchema } from '@/types/new/new_form_schema';
 import clsx from 'clsx';
 import { useFormContext } from 'react-hook-form';
 import { twMerge } from 'tailwind-merge';
 
-export default function EvaluationNav({
-  evaluationListPath,
-  nowEvaluationLabelPath,
-  setEIdx,
-}: {
-  evaluationListPath: `root.${number}.evaluationList`;
-  nowEvaluationLabelPath: `root.${number}.evaluationList.${number}.label`;
-  setEIdx: React.Dispatch<React.SetStateAction<number>>;
-}) {
+export default function EvaluationNav() {
   const { getValues } = useFormContext<TRootCuppingFormSchema>();
 
+  const { evaluationListPath, evaluationPath, setNavIdx } = useCuppingEvaluationContext();
+
   const evaluationList = getValues(evaluationListPath);
-  const nowEvaluationLabel = getValues(nowEvaluationLabelPath);
+
+  const nowEvaluationLabel = getValues(`${evaluationPath}.label`);
 
   return (
-    <nav className="flex gap-2">
+    <nav className="flex justify-between">
       {evaluationList.map((evaluation, idx) => {
         const isCompleated = evaluation.category.valueList.length > 0;
         const isSelected = evaluation.label === nowEvaluationLabel;
@@ -27,12 +23,12 @@ export default function EvaluationNav({
         return (
           <ButtonCn
             key={evaluation.id}
-            onClick={() => setEIdx(idx)}
+            onClick={() => setNavIdx(idx)}
             variant="outline"
             className={twMerge(
-              'brightness-125 transition',
-              clsx(isCompleated ? 'bg-green-300' : 'bg-rose-300'),
-              clsx(isSelected && 'brightness-95'),
+              'w-1/5 brightness-100 transition',
+              clsx(isCompleated ? 'bg-purple-500 text-white' : 'bg-rose-300'),
+              clsx(isSelected && 'brightness-130'),
             )}
           >
             {evaluation.title}
