@@ -28,7 +28,7 @@ export default function CategoryEvaluation({
   return (
     <article>
       {/* 평가 대상 */}
-      <ContentTitle title={title} required={required} tooltip={tooltip} />
+      <ContentTitle title={title} required={required} tooltip={tooltip} as="h3" />
       {/* 강도 평가 라디오 버튼 */}
       <RadioGroup
         defaultValue={value}

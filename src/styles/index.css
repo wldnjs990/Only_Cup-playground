@@ -1,8 +1,10 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
+@import '@/styles/font.css';
 
 body {
   height: 100dvh;
+  font-family: 'Pretendard', sans-serif;
 }
 
 @custom-variant dark (&:is(.dark *));
@@ -131,10 +133,10 @@ body {
 }
 
 .h2-md-style {
-  @apply text-2xl font-semibold;
+  @apply text-xl font-semibold;
 }
 .h2-style {
-  @apply text-xl font-semibold;
+  @apply text-lg font-semibold;
 }
 
 .h3-md-style {

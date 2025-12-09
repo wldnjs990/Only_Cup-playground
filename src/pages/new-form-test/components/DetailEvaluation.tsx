@@ -1,27 +1,16 @@
 import type { TRootCuppingFormSchema } from '@/types/new/new_form_schema';
-import type { Dispatch } from 'react';
 import { useFormContext } from 'react-hook-form';
 import CategoryIntensity from './CategoryIntensity';
 import CategoryAffectiveScore from './CategoryAffectiveScore';
-import { ButtonCn } from '@/components/ui/button_cn';
 import ContentTitle from './ContentTitle';
+import { useCuppingEvaluationContext } from '@/contexts/CuppingEvaluationContext';
 
-export default function DetailEvaluation({
-  nowDetailPath,
-  setEIdx,
-}: {
-  nowDetailPath: `root.${number}.evaluationList.${number}.detailEvaluation`;
-  setEIdx: Dispatch<React.SetStateAction<number>>;
-}) {
+export default function DetailEvaluation() {
   const { getValues } = useFormContext<TRootCuppingFormSchema>();
 
-  const { label, categoryEvaluationList } = getValues(nowDetailPath);
+  const { detailPath, handlePrevButtonClick } = useCuppingEvaluationContext();
 
-  const handleNextButtonClick = () => {
-    setEIdx((val) => {
-      return Math.min(val + 1, 4);
-    });
-  };
+  const { label, categoryEvaluationList } = getValues(detailPath);
 
   // 선택된 카테고리가 없으면 빈공간 출력
   if (categoryEvaluationList.length === 0) {
@@ -29,27 +18,30 @@ export default function DetailEvaluation({
   }
 
   return (
-    <section className="flex flex-col gap-3">
-      <ContentTitle title={label} />
+    <section className="flex flex-col">
+      <ContentTitle title={label} as="h2" />
+      <button className="flex text-sm" onClick={handlePrevButtonClick}>{`< 이전 단계`}</button>
 
-      <article className="flex flex-col gap-3">
+      <article className="mt-2 flex flex-col gap-3">
         {categoryEvaluationList.map((categoryEvaluation, idx) => {
-          const categoryEvaluationPath = `${nowDetailPath}.categoryEvaluationList.${idx}` as const;
+          const categoryEvaluationPath = `${detailPath}.categoryEvaluationList.${idx}` as const;
           return (
-            <article key={categoryEvaluation.value}>
-              <h4 className="font-bold">{categoryEvaluation.title}</h4>
+            <article
+              key={categoryEvaluation.value}
+              className="flex flex-col gap-3 rounded-lg bg-gray-100 p-3"
+            >
+              <span className="flex justify-center font-bold">{categoryEvaluation.title}</span>
               <hr />
               <CategoryIntensity
                 categoryEvaluationPath={categoryEvaluationPath}
                 categoryTitle={categoryEvaluation.title}
               />
+              <hr />
               <CategoryAffectiveScore categoryEvaluationPath={categoryEvaluationPath} />
             </article>
           );
         })}
       </article>
-
-      <ButtonCn onClick={handleNextButtonClick}>다음으로 이동</ButtonCn>
     </section>
   );
 }
