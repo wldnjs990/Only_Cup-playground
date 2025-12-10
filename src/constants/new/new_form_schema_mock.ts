@@ -26,13 +26,6 @@ export const NEW_FORM_SCHEMA: TCuppingFormSchema = {
       required: true,
       optionList: optionsList.coffeeTitleOptions,
     },
-    purpose: {
-      inputType: 'dropdown',
-      label: '무슨 목적으로 커핑에 참여하시나요?',
-      value: '',
-      required: false,
-      optionList: optionsList.purposeOptions,
-    },
   },
   // 평가 스키마
   evaluationList: [

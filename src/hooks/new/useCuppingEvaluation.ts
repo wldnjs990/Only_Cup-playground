@@ -5,38 +5,40 @@ import { useEffect, useState } from 'react';
 import { useFieldArray, useFormContext, useWatch } from 'react-hook-form';
 
 // 1뎁스 노드
-type StNodeListPath = `root.${number}.evaluationList.${number}.category.cascaderTree`;
+type StNodeListPath = `schemaList.${number}.evaluationList.${number}.category.cascaderTree`;
 // 1뎁스 selected 핸들러 타입
 export type HandleStNodeClick = (
-  selectedPath: `root.${number}.evaluationList.${number}.category.cascaderTree.${number}.selected`,
-  childrenPath: `root.${number}.evaluationList.${number}.category.cascaderTree.${number}.children`,
+  selectedPath: `schemaList.${number}.evaluationList.${number}.category.cascaderTree.${number}.selected`,
+  childrenPath: `schemaList.${number}.evaluationList.${number}.category.cascaderTree.${number}.children`,
   selected: boolean,
 ) => void;
 
 // 2뎁스 노드
 type NdNodeListPath =
-  | `root.${number}.evaluationList.${number}.category.cascaderTree.${number}.children`
+  | `schemaList.${number}.evaluationList.${number}.category.cascaderTree.${number}.children`
   | null;
 // 2뎁스 selected 핸들러 타입
 export type HandleNdNodeClick = (
-  selectedPath: `root.${number}.evaluationList.${number}.category.cascaderTree.${number}.children.${number}.selected`,
-  childrenPath: `root.${number}.evaluationList.${number}.category.cascaderTree.${number}.children.${number}.children`,
+  selectedPath: `schemaList.${number}.evaluationList.${number}.category.cascaderTree.${number}.children.${number}.selected`,
+  childrenPath: `schemaList.${number}.evaluationList.${number}.category.cascaderTree.${number}.children.${number}.children`,
   selected: boolean,
 ) => void;
 
 // 3뎁스 노드
 type LeafNodeListPath =
-  | `root.${number}.evaluationList.${number}.category.cascaderTree.${number}.children.${number}.children`
+  | `schemaList.${number}.evaluationList.${number}.category.cascaderTree.${number}.children.${number}.children`
   | null;
 // 리프 selected 핸들러 타입
 export type HandleLeafNodeClick = (
   selected: boolean,
   label: string,
   value: string,
-  selectedPath: `root.${number}.evaluationList.${number}.category.cascaderTree.${number}.children.${number}.children.${number}.selected`,
+  selectedPath: `schemaList.${number}.evaluationList.${number}.category.cascaderTree.${number}.children.${number}.children.${number}.selected`,
 ) => void;
 
-export default function useCuppingEvaluation(evaluationListPath: `root.${number}.evaluationList`) {
+export default function useCuppingEvaluation(
+  evaluationListPath: `schemaList.${number}.evaluationList`,
+) {
   const { getValues, setValue, control } = useFormContext<TRootCuppingFormSchema>();
 
   // 내비게이션 영역 -----------------------------------------------------------------------------------------
@@ -45,16 +47,17 @@ export default function useCuppingEvaluation(evaluationListPath: `root.${number}
   const [navIdx, setNavIdx] = useState<number>(0);
 
   // 현재 평가 경로
-  const [evaluationPath, setEvaluationPath] = useState<`root.${number}.evaluationList.${number}`>(
-    `${evaluationListPath}.${navIdx}`,
-  );
+  const [evaluationPath, setEvaluationPath] =
+    useState<`schemaList.${number}.evaluationList.${number}`>(`${evaluationListPath}.${navIdx}`);
 
   // 평가 영역 -----------------------------------------------------------------------------------------
 
   const [categoryPath, setCategoryPath] =
-    useState<`root.${number}.evaluationList.${number}.category`>(`${evaluationPath}.category`);
+    useState<`schemaList.${number}.evaluationList.${number}.category`>(
+      `${evaluationPath}.category`,
+    );
   const [detailPath, setDetailPath] =
-    useState<`root.${number}.evaluationList.${number}.detailEvaluation`>(
+    useState<`schemaList.${number}.evaluationList.${number}.detailEvaluation`>(
       `${evaluationPath}.detailEvaluation`,
     );
 

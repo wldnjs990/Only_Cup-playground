@@ -6,22 +6,22 @@ import useCuppingEvaluation, {
 import { createContext, useContext, type ReactNode } from 'react';
 import type { InputType } from 'zlib';
 
-type StNodeListPath = `root.${number}.evaluationList.${number}.category.cascaderTree`;
+type StNodeListPath = `schemaList.${number}.evaluationList.${number}.category.cascaderTree`;
 
 type NdNodeListPath =
-  | `root.${number}.evaluationList.${number}.category.cascaderTree.${number}.children`
+  | `schemaList.${number}.evaluationList.${number}.category.cascaderTree.${number}.children`
   | null;
 
 type LeafNodeListPath =
-  | `root.${number}.evaluationList.${number}.category.cascaderTree.${number}.children.${number}.children`
+  | `schemaList.${number}.evaluationList.${number}.category.cascaderTree.${number}.children.${number}.children`
   | null;
 
 interface Context {
-  evaluationListPath: `root.${number}.evaluationList`;
+  evaluationListPath: `schemaList.${number}.evaluationList`;
   navIdx: number;
-  categoryPath: `root.${number}.evaluationList.${number}.category`;
-  detailPath: `root.${number}.evaluationList.${number}.detailEvaluation`;
-  evaluationPath: `root.${number}.evaluationList.${number}`;
+  categoryPath: `schemaList.${number}.evaluationList.${number}.category`;
+  detailPath: `schemaList.${number}.evaluationList.${number}.detailEvaluation`;
+  evaluationPath: `schemaList.${number}.evaluationList.${number}`;
   stNodeListPath: StNodeListPath;
   ndNodeListPath: NdNodeListPath;
   leafNodeListPath: LeafNodeListPath;
@@ -44,7 +44,7 @@ export function CuppingEvaluationProvider({
   evaluationListPath,
 }: {
   children: ReactNode;
-  evaluationListPath: `root.${number}.evaluationList`;
+  evaluationListPath: `schemaList.${number}.evaluationList`;
 }) {
   const value = useCuppingEvaluation(evaluationListPath);
   return (

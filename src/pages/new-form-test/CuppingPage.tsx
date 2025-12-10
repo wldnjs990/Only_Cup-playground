@@ -21,12 +21,12 @@ export default function CuppingPage() {
 
   // rhf 동적 스키마 필드
   const {
-    fields: root,
+    fields: schemaList,
     append,
     remove,
   } = useFieldArray({
     control,
-    name: 'root',
+    name: 'schemaList',
   });
 
   // 커핑 추가, 제거
@@ -45,7 +45,7 @@ export default function CuppingPage() {
     // TODO: 않이 이거 타입 맞는데 왜이래 타입단언해야하나.. => 타입단언했는데 무슨 해결책 없나
     const pathArr = new Array(cuppingCount)
       .fill(0)
-      .map((_, idx) => `root.${idx}.basicInfo`) as FieldPath<TRootCuppingFormSchema>[];
+      .map((_, idx) => `schemaList.${idx}.basicInfo`) as FieldPath<TRootCuppingFormSchema>[];
     const isValid = await trigger(pathArr);
     if (!isValid) alert('커핑할 원두를 모두 선택해주세요!');
     else {
@@ -61,7 +61,7 @@ export default function CuppingPage() {
     <section className="flex h-full min-h-0 w-full flex-1 flex-col gap-2 overflow-hidden">
       <div className="h-full min-h-0 flex-1 overflow-y-auto">
         <ul className="flex flex-col flex-wrap sm:flex-row">
-          {root.map((_, idx) => {
+          {schemaList.map((_, idx) => {
             return <CuppingItem key={idx} idx={idx} />;
           })}
         </ul>

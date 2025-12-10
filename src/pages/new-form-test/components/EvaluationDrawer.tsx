@@ -17,8 +17,8 @@ export function EvaluationDrawer({
   evaluationListPath,
 }: {
   imgPath: string;
-  basicInfoTitlePath: `root.${number}.basicInfo.title`;
-  evaluationListPath: `root.${number}.evaluationList`;
+  basicInfoTitlePath: `schemaList.${number}.basicInfo.title`;
+  evaluationListPath: `schemaList.${number}.evaluationList`;
 }) {
   const { getValues } = useFormContext<TRootCuppingFormSchema>();
 
@@ -40,7 +40,11 @@ export function EvaluationDrawer({
       <DrawerContent>
         <div className="mx-auto w-full max-w-sm">
           <DrawerHeader>
-            <DrawerTitle className="h2-md-style">{BasicInfoTitle.selectedName}</DrawerTitle>
+            <DrawerTitle>
+              <div>
+                <h2 className="h2-md-style">{BasicInfoTitle.selectedName}</h2>
+              </div>
+            </DrawerTitle>
             {/* sr-only 라는 테일윈드 유틸 클래스는 스크린 리더에만 보일수 있도록 UI를 가리는 역할 */}
             <DrawerDescription className="sr-only">
               선택하신 커핑 평가를 이곳에서 할 수 있습니다.

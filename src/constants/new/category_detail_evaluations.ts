@@ -13,9 +13,9 @@ const createDetailEvaluations = (category: string, categoryName: string) => {
       value: 'mid',
       optionList: [
         // shadCn의 radio-group은 value를 문자열만 취급함
-        { label: '낮음', value: 'low' },
-        { label: '중간', value: 'mid' },
-        { label: '높음', value: 'high' },
+        { id: 1, label: '낮음', value: 'low' },
+        { id: 2, label: '중간', value: 'mid' },
+        { id: 3, label: '높음', value: 'high' },
       ],
       tooltip: '선택하신 카테고리가 감각적으로 얼마나 뚜렷하고 강하게 느껴지는지를 평가해주세요.',
     },

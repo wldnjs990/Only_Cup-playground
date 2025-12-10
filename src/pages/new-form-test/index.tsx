@@ -13,14 +13,23 @@ import RHFContext from '@/components/RHFContext';
 import { NEW_FORM_SCHEMA } from '@/constants/new/new_form_schema_mock';
 import CuppingPage from './CuppingPage';
 import { useEffect } from 'react';
+import { optionsList } from '@/constants/new/options_list';
 
 // useForm 사용시 타입추론을 위해 TRootCuppingFormSchema 타입을 FieldValues와 합쳐 추론 가능한 스키마 타입으로 만들어줌
 interface RHFRootCuppingFormSchema extends FieldValues, TRootCuppingFormSchema {}
 
 export default function NewFormTest() {
   // 폼 초기값
-  const defaultCuppingFormSchema = {
-    root: [NEW_FORM_SCHEMA],
+  const defaultCuppingFormSchema: TRootCuppingFormSchema = {
+    purpose: {
+      inputType: 'radio',
+      title: '평가자 분류',
+      value: '',
+      required: false,
+      optionList: optionsList.purposeOptions,
+      tooltip: '무슨 목적으로 커핑에 참여하시나요?',
+    },
+    schemaList: [NEW_FORM_SCHEMA],
   };
   // RHF 폼 스키마 생성
   const methods = useForm<RHFRootCuppingFormSchema>({

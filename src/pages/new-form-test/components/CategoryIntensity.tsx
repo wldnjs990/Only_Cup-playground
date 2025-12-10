@@ -10,7 +10,7 @@ export default function CategoryEvaluation({
   categoryEvaluationPath,
 }: {
   categoryTitle: string;
-  categoryEvaluationPath: `root.${number}.evaluationList.${number}.detailEvaluation.categoryEvaluationList.${number}`;
+  categoryEvaluationPath: `schemaList.${number}.evaluationList.${number}.detailEvaluation.categoryEvaluationList.${number}`;
 }) {
   const { getValues, setValue, control } = useFormContext<TRootCuppingFormSchema>();
 

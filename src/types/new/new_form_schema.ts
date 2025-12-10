@@ -36,7 +36,6 @@ const TextInput = z.object({
 // 기본 정보
 const BasicInfo = z.object({
   title: SelectInput,
-  purpose: TextInput,
 });
 
 // 카테고리
@@ -73,24 +72,14 @@ const Category = z.object({
   valueList: z.array(z.string()),
 });
 
-// 상세평가
 // 카테고리 상세 평가
-
-// 강도 평가 옵션
-const IntensityOption = z.object({
-  label: z.enum(['낮음', '중간', '높음']),
-  value: z.string(),
-});
-
-const IntensityOptionList = z.array(IntensityOption);
-
 // 강도 평가
-const Intensity = z.object({
+const radioInput = z.object({
   title: z.string(),
   inputType: InputType,
   required: z.boolean(),
   value: z.string(),
-  optionList: IntensityOptionList,
+  optionList: z.array(Option),
   tooltip: z.string(),
 });
 
@@ -125,7 +114,7 @@ const CategoryEvaluations = z.object({
   title: z.string(),
   value: z.string(),
   // 강도 평가
-  intensity: Intensity,
+  intensity: radioInput,
   // 정동 평가
   affectiveScore: AffectiveScore,
   // 정동평가(서술)
@@ -151,7 +140,7 @@ const Evaluation = z.object({
   detailEvaluation: DetailEvaluation,
 });
 
-// 루트 스키마
+// 커핑 스키마
 const CuppingFormSchema = z.object({
   // 기본 정보
   basicInfo: BasicInfo,
@@ -161,7 +150,8 @@ const CuppingFormSchema = z.object({
 
 // 루트 스키마
 const RootCuppingFormSchema = z.object({
-  root: z.array(CuppingFormSchema),
+  purpose: radioInput,
+  schemaList: z.array(CuppingFormSchema),
 });
 
 // 타입 export --------------------------------------------------------------------------------------

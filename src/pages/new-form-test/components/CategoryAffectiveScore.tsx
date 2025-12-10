@@ -13,7 +13,7 @@ import clsx from 'clsx';
 export default function CategoryAffectiveScore({
   categoryEvaluationPath,
 }: {
-  categoryEvaluationPath: `root.${number}.evaluationList.${number}.detailEvaluation.categoryEvaluationList.${number}`;
+  categoryEvaluationPath: `schemaList.${number}.evaluationList.${number}.detailEvaluation.categoryEvaluationList.${number}`;
 }) {
   const { getValues, setValue, control } = useFormContext<TRootCuppingFormSchema>();
 
