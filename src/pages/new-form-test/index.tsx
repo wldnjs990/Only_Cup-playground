@@ -23,11 +23,11 @@ export default function NewFormTest() {
   const defaultCuppingFormSchema: TRootCuppingFormSchema = {
     purpose: {
       inputType: 'radio',
-      title: '평가자 분류',
-      value: '',
+      label: '입문자',
+      value: 'basic',
       required: false,
       optionList: optionsList.purposeOptions,
-      tooltip: '무슨 목적으로 커핑에 참여하시나요?',
+      tooltip: `입문자 : 커핑 관련 툴팁들을 제공해줍니다.\n전문가 : 툴팁이 제공되지 않습니다.`,
     },
     schemaList: [NEW_FORM_SCHEMA],
   };

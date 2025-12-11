@@ -10,6 +10,7 @@ const createDetailEvaluations = (category: string, categoryName: string) => {
       title: '강도(Intensity)',
       inputType: 'radio',
       required: false,
+      label: '',
       value: 'mid',
       optionList: [
         // shadCn의 radio-group은 value를 문자열만 취급함

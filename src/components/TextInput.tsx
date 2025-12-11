@@ -1,7 +1,6 @@
 import type { RHFPathProps } from '@/constants/new/rhf-path';
 import { InputCn } from './ui/input_cn';
 import { useFormContext, type FieldValues } from 'react-hook-form';
-import type { TextInput } from '@/types/new/new_form_schema';
 
 export default function TextInput<TFieldValues extends FieldValues>({
   path,

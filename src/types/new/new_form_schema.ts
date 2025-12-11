@@ -16,21 +16,24 @@ const OptionLists = z.object({
   purposeOptions: z.array(Option),
 });
 
+// 공용 Input 타입
 const SelectInput = z.object({
   inputType: InputType,
+  required: z.boolean(),
   label: z.string(),
   value: z.string().refine((val) => val !== '', { error: '선택되지 않았어요!' }),
   selectedName: z.string(),
-  required: z.boolean(),
   optionList: z.array(Option),
+  tooltip: z.string().optional(),
 });
 
-const TextInput = z.object({
+const RadioInput = z.object({
   inputType: InputType,
+  required: z.boolean(),
   label: z.string(),
   value: z.string(),
-  required: z.boolean(),
   optionList: z.array(Option),
+  tooltip: z.string(),
 });
 
 // 기본 정보
@@ -73,14 +76,8 @@ const Category = z.object({
 });
 
 // 카테고리 상세 평가
-// 강도 평가
-const radioInput = z.object({
+const Intensity = RadioInput.extend({
   title: z.string(),
-  inputType: InputType,
-  required: z.boolean(),
-  value: z.string(),
-  optionList: z.array(Option),
-  tooltip: z.string(),
 });
 
 const AffectiveExplain = z.object({
@@ -114,7 +111,7 @@ const CategoryEvaluations = z.object({
   title: z.string(),
   value: z.string(),
   // 강도 평가
-  intensity: radioInput,
+  intensity: Intensity,
   // 정동 평가
   affectiveScore: AffectiveScore,
   // 정동평가(서술)
@@ -150,7 +147,7 @@ const CuppingFormSchema = z.object({
 
 // 루트 스키마
 const RootCuppingFormSchema = z.object({
-  purpose: radioInput,
+  purpose: RadioInput,
   schemaList: z.array(CuppingFormSchema),
 });
 
@@ -165,8 +162,8 @@ export const RootCuppingFormSchemaZodResolver = zodResolver(RootCuppingFormSchem
 // select 전용 타입
 export type SelectInput = z.infer<typeof SelectInput>;
 
-// text 전용 타입
-export type TextInput = z.infer<typeof TextInput>;
+// radio 전용 타입
+export type RadioInput = z.infer<typeof RadioInput>;
 
 // select 옵선들 전용 타입
 export type OptionLists = z.infer<typeof OptionLists>;

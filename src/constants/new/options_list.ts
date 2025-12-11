@@ -1,7 +1,7 @@
 // 원두, 목적은 사장님이 그때그때 추가하실거니, 따로 API로 관리해야함
 // value는 서버에 전송할 값
 
-import type { OptionLists } from "@/types/new/new_form_schema";
+import type { OptionLists } from '@/types/new/new_form_schema';
 
 // label은 UI로 보여줄 텍스트
 export const optionsList: OptionLists = {
@@ -12,7 +12,7 @@ export const optionsList: OptionLists = {
     { id: 4, label: '브라질 산토스', value: 'brazil_santos' },
   ],
   purposeOptions: [
-    { id: 1, label: '커핑 입문', value: 'basic' },
-    { id: 2, label: '전문 커피 감별', value: 'expert' },
+    { id: 1, label: '입문자', value: 'basic' },
+    { id: 2, label: '전문가', value: 'expert' },
   ],
 };

@@ -3,8 +3,8 @@ import useCuppingEvaluation, {
   type HandleNdNodeClick,
   type HandleStNodeClick,
 } from '@/hooks/new/useCuppingEvaluation';
+import type { CategoryName } from '@/types/new/new_form_schema';
 import { createContext, useContext, type ReactNode } from 'react';
-import type { InputType } from 'zlib';
 
 type StNodeListPath = `schemaList.${number}.evaluationList.${number}.category.cascaderTree`;
 
@@ -25,7 +25,7 @@ interface Context {
   stNodeListPath: StNodeListPath;
   ndNodeListPath: NdNodeListPath;
   leafNodeListPath: LeafNodeListPath;
-  categoryName: InputType;
+  categoryName: CategoryName;
   nowDepth: number;
   setNavIdx: React.Dispatch<React.SetStateAction<number>>;
   handlePrevButtonClick: () => void;
