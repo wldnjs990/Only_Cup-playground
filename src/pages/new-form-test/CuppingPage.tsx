@@ -5,6 +5,8 @@ import CuppingItem from './components/CuppingItem';
 import { ButtonCn } from '@/components/ui/button_cn';
 import { NEW_FORM_SCHEMA } from '@/constants/new/new_form_schema_mock';
 import useNewFormStore from '@/store/newFormStore';
+import RadioInput from '@/components/RadioInput';
+import ContentTitle from './components/ContentTitle';
 
 export default function CuppingPage() {
   // store
@@ -19,14 +21,14 @@ export default function CuppingPage() {
   // rhf context
   const { control, trigger } = useFormContext<TRootCuppingFormSchema>();
 
-  // rhf 동적 스키마 필드
+  // 동적 스키마 필드
   const {
-    fields: root,
+    fields: schemaList,
     append,
     remove,
   } = useFieldArray({
     control,
-    name: 'root',
+    name: 'schemaList',
   });
 
   // 커핑 추가, 제거
@@ -45,7 +47,7 @@ export default function CuppingPage() {
     // TODO: 않이 이거 타입 맞는데 왜이래 타입단언해야하나.. => 타입단언했는데 무슨 해결책 없나
     const pathArr = new Array(cuppingCount)
       .fill(0)
-      .map((_, idx) => `root.${idx}.basicInfo`) as FieldPath<TRootCuppingFormSchema>[];
+      .map((_, idx) => `schemaList.${idx}.basicInfo`) as FieldPath<TRootCuppingFormSchema>[];
     const isValid = await trigger(pathArr);
     if (!isValid) alert('커핑할 원두를 모두 선택해주세요!');
     else {
@@ -59,9 +61,18 @@ export default function CuppingPage() {
 
   return (
     <section className="flex h-full min-h-0 w-full flex-1 flex-col gap-2 overflow-hidden">
+      <RadioInput path="purpose" />
+      {step === 2 && (
+        <ContentTitle
+          as="h1"
+          title="사진 클릭해서 평가해주세요.(임시)"
+          className="mt-5 flex justify-center"
+        />
+      )}
+
       <div className="h-full min-h-0 flex-1 overflow-y-auto">
         <ul className="flex flex-col flex-wrap sm:flex-row">
-          {root.map((_, idx) => {
+          {schemaList.map((_, idx) => {
             return <CuppingItem key={idx} idx={idx} />;
           })}
         </ul>
@@ -75,9 +86,7 @@ export default function CuppingPage() {
             cuppingCount={cuppingCount}
             increaseFunc={CuppingFormIncrease}
             decreaseFunc={CuppingFormDecrease}
-          >
-            <ButtonCn>커핑 갯수 설정</ButtonCn>
-          </SettingDrawer>
+          />
         )}
         {step == 1 && <ButtonCn onClick={validateBasicInfoAndGoNextStep}>시작!</ButtonCn>}
         {/* 2페이지 */}

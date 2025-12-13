@@ -5,7 +5,7 @@ import { CuppingEvaluationProvider } from '@/contexts/CuppingEvaluationContext';
 export default function EvaluationContent({
   evaluationListPath,
 }: {
-  evaluationListPath: `root.${number}.evaluationList`;
+  evaluationListPath: `schemaList.${number}.evaluationList`;
 }) {
   return (
     <>

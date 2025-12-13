@@ -16,27 +16,29 @@ const OptionLists = z.object({
   purposeOptions: z.array(Option),
 });
 
+// 공용 Input 타입
 const SelectInput = z.object({
   inputType: InputType,
+  required: z.boolean(),
   label: z.string(),
   value: z.string().refine((val) => val !== '', { error: '선택되지 않았어요!' }),
   selectedName: z.string(),
-  required: z.boolean(),
   optionList: z.array(Option),
+  tooltip: z.string().optional(),
 });
 
-const TextInput = z.object({
+const RadioInput = z.object({
   inputType: InputType,
+  required: z.boolean(),
   label: z.string(),
   value: z.string(),
-  required: z.boolean(),
   optionList: z.array(Option),
+  tooltip: z.string(),
 });
 
 // 기본 정보
 const BasicInfo = z.object({
   title: SelectInput,
-  purpose: TextInput,
 });
 
 // 카테고리
@@ -73,25 +75,9 @@ const Category = z.object({
   valueList: z.array(z.string()),
 });
 
-// 상세평가
 // 카테고리 상세 평가
-
-// 강도 평가 옵션
-const IntensityOption = z.object({
-  label: z.enum(['낮음', '중간', '높음']),
-  value: z.string(),
-});
-
-const IntensityOptionList = z.array(IntensityOption);
-
-// 강도 평가
-const Intensity = z.object({
+const Intensity = RadioInput.extend({
   title: z.string(),
-  inputType: InputType,
-  required: z.boolean(),
-  value: z.string(),
-  optionList: IntensityOptionList,
-  tooltip: z.string(),
 });
 
 const AffectiveExplain = z.object({
@@ -151,7 +137,7 @@ const Evaluation = z.object({
   detailEvaluation: DetailEvaluation,
 });
 
-// 루트 스키마
+// 커핑 스키마
 const CuppingFormSchema = z.object({
   // 기본 정보
   basicInfo: BasicInfo,
@@ -161,7 +147,8 @@ const CuppingFormSchema = z.object({
 
 // 루트 스키마
 const RootCuppingFormSchema = z.object({
-  root: z.array(CuppingFormSchema),
+  purpose: RadioInput,
+  schemaList: z.array(CuppingFormSchema),
 });
 
 // 타입 export --------------------------------------------------------------------------------------
@@ -175,8 +162,8 @@ export const RootCuppingFormSchemaZodResolver = zodResolver(RootCuppingFormSchem
 // select 전용 타입
 export type SelectInput = z.infer<typeof SelectInput>;
 
-// text 전용 타입
-export type TextInput = z.infer<typeof TextInput>;
+// radio 전용 타입
+export type RadioInput = z.infer<typeof RadioInput>;
 
 // select 옵선들 전용 타입
 export type OptionLists = z.infer<typeof OptionLists>;
