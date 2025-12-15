@@ -71,7 +71,7 @@ export default function CuppingPage() {
       )}
 
       <div className="h-full min-h-0 flex-1 overflow-y-auto">
-        <ul className="flex flex-col flex-wrap sm:flex-row">
+        <ul className="grid h-fit grid-cols-1 sm:grid-cols-2">
           {schemaList.map((_, idx) => {
             return <CuppingItem key={idx} idx={idx} />;
           })}
@@ -81,17 +81,17 @@ export default function CuppingPage() {
       {/* 버튼 영역 */}
       <div className="flex flex-col gap-4">
         {/* 1페이지 */}
-        {step == 1 && (
+        {step === 1 && (
           <SettingDrawer
             cuppingCount={cuppingCount}
             increaseFunc={CuppingFormIncrease}
             decreaseFunc={CuppingFormDecrease}
           />
         )}
-        {step == 1 && <ButtonCn onClick={validateBasicInfoAndGoNextStep}>시작!</ButtonCn>}
+        {step === 1 && <ButtonCn onClick={validateBasicInfoAndGoNextStep}>시작!</ButtonCn>}
         {/* 2페이지 */}
-        {step == 2 && <ButtonCn>평가 완료!</ButtonCn>}
-        {step == 2 && <ButtonCn onClick={goPrevStep}>뒤로가기</ButtonCn>}
+        {step === 2 && <ButtonCn>평가 완료!</ButtonCn>}
+        {step === 2 && <ButtonCn onClick={goPrevStep}>뒤로가기</ButtonCn>}
       </div>
     </section>
   );

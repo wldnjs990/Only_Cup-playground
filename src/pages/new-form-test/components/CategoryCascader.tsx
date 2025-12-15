@@ -36,7 +36,8 @@ export default function CategoryCascader() {
           className="flex flex-wrap justify-around gap-1 px-4 py-2"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.2, ease: 'easeInOut' }}
+          exit={{ opacity: 1 }}
+          transition={{ duration: 0.3, ease: 'easeInOut' }}
         >
           {/* 루트 노드 */}
           {nowDepth === 1 && <CategorySt key={stNodeListPath} />}
