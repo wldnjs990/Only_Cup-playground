@@ -12,7 +12,7 @@ export default function TestFrame({
     <main className="flex h-full min-h-0 min-w-0 flex-1 items-center justify-center overflow-hidden p-5">
       <section
         className={twMerge(
-          'flex h-full w-full overflow-y-scroll rounded-lg bg-white p-5 [color-scheme:light] shadow-xl/20 dark:bg-white',
+          'flex h-full w-full overflow-y-auto rounded-lg bg-white p-5 [color-scheme:light] shadow-xl/20 dark:bg-white',
           className,
         )}
       >

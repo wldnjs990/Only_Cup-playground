@@ -45,9 +45,9 @@ export default function NewFormTest() {
     console.error(error);
   };
 
-  // 커핑 리스트 높이만큼 웹사이트 높이가 추가되는 문제 해결이 안됨;;
-  // 그냥 인덱스 들어올때만 useEffect로 body에 overflow 박아야겠다
-  // html도 높이가 그대로 고정인데 왜 측정되지도 않는 높이가 추가로 생겨나는거지
+  // vaul이 만든 drawer 라이브러리가 canvas 태그관련 레이아웃 버그를 발생시킴
+  // 그래서 body태그에 인라인 스타일로 강제 고정
+  // TODO : drawer 라이브러리 직접 구현하기
   useEffect(() => {
     document.body.style.overflow = 'hidden';
 
