@@ -1,4 +1,4 @@
-import type { RHFPathProps } from '@/constants/new/rhf-path';
+import type { RHFPathProps } from '@/types/new/rhf-path';
 import { InputCn } from './ui/input_cn';
 import { useFormContext, type FieldValues } from 'react-hook-form';
 

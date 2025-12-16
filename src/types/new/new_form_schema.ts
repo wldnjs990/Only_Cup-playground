@@ -63,7 +63,7 @@ const CategoryFirstNode = z.object({
   children: z.array(CategorySecondNode),
 });
 
-const CategoryName = z.enum(['aroma', 'taste', 'acidity', 'switness', 'mouthfeel']);
+const CategoryName = z.enum(['aroma', 'taste', 'acidity', 'sweetness', 'mouthfeel']);
 
 const Category = z.object({
   inputType: InputType,
@@ -182,7 +182,7 @@ const CategoryTree = z.object({
   aroma: z.array(CategoryFirstNode),
   taste: z.array(CategoryFirstNode),
   acidity: z.array(CategoryFirstNode),
-  switness: z.array(CategoryFirstNode),
+  sweetness: z.array(CategoryFirstNode),
   mouthfeel: z.array(CategoryFirstNode),
 });
 

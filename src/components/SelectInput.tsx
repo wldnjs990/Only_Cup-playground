@@ -7,7 +7,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select_cn';
-import type { RHFPathProps } from '@/constants/new/rhf-path';
+import type { RHFPathProps } from '@/types/new/rhf-path';
 import type { SelectInput } from '@/types/new/new_form_schema';
 import clsx from 'clsx';
 import { Controller, useFormContext, type FieldValues } from 'react-hook-form';

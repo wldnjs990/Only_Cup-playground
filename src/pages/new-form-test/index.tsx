@@ -5,43 +5,30 @@ import {
   type SubmitHandler,
 } from 'react-hook-form';
 import TestFrame from './components/TestFrame';
-import {
-  RootCuppingFormSchemaZodResolver,
-  type TRootCuppingFormSchema,
-} from '@/types/new/new_form_schema';
 import RHFContext from '@/components/RHFContext';
-import { NEW_FORM_SCHEMA } from '@/constants/new/new_form_schema_mock';
 import CuppingPage from './CuppingPage';
 import { useEffect } from 'react';
-import { optionsList } from '@/constants/new/options_list';
+import { EMPTY_FORM_VALUES } from '@/constants/new/form_values_mock';
+import {
+  RootCuppingFormValueResolver,
+  type RootCuppingFormValue,
+} from '@/types/new/form_values_schema';
 
-// useForm 사용시 타입추론을 위해 TRootCuppingFormSchema 타입을 FieldValues와 합쳐 추론 가능한 스키마 타입으로 만들어줌
-interface RHFRootCuppingFormSchema extends FieldValues, TRootCuppingFormSchema {}
+// useForm 사용시 타입추론을 위해 RootCuppingFormValue 타입을 FieldValues와 합쳐 추론 가능한 스키마 타입으로 만들어줌
+interface RHFRootCuppingFormSchema extends FieldValues, RootCuppingFormValue {}
 
 export default function NewFormTest() {
-  // 폼 초기값
-  const defaultCuppingFormSchema: TRootCuppingFormSchema = {
-    purpose: {
-      inputType: 'radio',
-      label: '입문자',
-      value: 'basic',
-      required: false,
-      optionList: optionsList.purposeOptions,
-      tooltip: `입문자 : 커핑 관련 툴팁들을 제공해줍니다.\n전문가 : 툴팁이 제공되지 않습니다.`,
-    },
-    schemaList: [NEW_FORM_SCHEMA],
-  };
   // RHF 폼 스키마 생성
   const methods = useForm<RHFRootCuppingFormSchema>({
-    defaultValues: defaultCuppingFormSchema,
-    resolver: RootCuppingFormSchemaZodResolver,
+    defaultValues: EMPTY_FORM_VALUES,
+    resolver: RootCuppingFormValueResolver,
   });
 
-  const onSubmit: SubmitHandler<TRootCuppingFormSchema> = (data) => {
+  const onSubmit: SubmitHandler<RootCuppingFormValue> = (data) => {
     console.log('submit 발동됨.');
     console.log(data);
   };
-  const onError: SubmitErrorHandler<TRootCuppingFormSchema> = (error) => {
+  const onError: SubmitErrorHandler<RootCuppingFormValue> = (error) => {
     console.error(error);
   };
 

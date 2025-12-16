@@ -1,53 +1,44 @@
 import { useFieldArray, useFormContext, type FieldPath } from 'react-hook-form';
 import { SettingDrawer } from './components/SettingDrawerEx';
-import type { TRootCuppingFormSchema } from '@/types/new/new_form_schema';
 import CuppingItem from './components/CuppingItem';
 import { ButtonCn } from '@/components/ui/button_cn';
-import { NEW_FORM_SCHEMA } from '@/constants/new/new_form_schema_mock';
-import useNewFormStore from '@/store/newFormStore';
 import RadioInput from '@/components/RadioInput';
 import ContentTitle from './components/ContentTitle';
+import type { RootCuppingFormValue } from '@/types/new/form_values_schema';
+import { createEmptyCuppingFormValue } from '@/constants/new/form_values_mock';
 
 export default function CuppingPage() {
-  // store
-  const step = useNewFormStore((state) => state.step);
-  const nextstep = useNewFormStore((state) => state.nextstep);
-  const prevstep = useNewFormStore((state) => state.prevstep);
-
-  const cuppingCount = useNewFormStore((state) => state.cuppingCount);
-  const increaseCuppingCount = useNewFormStore((state) => state.increaseCuppingCount);
-  const decreaseCuppingCount = useNewFormStore((state) => state.decreaseCuppingCount);
-
   // rhf context
-  const { control, trigger } = useFormContext<TRootCuppingFormSchema>();
+  const { control, trigger } = useFormContext<RootCuppingFormValue>();
 
   // 동적 스키마 필드
   const {
-    fields: schemaList,
+    fields: cuppings,
     append,
     remove,
   } = useFieldArray({
     control,
-    name: 'schemaList',
+    name: 'cuppings',
   });
 
   // 커핑 추가, 제거
   const CuppingFormIncrease = () => {
-    append(NEW_FORM_SCHEMA);
-    increaseCuppingCount();
+    append(createEmptyCuppingFormValue());
   };
   const CuppingFormDecrease = (idx: number) => {
     remove(idx - 1);
-    decreaseCuppingCount();
   };
 
   // 커핑 기본 정보 검증 후 다음 스텝 이동
   // TODO : 따로 함수 ts 파일에 분리해두기
   const validateBasicInfoAndGoNextStep = async () => {
     // TODO: 않이 이거 타입 맞는데 왜이래 타입단언해야하나.. => 타입단언했는데 무슨 해결책 없나
-    const pathArr = new Array(cuppingCount)
+
+    const cuppingsLength = cuppings.length;
+
+    const pathArr = new Array(cuppingsLength)
       .fill(0)
-      .map((_, idx) => `schemaList.${idx}.basicInfo`) as FieldPath<TRootCuppingFormSchema>[];
+      .map((_, idx) => `cuppings.${idx}.coffeeId`) as `cuppings.${number}.coffeeId`[];
     const isValid = await trigger(pathArr);
     if (!isValid) alert('커핑할 원두를 모두 선택해주세요!');
     else {
@@ -64,7 +55,7 @@ export default function CuppingPage() {
       <RadioInput path="purpose" />
       {step === 2 && (
         <ContentTitle
-          as="h1"
+          as="h2"
           title="사진 클릭해서 평가해주세요.(임시)"
           className="mt-5 flex justify-center"
         />
@@ -72,7 +63,7 @@ export default function CuppingPage() {
 
       <div className="h-full min-h-0 flex-1 overflow-y-auto">
         <ul className="grid h-fit grid-cols-1 sm:grid-cols-2">
-          {schemaList.map((_, idx) => {
+          {cuppings.map((_, idx) => {
             return <CuppingItem key={idx} idx={idx} />;
           })}
         </ul>

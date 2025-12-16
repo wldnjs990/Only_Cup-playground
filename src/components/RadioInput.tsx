@@ -1,4 +1,4 @@
-import type { RHFPathProps } from '@/constants/new/rhf-path';
+import type { RHFPathProps } from '@/types/new/rhf-path';
 import type { RadioInput } from '@/types/new/new_form_schema';
 import { Controller, useFormContext, type FieldValues } from 'react-hook-form';
 import { Label } from './ui/label';
