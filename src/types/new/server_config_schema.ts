@@ -13,6 +13,11 @@ const Option = z.object({
   value: z.string(),
 });
 
+const OptionLists = z.object({
+  coffeeTitleOptions: z.array(Option),
+  purposeOptions: z.array(Option),
+});
+
 /**
  * Input 타입
  */
@@ -63,7 +68,9 @@ const CategoryFirstNode = z.object({
  */
 const SelectInputConfig = z.object({
   inputType: z.literal('dropdown'),
-  label: z.string(),
+  title: z.string().optional(), // 섹션/필드셋 제목 (선택)
+  label: z.string(), // 필드 레이블
+  placeholder: z.string().optional(), // 입력 힌트
   required: z.boolean(),
   optionList: z.array(Option),
   tooltip: z.string().optional(),
@@ -74,7 +81,9 @@ const SelectInputConfig = z.object({
  */
 const RadioInputConfig = z.object({
   inputType: z.literal('radio'),
-  label: z.string(),
+  title: z.string().optional(), // 섹션/필드셋 제목 (선택)
+  label: z.string(), // 필드 레이블
+  placeholder: z.string().optional(), // 입력 힌트 (라디오에는 보통 불필요)
   required: z.boolean(),
   optionList: z.array(Option),
   tooltip: z.string().optional(),
@@ -85,7 +94,8 @@ const RadioInputConfig = z.object({
  */
 const SliderInputConfig = z.object({
   inputType: z.literal('slider'),
-  label: z.string(),
+  title: z.string().optional(), // 섹션 제목 (선택)
+  label: z.string(), // 필드 레이블
   required: z.boolean(),
   min: z.number(),
   max: z.number(),
@@ -109,7 +119,9 @@ const TextInputConfig = z.object({
  */
 const CascaderInputConfig = z.object({
   inputType: z.literal('cascader'),
-  label: z.string(),
+  title: z.string().optional(), // 섹션 제목 (선택)
+  label: z.string(), // 필드 레이블
+  placeholder: z.string().optional(), // 입력 힌트
   required: z.boolean(),
   cascaderTree: z.array(CategoryFirstNode),
   maxSelection: z.number().optional().default(5),
@@ -124,9 +136,11 @@ const CascaderInputConfig = z.object({
  * 카테고리 상세 평가 설정
  */
 const DetailEvaluationConfig = z.object({
-  label: z.string(),
+  title: z.string().optional(), // 섹션 제목 (선택)
+  label: z.string(), // 섹션 설명
   // 강도 평가 설정
   intensity: z.object({
+    title: z.string().optional(),
     label: z.string(),
     inputType: z.literal('radio'),
     optionList: z.array(Option),
@@ -134,6 +148,7 @@ const DetailEvaluationConfig = z.object({
   }),
   // 정동 평가 설정
   affectiveScore: z.object({
+    title: z.string().optional(),
     label: z.string(),
     inputType: z.literal('slider'),
     min: z.number(),
@@ -143,6 +158,7 @@ const DetailEvaluationConfig = z.object({
   }),
   // 정동 평가 서술 설정
   affectiveNote: z.object({
+    title: z.string().optional(),
     label: z.string(),
     inputType: z.literal('text'),
     placeholder: z.string().optional(),
@@ -207,6 +223,7 @@ const AffectiveExplainList = z.array(AffectiveExplain);
 // ============================================
 
 export type Option = z.infer<typeof Option>;
+export type OptionLists = z.infer<typeof OptionLists>;
 export type InputType = z.infer<typeof InputType>;
 export type CategoryName = z.infer<typeof CategoryName>;
 

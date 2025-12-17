@@ -7,24 +7,17 @@ import {
   DrawerTrigger,
 } from '@/components/ui/drawer';
 import useNewFormStore from '@/store/newFormStore';
-import type { TRootCuppingFormSchema } from '@/types/new/new_form_schema';
-import { useFormContext } from 'react-hook-form';
 import EvaluationContent from './EvaluationContent';
+import { DrawerCoffeeTitle } from './DrawerCoffeeTitle';
 
 export function EvaluationDrawer({
   imgPath,
-  basicInfoTitlePath,
-  evaluationListPath,
+  cuppingsIdx,
 }: {
   imgPath: string;
-  basicInfoTitlePath: `schemaList.${number}.basicInfo.title`;
-  evaluationListPath: `schemaList.${number}.evaluationList`;
+  cuppingsIdx: number;
 }) {
-  const { getValues } = useFormContext<TRootCuppingFormSchema>();
-
   const step = useNewFormStore((state) => state.step);
-
-  const BasicInfoTitle = getValues(basicInfoTitlePath);
 
   return (
     <Drawer>
@@ -41,20 +34,18 @@ export function EvaluationDrawer({
         <div className="mx-auto w-full max-w-sm">
           <DrawerHeader>
             <DrawerTitle>
-              <div>
-                <h2 className="h2-md-style">{BasicInfoTitle.selectedName}</h2>
-              </div>
+              {/* useWatch로 리렌더링 범위를 DrawerCoffeeTitle 컴포넌트로 제한 */}
+              {/* TODO : CuppingItem에 있는 coffeeId 쓰는 값도 렌더링 최적화 해야하는데, ContentTitle을 확장성있게 수정하자 */}
+              {/* title이 필요한 데이터를 title 또는 path로 받아서 처리할 수 있도록 수정해보자(아니면 useWatch 렌더링용 컴포넌트를 새로 만들던가) */}
+              <DrawerCoffeeTitle cuppingsIdx={cuppingsIdx} />
             </DrawerTitle>
             {/* sr-only 라는 테일윈드 유틸 클래스는 스크린 리더에만 보일수 있도록 UI를 가리는 역할 */}
             <DrawerDescription className="sr-only">
               선택하신 커핑 평가를 이곳에서 할 수 있습니다.
             </DrawerDescription>
           </DrawerHeader>
-          {/* 컨텐츠 (카테고리 - 강도 평가 - 정동평가) */}
-          <div className="p-4 pb-0">
-            <EvaluationContent evaluationListPath={evaluationListPath} />
-          </div>
-          {/* 컨텐츠 */}
+          {/* 컨텐츠 (카테고리 -> 강도 평가 -> 정동평가) */}
+          <EvaluationContent cuppingsIdx={cuppingsIdx} />
         </div>
       </DrawerContent>
     </Drawer>

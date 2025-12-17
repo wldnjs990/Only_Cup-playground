@@ -1,10 +1,10 @@
-import type { TRootCuppingFormSchema } from '@/types/new/new_form_schema';
 import { useFormContext, useWatch } from 'react-hook-form';
 import CategoryButton from './CategoryButton';
 import { useCuppingEvaluationContext } from '@/contexts/CuppingEvaluationContext';
+import type { RootCuppingFormValue } from '@/types/new/form_values_schema';
 
 export default function CategoryLeaf() {
-  const { control } = useFormContext<TRootCuppingFormSchema>();
+  const { control } = useFormContext<RootCuppingFormValue>();
 
   const { handleLeafNodeClick, leafNodeListPath } = useCuppingEvaluationContext();
 

@@ -1,7 +1,7 @@
 // 원두, 목적은 사장님이 그때그때 추가하실거니, 따로 API로 관리해야함
 // value는 서버에 전송할 값
 
-import type { OptionLists } from '@/types/new/new_form_schema';
+import type { OptionLists } from '@/types/new/server_config_schema';
 
 // label은 UI로 보여줄 텍스트
 export const optionsList: OptionLists = {

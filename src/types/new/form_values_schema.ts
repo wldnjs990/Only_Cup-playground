@@ -1,4 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import type { FieldValues } from 'react-hook-form';
 import z from 'zod';
 
 // ============================================
@@ -64,5 +65,7 @@ export type EvaluationValue = z.infer<typeof EvaluationValue>;
 export type CuppingFormValue = z.infer<typeof CuppingFormValue>;
 export type RootCuppingFormValue = z.infer<typeof RootCuppingFormValue>;
 
+// Field type
+export interface RHFRootCuppingFormSchema extends FieldValues, RootCuppingFormValue {}
 // RHF resolver
 export const RootCuppingFormValueResolver = zodResolver(RootCuppingFormValue);

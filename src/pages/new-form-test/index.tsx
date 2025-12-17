@@ -1,9 +1,4 @@
-import {
-  useForm,
-  type FieldValues,
-  type SubmitErrorHandler,
-  type SubmitHandler,
-} from 'react-hook-form';
+import { useForm, type SubmitErrorHandler, type SubmitHandler } from 'react-hook-form';
 import TestFrame from './components/TestFrame';
 import RHFContext from '@/components/RHFContext';
 import CuppingPage from './CuppingPage';
@@ -11,11 +6,11 @@ import { useEffect } from 'react';
 import { EMPTY_FORM_VALUES } from '@/constants/new/form_values_mock';
 import {
   RootCuppingFormValueResolver,
+  type RHFRootCuppingFormSchema,
   type RootCuppingFormValue,
 } from '@/types/new/form_values_schema';
 
 // useForm 사용시 타입추론을 위해 RootCuppingFormValue 타입을 FieldValues와 합쳐 추론 가능한 스키마 타입으로 만들어줌
-interface RHFRootCuppingFormSchema extends FieldValues, RootCuppingFormValue {}
 
 export default function NewFormTest() {
   // RHF 폼 스키마 생성

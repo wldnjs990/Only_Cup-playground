@@ -1,77 +1,63 @@
 import createDetailEvaluations from '@/constants/new/category_detail_evaluations';
 import { categoryTree } from '@/constants/new/category_tree';
+import type { RootCuppingFormValue } from '@/types/new/form_values_schema';
 import type { TRootCuppingFormSchema } from '@/types/new/new_form_schema';
 import { useEffect, useState } from 'react';
 import { useFieldArray, useFormContext, useWatch } from 'react-hook-form';
 
 // 1뎁스 노드
-type StNodeListPath = `schemaList.${number}.evaluationList.${number}.category.cascaderTree`;
+type StNodeListPath = `cuppings.${number}.evaluationList.${number}.category.cascaderTree`;
 // 1뎁스 selected 핸들러 타입
 export type HandleStNodeClick = (
-  selectedPath: `schemaList.${number}.evaluationList.${number}.category.cascaderTree.${number}.selected`,
-  childrenPath: `schemaList.${number}.evaluationList.${number}.category.cascaderTree.${number}.children`,
+  selectedPath: `cuppings.${number}.evaluationList.${number}.category.cascaderTree.${number}.selected`,
+  childrenPath: `cuppings.${number}.evaluationList.${number}.category.cascaderTree.${number}.children`,
   selected: boolean,
 ) => void;
 
 // 2뎁스 노드
 type NdNodeListPath =
-  | `schemaList.${number}.evaluationList.${number}.category.cascaderTree.${number}.children`
+  | `cuppings.${number}.evaluationList.${number}.category.cascaderTree.${number}.children`
   | null;
 // 2뎁스 selected 핸들러 타입
 export type HandleNdNodeClick = (
-  selectedPath: `schemaList.${number}.evaluationList.${number}.category.cascaderTree.${number}.children.${number}.selected`,
-  childrenPath: `schemaList.${number}.evaluationList.${number}.category.cascaderTree.${number}.children.${number}.children`,
+  selectedPath: `cuppings.${number}.evaluationList.${number}.category.cascaderTree.${number}.children.${number}.selected`,
+  childrenPath: `cuppings.${number}.evaluationList.${number}.category.cascaderTree.${number}.children.${number}.children`,
   selected: boolean,
 ) => void;
 
 // 3뎁스 노드
 type LeafNodeListPath =
-  | `schemaList.${number}.evaluationList.${number}.category.cascaderTree.${number}.children.${number}.children`
+  | `cuppings.${number}.evaluationList.${number}.category.cascaderTree.${number}.children.${number}.children`
   | null;
 // 리프 selected 핸들러 타입
 export type HandleLeafNodeClick = (
   selected: boolean,
   label: string,
   value: string,
-  selectedPath: `schemaList.${number}.evaluationList.${number}.category.cascaderTree.${number}.children.${number}.children.${number}.selected`,
+  selectedPath: `cuppings.${number}.evaluationList.${number}.category.cascaderTree.${number}.children.${number}.children.${number}.selected`,
 ) => void;
 
-export default function useCuppingEvaluation(
-  evaluationListPath: `schemaList.${number}.evaluationList`,
-) {
-  const { getValues, setValue, control } = useFormContext<TRootCuppingFormSchema>();
+export default function useCuppingEvaluation(cuppingsIdx: number) {
+  const { getValues, setValue, control } = useFormContext<RootCuppingFormValue>();
 
   // 내비게이션 영역 -----------------------------------------------------------------------------------------
 
-  // 현재 평가(맛, 향 ... 5개)
-  const [navIdx, setNavIdx] = useState<number>(0);
+  // 선택된 내비게이션 인덱스
+  const [evaluationsIdx, setEvaluationsIdx] = useState<number>(0);
 
   // 현재 평가 경로
   const [evaluationPath, setEvaluationPath] =
-    useState<`schemaList.${number}.evaluationList.${number}`>(`${evaluationListPath}.${navIdx}`);
-
-  // 평가 영역 -----------------------------------------------------------------------------------------
-
-  const [categoryPath, setCategoryPath] =
-    useState<`schemaList.${number}.evaluationList.${number}.category`>(
-      `${evaluationPath}.category`,
+    useState<`cuppings.${number}.evaluationList.${number}`>(
+      `cuppings.${cuppingsIdx}.evaluationList.${evaluationsIdx}`,
     );
-  const [detailPath, setDetailPath] =
-    useState<`schemaList.${number}.evaluationList.${number}.detailEvaluation`>(
-      `${evaluationPath}.detailEvaluation`,
-    );
-
-  // 선택한 카테고리 이름
-  const categoryName = getValues(`${categoryPath}.name`);
 
   // 1뎁스 노드 ----------------------------------------------------------------------------------------
-  const [stNodeListPath, setStNodeListPath] = useState<StNodeListPath>(
-    `${categoryPath}.cascaderTree`,
-  );
-  // 1뎁스 선택 인덱스
-  const [stNodnavIdx, setStNodnavIdx] = useState<number>(0);
+
+  // 노드 선택 여부
+  const [stNodeIdx, setStNodeIdx] = useState<number | null>(null);
+
   // 1뎁스 selected 핸들러
-  const handleStNodeClick: HandleStNodeClick = (selectedPath, childrenPath, selected) => {
+  const handleStNodeClick: HandleStNodeClick = (nowIdx) => {
     // 초기화용 categoryTree 상수
     const initialCategory = categoryTree[categoryName];
 
@@ -211,7 +197,7 @@ export default function useCuppingEvaluation(
 
   return {
     evaluationListPath,
-    navIdx,
+    evaluationsIdx,
     evaluationPath,
     categoryPath,
     detailPath,
@@ -220,7 +206,7 @@ export default function useCuppingEvaluation(
     leafNodeListPath,
     categoryName,
     nowDepth,
-    setNavIdx,
+    setEvaluationsIdx,
     handlePrevButtonClick,
     handleDetailEvaluateButtonClick,
     handleStNodeClick,

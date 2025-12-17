@@ -1,60 +1,51 @@
 import type { RHFPathProps } from '@/types/new/rhf-path';
 import type { RadioInput } from '@/types/new/new_form_schema';
-import { Controller, useFormContext, type FieldValues } from 'react-hook-form';
+import { useFormContext, type FieldValues } from 'react-hook-form';
 import { Label } from './ui/label';
 import { RadioGroup, RadioGroupItem } from './ui/radio-group_cn';
 import { twMerge } from 'tailwind-merge';
 import clsx from 'clsx';
-import { ToolTip } from '@/pages/new-form-test/components/ToolTip';
+import ContentTitle from '@/pages/new-form-test/components/ContentTitle';
+import ErrorMessage from './ErrorMessage';
+import type { RadioInputConfig } from '@/types/new/server_config_schema';
 
 export default function RadioInput<TFieldValues extends FieldValues>({
   path,
+  config,
 }: RHFPathProps<TFieldValues>) {
-  const { control } = useFormContext<TFieldValues>();
+  const { register, formState, getFieldState } = useFormContext<TFieldValues>();
+
+  // TODO : inputType에 따라 적절한 input UI를 반환해주는 통합 컴포넌트 만들기
+  const { inputType, label, required, optionList, tooltip } = config as RadioInputConfig;
+
+  const { error } = getFieldState(path, formState);
 
   return (
-    <Controller
-      name={path}
-      control={control}
-      render={({ field }) => {
-        const { value, optionList, tooltip } = field.value as RadioInput;
-        return (
-          <RadioGroup
-            defaultValue={value}
-            onValueChange={(changingValue) => {
-              const selected = optionList.find((opt) => opt.value === changingValue);
-              field.onChange({ ...field.value, value: changingValue, label: selected?.label });
-            }}
-            className="relative flex justify-center gap-0"
-          >
-            <ToolTip tooltipText={tooltip} className="absolute right-0 h-6 w-6" />
-            {optionList.map((option, idx) => {
-              return (
-                <div
-                  key={option.value}
-                  className={twMerge(
-                    'border px-2 py-1 transition',
-                    clsx(idx === 0 && 'rounded-l-full'),
-                    clsx(idx === optionList.length - 1 && 'rounded-r-full'),
-                    clsx(
-                      option.value === value
-                        ? 'border-purple-400 bg-purple-400 text-white'
-                        : 'bg-gray-100',
-                    ),
-                  )}
-                >
-                  <RadioGroupItem
-                    value={option.value}
-                    id={`intensity-${idx}-${option.value}`}
-                    hidden
-                  />
-                  <Label htmlFor={`intensity-${idx}-${option.value}`}>{option.label}</Label>
-                </div>
-              );
-            })}
-          </RadioGroup>
-        );
-      }}
-    ></Controller>
+    <section>
+      {/* 라디오 title */}
+      <ContentTitle as="h2" title={label} tooltip={tooltip} required={required} />
+      {/* 라디오 input */}
+      <RadioGroup {...register(path)} className="relative flex justify-center gap-0">
+        {optionList.map((option, idx) => {
+          const { id, label, value } = option;
+          return (
+            <div
+              key={id}
+              className={twMerge(
+                'border bg-gray-100 px-2 py-1 transition',
+                'checked:border-purple-400 checked:bg-purple-400 checked:text-white',
+                clsx(idx === 0 && 'rounded-l-full'),
+                clsx(idx === optionList.length - 1 && 'rounded-r-full'),
+              )}
+            >
+              <RadioGroupItem value={value} id={`${path}-${id}-${value}`} hidden />
+              <Label htmlFor={`${path}-${id}-${value}`}>{label}</Label>
+            </div>
+          );
+        })}
+        {/* 라디오 error */}
+        <ErrorMessage error={error} />
+      </RadioGroup>
+    </section>
   );
 }

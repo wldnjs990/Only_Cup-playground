@@ -1,4 +1,3 @@
-import type { TRootCuppingFormSchema } from '@/types/new/new_form_schema';
 import { useFormContext } from 'react-hook-form';
 import CategorySt from './CategorySt';
 import CategoryNd from './CategoryNd';
@@ -7,9 +6,10 @@ import CategoryLeaf from './CategoryLeaf';
 import { AnimatePresence, motion } from 'motion/react';
 import ContentTitle from './ContentTitle';
 import { useCuppingEvaluationContext } from '@/contexts/CuppingEvaluationContext';
+import type { RootCuppingFormValue } from '@/types/new/form_values_schema';
 
 export default function CategoryCascader() {
-  const { getValues } = useFormContext<TRootCuppingFormSchema>();
+  const { getValues } = useFormContext<RootCuppingFormValue>();
 
   const {
     categoryPath,

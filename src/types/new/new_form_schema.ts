@@ -1,20 +1,10 @@
+// 구조문제로 이 파일은 삭제 예정 ----------------------------------------------------------------------
+
 import { zodResolver } from '@hookform/resolvers/zod';
 import z from 'zod';
 
 // 공용 타입
 const InputType = z.enum(['text', 'radio', 'dropdown', 'cascader', 'slider']);
-
-// 커핑 옵션
-const Option = z.object({
-  id: z.number(),
-  label: z.string(),
-  value: z.string(),
-});
-
-const OptionLists = z.object({
-  coffeeTitleOptions: z.array(Option),
-  purposeOptions: z.array(Option),
-});
 
 // 공용 Input 타입
 const SelectInput = z.object({
@@ -196,3 +186,5 @@ export type CategoryName = z.infer<typeof CategoryName>;
 export type CategoryEvaluations = z.infer<typeof CategoryEvaluations>;
 
 export type AffectiveExplainList = z.infer<typeof AffectiveExplainList>;
+
+// 구조문제로 이 파일은 삭제 예정 ----------------------------------------------------------------------

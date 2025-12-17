@@ -1,9 +1,9 @@
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group_cn';
-import type { TRootCuppingFormSchema } from '@/types/new/new_form_schema';
 
 import { useFormContext, useWatch } from 'react-hook-form';
 import ContentTitle from './ContentTitle';
+import type { RootCuppingFormValue } from '@/types/new/form_values_schema';
 
 export default function CategoryEvaluation({
   categoryTitle,
@@ -12,7 +12,7 @@ export default function CategoryEvaluation({
   categoryTitle: string;
   categoryEvaluationPath: `schemaList.${number}.evaluationList.${number}.detailEvaluation.categoryEvaluationList.${number}`;
 }) {
-  const { getValues, setValue, control } = useFormContext<TRootCuppingFormSchema>();
+  const { getValues, setValue, control } = useFormContext<RootCuppingFormValue>();
 
   // 강도 평가 주소
   const categoryIntensityPath = `${categoryEvaluationPath}.intensity` as const;

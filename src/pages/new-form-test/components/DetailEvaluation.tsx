@@ -1,12 +1,12 @@
-import type { TRootCuppingFormSchema } from '@/types/new/new_form_schema';
 import { useFormContext } from 'react-hook-form';
 import CategoryIntensity from './CategoryIntensity';
 import CategoryAffectiveScore from './CategoryAffectiveScore';
 import ContentTitle from './ContentTitle';
 import { useCuppingEvaluationContext } from '@/contexts/CuppingEvaluationContext';
+import type { RootCuppingFormValue } from '@/types/new/form_values_schema';
 
 export default function DetailEvaluation() {
-  const { getValues } = useFormContext<TRootCuppingFormSchema>();
+  const { getValues } = useFormContext<RootCuppingFormValue>();
 
   const { detailPath, handlePrevButtonClick } = useCuppingEvaluationContext();
 

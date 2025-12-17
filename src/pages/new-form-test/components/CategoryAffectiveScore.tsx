@@ -1,10 +1,10 @@
 import { SliderCn } from '@/components/ui/slider_cn';
-import type { TRootCuppingFormSchema } from '@/types/new/new_form_schema';
 import { useFormContext, useWatch } from 'react-hook-form';
 import ContentTitle from './ContentTitle';
 import { affectiveExplainList } from '@/constants/new/affectiveExplainList';
 import { twMerge } from 'tailwind-merge';
 import clsx from 'clsx';
+import type { RootCuppingFormValue } from '@/types/new/form_values_schema';
 
 // 정동평가에 슬라이드바 색상, 설명 같은건 프론트에서 관리하는게 맞는거 같음.
 // 디자인 관련되었는데, 자주 바뀔거 같지 않는 요소니깐 그냥 프론트에서 관리하고, 관리자가 수정 요청하면 개발자가 직접 수정해주면 되니깐
@@ -15,7 +15,7 @@ export default function CategoryAffectiveScore({
 }: {
   categoryEvaluationPath: `schemaList.${number}.evaluationList.${number}.detailEvaluation.categoryEvaluationList.${number}`;
 }) {
-  const { getValues, setValue, control } = useFormContext<TRootCuppingFormSchema>();
+  const { getValues, setValue, control } = useFormContext<RootCuppingFormValue>();
 
   const categoryAffectiveScorePath = `${categoryEvaluationPath}.affectiveScore` as const;
   const { title, required, max, min, tooltip } = getValues(categoryAffectiveScorePath);

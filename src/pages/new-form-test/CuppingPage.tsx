@@ -1,15 +1,21 @@
-import { useFieldArray, useFormContext, type FieldPath } from 'react-hook-form';
-import { SettingDrawer } from './components/SettingDrawerEx';
+import { useFieldArray, useFormContext } from 'react-hook-form';
+import { CuppingCountControl } from './components/CuppingCountControl';
 import CuppingItem from './components/CuppingItem';
 import { ButtonCn } from '@/components/ui/button_cn';
 import RadioInput from '@/components/RadioInput';
 import ContentTitle from './components/ContentTitle';
 import type { RootCuppingFormValue } from '@/types/new/form_values_schema';
 import { createEmptyCuppingFormValue } from '@/constants/new/form_values_mock';
+import { SERVER_FORM_CONFIG } from '@/constants/new/server_config_mock';
+import useNewFormStore from '@/store/newFormStore';
 
 export default function CuppingPage() {
-  // rhf context
   const { control, trigger } = useFormContext<RootCuppingFormValue>();
+
+  // new form store
+  const step = useNewFormStore((state) => state.step);
+  const nextstep = useNewFormStore((state) => state.nextstep);
+  const prevstep = useNewFormStore((state) => state.prevstep);
 
   // 동적 스키마 필드
   const {
@@ -21,6 +27,8 @@ export default function CuppingPage() {
     name: 'cuppings',
   });
 
+  // TODO : 함수 ts 파일에 분리하기
+
   // 커핑 추가, 제거
   const CuppingFormIncrease = () => {
     append(createEmptyCuppingFormValue());
@@ -30,41 +38,43 @@ export default function CuppingPage() {
   };
 
   // 커핑 기본 정보 검증 후 다음 스텝 이동
-  // TODO : 따로 함수 ts 파일에 분리해두기
   const validateBasicInfoAndGoNextStep = async () => {
-    // TODO: 않이 이거 타입 맞는데 왜이래 타입단언해야하나.. => 타입단언했는데 무슨 해결책 없나
+    const cuppingLength = cuppings.length;
 
-    const cuppingsLength = cuppings.length;
-
-    const pathArr = new Array(cuppingsLength)
+    const pathArr = new Array(cuppingLength)
       .fill(0)
       .map((_, idx) => `cuppings.${idx}.coffeeId`) as `cuppings.${number}.coffeeId`[];
+
     const isValid = await trigger(pathArr);
+
     if (!isValid) alert('커핑할 원두를 모두 선택해주세요!');
-    else {
-      nextstep();
-    }
+    else nextstep();
   };
 
   const goPrevStep = async () => {
     prevstep();
   };
 
+  // purpose UI 메타데이터
+  const purposeConfig = SERVER_FORM_CONFIG.purpose;
+
   return (
     <section className="flex h-full min-h-0 w-full flex-1 flex-col gap-2 overflow-hidden">
-      <RadioInput path="purpose" />
+      {/* purpose radio */}
+      <RadioInput path="cuppings.purposeValue" config={purposeConfig} />
+
       {step === 2 && (
         <ContentTitle
           as="h2"
-          title="사진 클릭해서 평가해주세요.(임시)"
+          title="클릭해서 평가해주세요.(임시)"
           className="mt-5 flex justify-center"
         />
       )}
 
       <div className="h-full min-h-0 flex-1 overflow-y-auto">
         <ul className="grid h-fit grid-cols-1 sm:grid-cols-2">
-          {cuppings.map((_, idx) => {
-            return <CuppingItem key={idx} idx={idx} />;
+          {cuppings.map((cupping, idx) => {
+            return <CuppingItem key={cupping.id} cuppingsIdx={idx} />;
           })}
         </ul>
       </div>
@@ -73,8 +83,8 @@ export default function CuppingPage() {
       <div className="flex flex-col gap-4">
         {/* 1페이지 */}
         {step === 1 && (
-          <SettingDrawer
-            cuppingCount={cuppingCount}
+          <CuppingCountControl
+            cuppingCount={cuppings.length}
             increaseFunc={CuppingFormIncrease}
             decreaseFunc={CuppingFormDecrease}
           />

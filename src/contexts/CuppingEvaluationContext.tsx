@@ -6,22 +6,22 @@ import useCuppingEvaluation, {
 import type { CategoryName } from '@/types/new/new_form_schema';
 import { createContext, useContext, type ReactNode } from 'react';
 
-type StNodeListPath = `schemaList.${number}.evaluationList.${number}.category.cascaderTree`;
+type StNodeListPath = `cuppings.${number}.evaluationList.${number}.category.cascaderTree`;
 
 type NdNodeListPath =
-  | `schemaList.${number}.evaluationList.${number}.category.cascaderTree.${number}.children`
+  | `cuppings.${number}.evaluationList.${number}.category.cascaderTree.${number}.children`
   | null;
 
 type LeafNodeListPath =
-  | `schemaList.${number}.evaluationList.${number}.category.cascaderTree.${number}.children.${number}.children`
+  | `cuppings.${number}.evaluationList.${number}.category.cascaderTree.${number}.children.${number}.children`
   | null;
 
 interface Context {
-  evaluationListPath: `schemaList.${number}.evaluationList`;
+  evaluationListPath: `cuppings.${number}.evaluationList`;
   navIdx: number;
-  categoryPath: `schemaList.${number}.evaluationList.${number}.category`;
-  detailPath: `schemaList.${number}.evaluationList.${number}.detailEvaluation`;
-  evaluationPath: `schemaList.${number}.evaluationList.${number}`;
+  categoryPath: `cuppings.${number}.evaluationList.${number}.category`;
+  detailPath: `cuppings.${number}.evaluationList.${number}.detailEvaluation`;
+  evaluationPath: `cuppings.${number}.evaluationList.${number}`;
   stNodeListPath: StNodeListPath;
   ndNodeListPath: NdNodeListPath;
   leafNodeListPath: LeafNodeListPath;
@@ -41,12 +41,12 @@ const CuppingEvaluationContext = createContext<Context | null>(null);
 // 카테고리, 디테일 평가 컨텍스트 provider
 export function CuppingEvaluationProvider({
   children,
-  evaluationListPath,
+  cuppingsIdx,
 }: {
   children: ReactNode;
-  evaluationListPath: `schemaList.${number}.evaluationList`;
+  cuppingsIdx: number;
 }) {
-  const value = useCuppingEvaluation(evaluationListPath);
+  const value = useCuppingEvaluation(cuppingsIdx);
   return (
     <CuppingEvaluationContext.Provider value={value}>{children}</CuppingEvaluationContext.Provider>
   );
