@@ -10,12 +10,15 @@ export default function CategoryEvaluation({ detailsIdx }: { detailsIdx: number 
 
   const intensityPath =
     `cuppings.${cuppingsIdx}.evaluations.${evaluationsIdx}.details.${detailsIdx}.intensity` as const;
+  const intensityLabelPath =
+    `cuppings.${cuppingsIdx}.evaluations.${evaluationsIdx}.details.${detailsIdx}.intensityLabel` as const;
 
   return (
     <article>
       {/* intensity radio */}
       <RadioInput
-        path={intensityPath}
+        valuePath={intensityPath}
+        labelPath={intensityLabelPath}
         config={intensityConfig}
         className="flex w-full items-center justify-center p-4"
       />

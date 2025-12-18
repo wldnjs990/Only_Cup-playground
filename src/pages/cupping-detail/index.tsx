@@ -100,10 +100,12 @@ export default function CuppingDetail() {
         <div className="mb-6 rounded-lg border bg-white p-6">
           <h2 className="mb-2 text-xl font-semibold">커피 정보</h2>
           <p className="text-gray-700">
-            <span className="font-medium">커피:</span> {currentCupping.coffeeLabel || currentCupping.coffeeId}
+            <span className="font-medium">커피:</span>{' '}
+            {currentCupping.coffeeLabel || currentCupping.coffeeId}
           </p>
           <p className="text-gray-700">
-            <span className="font-medium">평가 목적:</span> {cuppingData.purposeLabel || cuppingData.purposeValue}
+            <span className="font-medium">평가 목적:</span>{' '}
+            {cuppingData.purposeLabel || cuppingData.purposeValue}
           </p>
         </div>
 
@@ -120,7 +122,7 @@ export default function CuppingDetail() {
         </div>
 
         {/* 카테고리별 상세 평가 */}
-        <div className="space-y-6">
+        <div className="space-y-6 pb-6">
           {currentCupping.evaluations.map((evaluation) => (
             <AffectiveNoteEditor
               key={evaluation.categoryName}

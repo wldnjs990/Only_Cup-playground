@@ -1,4 +1,11 @@
-import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer } from 'recharts';
+import {
+  Radar,
+  RadarChart,
+  PolarGrid,
+  PolarAngleAxis,
+  PolarRadiusAxis,
+  ResponsiveContainer,
+} from 'recharts';
 import type { CuppingFormValue } from '@/types/new/form_values_schema';
 
 interface SpiderChartProps {
@@ -18,7 +25,8 @@ export default function CuppingSpiderChart({ cupping }: SpiderChartProps) {
   // 각 평가 항목의 affectiveScore 평균 계산
   const chartData = cupping.evaluations.map((evaluation) => {
     const scores = evaluation.details.map((detail) => detail.affectiveScore);
-    const average = scores.length > 0 ? scores.reduce((sum, score) => sum + score, 0) / scores.length : 0;
+    const average =
+      scores.length > 0 ? scores.reduce((sum, score) => sum + score, 0) / scores.length : 0;
 
     return {
       category: CATEGORY_LABELS[evaluation.categoryName] || evaluation.categoryName,
@@ -33,8 +41,14 @@ export default function CuppingSpiderChart({ cupping }: SpiderChartProps) {
         <RadarChart data={chartData}>
           <PolarGrid stroke="#e2e8f0" />
           <PolarAngleAxis dataKey="category" tick={{ fill: '#64748b', fontSize: 14 }} />
-          <PolarRadiusAxis angle={90} domain={[0, 9]} tick={{ fill: '#94a3b8', fontSize: 12 }} />
-          <Radar name="평가 점수" dataKey="score" stroke="#3b82f6" fill="#3b82f6" fillOpacity={0.6} />
+          <PolarRadiusAxis angle={90} domain={[0, 9]} tick={{ fill: '#e0e1e2', fontSize: 12 }} />
+          <Radar
+            name="평가 점수"
+            dataKey="score"
+            stroke="#c27aff"
+            fill="#c27aff"
+            fillOpacity={0.7}
+          />
         </RadarChart>
       </ResponsiveContainer>
     </div>

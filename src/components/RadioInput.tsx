@@ -1,4 +1,4 @@
-import type { RHFPathProps } from '@/types/new/rhf-path';
+import type { RHFRadioPathProps } from '@/types/new/rhf-path';
 import type { RadioInput } from '@/types/new/new_form_schema';
 import { useFormContext, useWatch, type FieldValues, type PathValue } from 'react-hook-form';
 import { Label } from './ui/label';
@@ -7,31 +7,31 @@ import { twMerge } from 'tailwind-merge';
 import clsx from 'clsx';
 import ContentTitle from '@/pages/new-form-test/components/ContentTitle';
 import ErrorMessage from './ErrorMessage';
-import type { RadioInputConfig } from '@/types/new/server_config_schema';
 
 export default function RadioInput<TFieldValues extends FieldValues>({
-  path,
+  valuePath,
+  labelPath,
   config,
   className,
-}: RHFPathProps<TFieldValues>) {
+}: RHFRadioPathProps<TFieldValues>) {
   const { control, setValue, formState, getFieldState } = useFormContext<TFieldValues>();
 
   // TODO : inputType에 따라 적절한 input UI를 반환해주는 통합 컴포넌트 만들기
-  const { title, label, required, optionList, tooltip } = config as RadioInputConfig;
+  const { title, label, required, optionList, tooltip } = config;
 
-  const { error } = getFieldState(path, formState);
+  const { error } = getFieldState(valuePath, formState);
 
   // useWatch로 값 감시 (기본값: 빈 문자열)
-  const watchedValue = useWatch({ name: path, control });
+  const watchedValue = useWatch({ name: valuePath, control });
   const selectedValue = (watchedValue ?? '') as string;
 
   const handleValueChange = (value: string) => {
-    setValue(path, value as PathValue<TFieldValues, typeof path>);
+    // value 저장
+    setValue(valuePath, value as PathValue<TFieldValues, typeof valuePath>);
 
-    // label도 함께 저장 (path가 "xxx"이면 "xxxLabel"에 저장)
-    const selectedOption = optionList.find(opt => opt.value === value);
+    // label도 함께 저장
+    const selectedOption = optionList.find((opt) => opt.value === value);
     if (selectedOption) {
-      const labelPath = `${path}Label` as any;
       setValue(labelPath, selectedOption.label as PathValue<TFieldValues, typeof labelPath>);
     }
   };
@@ -61,10 +61,10 @@ export default function RadioInput<TFieldValues extends FieldValues>({
             >
               <RadioGroupItem
                 value={option.value}
-                id={`${path}-${option.id}-${option.value}`}
+                id={`${valuePath}-${option.id}-${option.value}`}
                 hidden
               />
-              <Label htmlFor={`${path}-${option.id}-${option.value}`} className={className}>
+              <Label htmlFor={`${valuePath}-${option.id}-${option.value}`} className={className}>
                 {option.label}
               </Label>
             </div>

@@ -10,6 +10,7 @@ export default function CuppingItem({ cuppingsIdx }: { cuppingsIdx: number }) {
   const step = useNewFormStore((state) => state.step);
 
   const coffeeIdPath = `cuppings.${cuppingsIdx}.coffeeId` as const;
+  const coffeeLabelPath = `cuppings.${cuppingsIdx}.coffeeLabel` as const;
 
   const coffeeSelectConfig = SERVER_FORM_CONFIG.cuppingForm.basicInfo.coffeeSelect;
 
@@ -21,7 +22,11 @@ export default function CuppingItem({ cuppingsIdx }: { cuppingsIdx: number }) {
       {step == 2 && <DrawerCoffeeTitle cuppingsIdx={cuppingsIdx} />}
       {/* 커피 select */}
       {step == 1 && (
-        <SelectInput<RootCuppingFormValue> path={coffeeIdPath} config={coffeeSelectConfig} />
+        <SelectInput<RootCuppingFormValue>
+          valuePath={coffeeIdPath}
+          labelPath={coffeeLabelPath}
+          config={coffeeSelectConfig}
+        />
       )}
     </li>
   );

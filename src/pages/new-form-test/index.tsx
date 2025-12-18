@@ -27,12 +27,10 @@ export default function NewFormTest() {
       // 로컬 스토리지에 저장
       const savedData = saveCupping(data);
 
-      console.log('커핑 평가 저장 완료:', savedData);
-
+      alert('평가를 완료했습니다!');
       // 상세 페이지로 이동
       navigate(`/cupping/${savedData.id}`);
     } catch (error) {
-      console.error('저장 실패:', error);
       alert('저장에 실패했습니다. 다시 시도해주세요.');
     }
   };
