@@ -1,43 +1,40 @@
 import DetailEvaluation from './DetailEvaluation';
 import CategoryCascader from './CategoryCascader';
 import { ButtonCn } from '@/components/ui/button_cn';
-import { useFormContext, useWatch } from 'react-hook-form';
-import type { TRootCuppingFormSchema } from '@/types/new/new_form_schema';
 import { useCuppingEvaluationContext } from '@/contexts/CuppingEvaluationContext';
+import { SERVER_FORM_CONFIG } from '@/constants/new/server_config_mock';
+import ContentTitle from './ContentTitle';
 
 export default function Evaluation() {
-  const { getValues, control } = useFormContext<TRootCuppingFormSchema>();
-
+  // 커스텀 컨텍스트
   const {
-    navIdx,
-    categoryPath,
-    evaluationPath,
-    nowDepth,
-    detailPath,
-    handleDetailEvaluateButtonClick,
+    evaluationsIdx,
+    evaluationSequence,
+    updateEvaluationSequence,
+    leafNodeIdx,
+    cascaderDepth,
   } = useCuppingEvaluationContext();
 
-  const evaluationLabel = useWatch({ name: `${evaluationPath}.label`, control });
-
-  const isCategorySelected = getValues(`${categoryPath}.valueList`).length > 0;
+  // 평가 타이틀
+  const evaluationTitle = SERVER_FORM_CONFIG.cuppingForm.evaluations[evaluationsIdx].title;
 
   return (
     <section className="mt-1 flex flex-col">
-      <h2 className="h2-style mt-3">{`step.${navIdx + 1} ${evaluationLabel}`}</h2>
+      <ContentTitle as="h2" title={`step.${evaluationsIdx + 1} ${evaluationTitle}`} />
 
       <article className="h-60 overflow-y-scroll">
-        {nowDepth <= 3 && <CategoryCascader />}
-        {nowDepth > 3 && <DetailEvaluation key={detailPath} />}
+        {evaluationSequence === 'category' && <CategoryCascader />}
+        {evaluationSequence === 'detail' && <DetailEvaluation />}
       </article>
       {/* 카테고리 선택, 다음 평가 이동 버튼 */}
       <article className="flex py-3">
         <ButtonCn
           variant="outline"
           className="flex-1 bg-purple-500 text-white disabled:bg-gray-400"
-          onClick={handleDetailEvaluateButtonClick}
-          disabled={!isCategorySelected}
+          onClick={updateEvaluationSequence}
+          disabled={!leafNodeIdx.includes(true)}
         >
-          {isCategorySelected ? '카테고리 선택 완료' : `${nowDepth}/3 선택중`}
+          {leafNodeIdx.includes(true) ? '카테고리 선택 완료' : `${cascaderDepth}/3 선택중`}
         </ButtonCn>
       </article>
     </section>

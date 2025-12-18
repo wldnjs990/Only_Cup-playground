@@ -30,6 +30,7 @@ const useNewFormStore = create<UseNewFormStore>((set) => ({
     set((state) => ({
       step: Math.max(state.step - 1, MIN_STEP),
     })),
+
   // 커핑 갯수
   cuppingCount: 1,
   increaseCuppingCount: () =>

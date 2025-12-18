@@ -1,28 +1,24 @@
-import type { TRootCuppingFormSchema } from '@/types/new/new_form_schema';
-import { useFormContext, useWatch } from 'react-hook-form';
 import CategoryButton from './CategoryButton';
 import { useCuppingEvaluationContext } from '@/contexts/CuppingEvaluationContext';
+import { SERVER_FORM_CONFIG } from '@/constants/new/server_config_mock';
 
 export default function CategorySt() {
-  const { control } = useFormContext<TRootCuppingFormSchema>();
+  const { evaluationsIdx, handleStNodeClick, stNodeIdx } = useCuppingEvaluationContext();
 
-  const { stNodeListPath, handleStNodeClick } = useCuppingEvaluationContext();
-
-  const stNodeList = useWatch({ name: stNodeListPath, control });
+  const stNodeList =
+    SERVER_FORM_CONFIG.cuppingForm.evaluations[evaluationsIdx].category.cascaderTree;
 
   return (
     <>
-      {stNodeList.map(({ id, label, selected }, idx) => {
-        const selectedPath = `${stNodeListPath}.${idx}.selected` as const;
-        const childrenPath = `${stNodeListPath}.${idx}.children` as const;
-
+      {stNodeList.map((node, idx) => {
+        const isSelected = stNodeIdx === idx;
         return (
           <CategoryButton
-            key={id + label + selected}
-            selected={selected}
-            onClick={() => handleStNodeClick(selectedPath, childrenPath, selected)}
+            key={node.id + node.label}
+            selected={isSelected}
+            onClick={() => handleStNodeClick(idx)}
           >
-            {label}
+            {node.label}
           </CategoryButton>
         );
       })}

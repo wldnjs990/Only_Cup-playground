@@ -1,48 +1,27 @@
-import { Label } from '@/components/ui/label';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group_cn';
-import type { TRootCuppingFormSchema } from '@/types/new/new_form_schema';
+import RadioInput from '@/components/RadioInput';
+import { SERVER_FORM_CONFIG } from '@/constants/new/server_config_mock';
+import { useCuppingEvaluationContext } from '@/contexts/CuppingEvaluationContext';
 
-import { useFormContext, useWatch } from 'react-hook-form';
-import ContentTitle from './ContentTitle';
+export default function CategoryEvaluation({ detailsIdx }: { detailsIdx: number }) {
+  const { cuppingsIdx, evaluationsIdx } = useCuppingEvaluationContext();
 
-export default function CategoryEvaluation({
-  categoryTitle,
-  categoryEvaluationPath,
-}: {
-  categoryTitle: string;
-  categoryEvaluationPath: `schemaList.${number}.evaluationList.${number}.detailEvaluation.categoryEvaluationList.${number}`;
-}) {
-  const { getValues, setValue, control } = useFormContext<TRootCuppingFormSchema>();
+  const intensityConfig =
+    SERVER_FORM_CONFIG.cuppingForm.evaluations[evaluationsIdx].detailEvaluation.intensity;
 
-  // 강도 평가 주소
-  const categoryIntensityPath = `${categoryEvaluationPath}.intensity` as const;
-
-  // 강도 평가 옵션 리스트 주소
-  const categoryIntensityValuePath = `${categoryIntensityPath}.value` as const;
-
-  const { title, required, optionList, tooltip } = getValues(categoryIntensityPath);
-
-  // 강도 평가 감시
-  const value = useWatch({ name: categoryIntensityValuePath, control });
+  const intensityPath =
+    `cuppings.${cuppingsIdx}.evaluations.${evaluationsIdx}.details.${detailsIdx}.intensity` as const;
+  const intensityLabelPath =
+    `cuppings.${cuppingsIdx}.evaluations.${evaluationsIdx}.details.${detailsIdx}.intensityLabel` as const;
 
   return (
     <article>
-      {/* 평가 대상 */}
-      <ContentTitle title={title} required={required} tooltip={tooltip} as="h3" />
-      {/* 강도 평가 라디오 버튼 */}
-      <RadioGroup
-        defaultValue={value}
-        onValueChange={(changingValue) => setValue(categoryIntensityValuePath, changingValue)}
-      >
-        {optionList.map((option) => {
-          return (
-            <div key={option.value} className="flex items-center gap-3">
-              <RadioGroupItem value={option.value} id={`radio-${categoryTitle}${option.value}`} />
-              <Label htmlFor={`radio-${categoryTitle}${option.value}`}>{option.label}</Label>
-            </div>
-          );
-        })}
-      </RadioGroup>
+      {/* intensity radio */}
+      <RadioInput
+        valuePath={intensityPath}
+        labelPath={intensityLabelPath}
+        config={intensityConfig}
+        className="flex w-full items-center justify-center p-4"
+      />
     </article>
   );
 }
