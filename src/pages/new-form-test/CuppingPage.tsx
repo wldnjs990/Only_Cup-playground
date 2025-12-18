@@ -10,7 +10,7 @@ import { SERVER_FORM_CONFIG } from '@/constants/new/server_config_mock';
 import useNewFormStore from '@/store/newFormStore';
 
 export default function CuppingPage() {
-  const { control, trigger } = useFormContext<RootCuppingFormValue>();
+  const { control, trigger, getValues } = useFormContext<RootCuppingFormValue>();
 
   // new form store
   const step = useNewFormStore((state) => state.step);
@@ -39,7 +39,7 @@ export default function CuppingPage() {
 
   // 커핑 기본 정보 검증 후 다음 스텝 이동
   const validateBasicInfoAndGoNextStep = async () => {
-    const cuppingLength = cuppings.length;
+    const cuppingLength = getValues('cuppings').length;
 
     const pathArr = new Array(cuppingLength)
       .fill(0)
@@ -47,8 +47,18 @@ export default function CuppingPage() {
 
     const isValid = await trigger(pathArr);
 
-    if (!isValid) alert('커핑할 원두를 모두 선택해주세요!');
-    else nextstep();
+    // 디버깅: 실제 값과 에러 확인
+    if (!isValid) {
+      console.log('Validation failed for paths:', pathArr);
+      pathArr.forEach((path) => {
+        const value =
+          control._formValues[path.split('.')[0]]?.[path.split('.')[1]]?.[path.split('.')[2]];
+        console.log(`${path}: "${value}"`);
+      });
+      alert('커핑할 원두를 모두 선택해주세요!');
+    } else {
+      nextstep();
+    }
   };
 
   const goPrevStep = async () => {
@@ -61,7 +71,7 @@ export default function CuppingPage() {
   return (
     <section className="flex h-full min-h-0 w-full flex-1 flex-col gap-2 overflow-hidden">
       {/* purpose radio */}
-      <RadioInput path="cuppings.purposeValue" config={purposeConfig} />
+      <RadioInput path="purposeValue" config={purposeConfig} />
 
       {step === 2 && (
         <ContentTitle

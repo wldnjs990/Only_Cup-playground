@@ -21,5 +21,5 @@ export function DrawerCoffeeTitle({ cuppingsIdx }: DrawerCoffeeTitleProps) {
     SERVER_FORM_CONFIG.cuppingForm.basicInfo.coffeeSelect.optionList,
     coffeeId,
   );
-  return <h2>{coffeeLabel}</h2>;
+  return <span>{coffeeLabel}</span>;
 }

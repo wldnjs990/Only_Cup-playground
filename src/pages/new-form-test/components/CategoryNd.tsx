@@ -1,31 +1,28 @@
-import { useFormContext, useWatch } from 'react-hook-form';
 import CategoryButton from './CategoryButton';
 import { useCuppingEvaluationContext } from '@/contexts/CuppingEvaluationContext';
-import type { RootCuppingFormValue } from '@/types/new/form_values_schema';
+import { SERVER_FORM_CONFIG } from '@/constants/new/server_config_mock';
 
 export default function CategoryNd() {
-  const { control } = useFormContext<RootCuppingFormValue>();
+  const { evaluationsIdx, stNodeIdx, ndNodeIdx, handleNdNodeClick } = useCuppingEvaluationContext();
 
-  const { categoryName, ndNodeListPath, handleNdNodeClick } = useCuppingEvaluationContext();
+  // 이전 노드 선택 안됐는데 렌더링된거면 오류 처리(임시)
+  if (stNodeIdx === null) return <span>오류(stNodeIdx 없음)</span>;
 
-  const ndNodeList = ndNodeListPath && useWatch({ name: ndNodeListPath, control });
+  const ndNodeList =
+    SERVER_FORM_CONFIG.cuppingForm.evaluations[evaluationsIdx].category.cascaderTree[stNodeIdx]
+      .children;
 
-  if (!ndNodeList) {
-    return <div>오류</div>;
-  }
   return (
     <>
-      {ndNodeList.map(({ id, label, selected }, idx) => {
-        const selectedPath = `${ndNodeListPath}.${idx}.selected` as const;
-        const childrenPath = `${ndNodeListPath}.${idx}.children` as const;
-
+      {ndNodeList.map((node, idx) => {
+        const isSelected = ndNodeIdx === idx;
         return (
           <CategoryButton
-            key={id + label + categoryName}
-            selected={selected}
-            onClick={() => handleNdNodeClick(selectedPath, childrenPath, selected)}
+            key={node.id + node.label}
+            selected={isSelected}
+            onClick={() => handleNdNodeClick(idx)}
           >
-            {label}
+            {node.label}
           </CategoryButton>
         );
       })}

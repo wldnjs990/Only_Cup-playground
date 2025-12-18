@@ -13,12 +13,12 @@ import { optionsList } from './options_list';
 export const SERVER_FORM_CONFIG: RootCuppingFormConfig = {
   // 목적 선택 설정
   purpose: {
+    required: false,
     inputType: 'radio',
-    title: '커핑 목적',
+    title: '',
     label: '목적을 선택해주세요',
-    required: true,
     optionList: optionsList.purposeOptions,
-    tooltip: '입문자와 전문가 모드는 평가 항목이 다릅니다',
+    tooltip: '입문자 모드는 툴팁을 제공해줍니다.',
   },
 
   // 커핑 폼 설정
@@ -57,6 +57,7 @@ export const SERVER_FORM_CONFIG: RootCuppingFormConfig = {
           intensity: {
             title: '강도',
             label: '향의 강도를 평가해주세요',
+            required: true,
             inputType: 'radio',
             optionList: [
               { id: 1, label: '약함', value: 'low' },
@@ -69,8 +70,9 @@ export const SERVER_FORM_CONFIG: RootCuppingFormConfig = {
             title: '정동 평가',
             label: '향에 대한 만족도를 평가해주세요',
             inputType: 'slider',
+            required: true,
             min: 0,
-            max: 10,
+            max: 9,
             step: 1,
             tooltip: '0은 매우 나쁨, 10은 매우 좋음',
           },
@@ -104,6 +106,7 @@ export const SERVER_FORM_CONFIG: RootCuppingFormConfig = {
           intensity: {
             title: '강도',
             label: '맛의 강도를 평가해주세요',
+            required: true,
             inputType: 'radio',
             optionList: [
               { id: 1, label: '약함', value: 'low' },
@@ -116,6 +119,7 @@ export const SERVER_FORM_CONFIG: RootCuppingFormConfig = {
             title: '정동 평가',
             label: '맛에 대한 만족도를 평가해주세요',
             inputType: 'slider',
+            required: true,
             min: 0,
             max: 10,
             step: 1,
@@ -151,6 +155,7 @@ export const SERVER_FORM_CONFIG: RootCuppingFormConfig = {
           intensity: {
             title: '강도',
             label: '산미의 강도를 평가해주세요',
+            required: true,
             inputType: 'radio',
             optionList: [
               { id: 1, label: '약함', value: 'low' },
@@ -163,6 +168,7 @@ export const SERVER_FORM_CONFIG: RootCuppingFormConfig = {
             title: '정동 평가',
             label: '산미에 대한 만족도를 평가해주세요',
             inputType: 'slider',
+            required: true,
             min: 0,
             max: 10,
             step: 1,
@@ -198,6 +204,7 @@ export const SERVER_FORM_CONFIG: RootCuppingFormConfig = {
           intensity: {
             title: '강도',
             label: '단맛의 강도를 평가해주세요',
+            required: true,
             inputType: 'radio',
             optionList: [
               { id: 1, label: '약함', value: 'low' },
@@ -210,6 +217,7 @@ export const SERVER_FORM_CONFIG: RootCuppingFormConfig = {
             title: '정동 평가',
             label: '단맛에 대한 만족도를 평가해주세요',
             inputType: 'slider',
+            required: true,
             min: 0,
             max: 10,
             step: 1,
@@ -245,6 +253,7 @@ export const SERVER_FORM_CONFIG: RootCuppingFormConfig = {
           intensity: {
             title: '강도',
             label: '마우스필의 강도를 평가해주세요',
+            required: true,
             inputType: 'radio',
             optionList: [
               { id: 1, label: '약함', value: 'low' },
@@ -257,6 +266,7 @@ export const SERVER_FORM_CONFIG: RootCuppingFormConfig = {
             title: '정동 평가',
             label: '마우스필에 대한 만족도를 평가해주세요',
             inputType: 'slider',
+            required: true,
             min: 0,
             max: 10,
             step: 1,

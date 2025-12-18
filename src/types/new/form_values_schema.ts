@@ -18,7 +18,7 @@ const CategoryName = z.enum(['aroma', 'taste', 'acidity', 'sweetness', 'mouthfee
 const CategoryDetailValue = z.object({
   categoryValue: z.string(), // 선택한 카테고리 값 (예: "sweet", "chocolate")
   intensity: z.string().min(1, '강도를 선택해주세요'),
-  affectiveScore: z.number().min(0).max(10),
+  affectiveScore: z.number().min(0).max(9),
   affectiveNote: z.string().optional().default(''),
 });
 

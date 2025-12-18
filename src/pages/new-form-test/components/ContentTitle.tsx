@@ -11,7 +11,7 @@ export default function ContentTitle({
   required = false,
   tooltip = '',
 }: {
-  title: string;
+  title?: string;
   as?: HeadingLevel;
   className?: string;
   required?: boolean;
@@ -23,6 +23,16 @@ export default function ContentTitle({
     h2: 'h2-style',
     h3: 'h3-style',
   };
+
+  // 툴팁만 보여주고싶을때(relative를 부모에 걸어줘야함!)
+  if (!title)
+    return (
+      <>
+        {tooltip && (
+          <ToolTip tooltipText={tooltip} className="absolute top-2 right-0 z-10 -translate-0.5" />
+        )}
+      </>
+    );
 
   return (
     <article className={twMerge('flex justify-between', className)}>

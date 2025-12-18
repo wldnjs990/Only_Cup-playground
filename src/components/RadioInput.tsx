@@ -1,6 +1,6 @@
 import type { RHFPathProps } from '@/types/new/rhf-path';
 import type { RadioInput } from '@/types/new/new_form_schema';
-import { useFormContext, type FieldValues } from 'react-hook-form';
+import { useFormContext, useWatch, type FieldValues, type PathValue } from 'react-hook-form';
 import { Label } from './ui/label';
 import { RadioGroup, RadioGroupItem } from './ui/radio-group_cn';
 import { twMerge } from 'tailwind-merge';
@@ -12,34 +12,54 @@ import type { RadioInputConfig } from '@/types/new/server_config_schema';
 export default function RadioInput<TFieldValues extends FieldValues>({
   path,
   config,
+  className,
 }: RHFPathProps<TFieldValues>) {
-  const { register, formState, getFieldState } = useFormContext<TFieldValues>();
+  const { control, setValue, formState, getFieldState } = useFormContext<TFieldValues>();
 
   // TODO : inputType에 따라 적절한 input UI를 반환해주는 통합 컴포넌트 만들기
-  const { inputType, label, required, optionList, tooltip } = config as RadioInputConfig;
+  const { title, label, required, optionList, tooltip } = config as RadioInputConfig;
 
   const { error } = getFieldState(path, formState);
 
+  // useWatch로 값 감시 (기본값: 빈 문자열)
+  const watchedValue = useWatch({ name: path, control });
+  const selectedValue = (watchedValue ?? '') as string;
+
+  const handleValueChange = (value: string) => {
+    setValue(path, value as PathValue<TFieldValues, typeof path>);
+  };
+
   return (
-    <section>
+    <section className="relative py-2">
       {/* 라디오 title */}
-      <ContentTitle as="h2" title={label} tooltip={tooltip} required={required} />
+      <ContentTitle as="h2" title={title} tooltip={tooltip} required={required} />
+      <span className="sr-only">{label}</span>
       {/* 라디오 input */}
-      <RadioGroup {...register(path)} className="relative flex justify-center gap-0">
+      <RadioGroup
+        value={selectedValue}
+        onValueChange={handleValueChange}
+        className="relative flex justify-center gap-0"
+      >
         {optionList.map((option, idx) => {
-          const { id, label, value } = option;
+          const isSelected = selectedValue === option.value;
           return (
             <div
-              key={id}
+              key={option.id}
               className={twMerge(
                 'border bg-gray-100 px-2 py-1 transition',
-                'checked:border-purple-400 checked:bg-purple-400 checked:text-white',
+                clsx(isSelected && 'border-purple-400 bg-purple-400 text-white'),
                 clsx(idx === 0 && 'rounded-l-full'),
                 clsx(idx === optionList.length - 1 && 'rounded-r-full'),
               )}
             >
-              <RadioGroupItem value={value} id={`${path}-${id}-${value}`} hidden />
-              <Label htmlFor={`${path}-${id}-${value}`}>{label}</Label>
+              <RadioGroupItem
+                value={option.value}
+                id={`${path}-${option.id}-${option.value}`}
+                hidden
+              />
+              <Label htmlFor={`${path}-${option.id}-${option.value}`} className={className}>
+                {option.label}
+              </Label>
             </div>
           );
         })}

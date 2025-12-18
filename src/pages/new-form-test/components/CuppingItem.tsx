@@ -19,7 +19,6 @@ export default function CuppingItem({ cuppingsIdx }: { cuppingsIdx: number }) {
       {/* TODO : useWatch 때문에 페이지 전체가 리렌더링되는데, ContentTitle을 확장해서 최적화 해볼까? */}
       {/* ContentTitle에서 useWatch를 사용해서 렌더링 범위 축소시키기 */}
       {step == 2 && <DrawerCoffeeTitle cuppingsIdx={cuppingsIdx} />}
-
       {/* 커피 select */}
       {step == 1 && (
         <SelectInput<RootCuppingFormValue> path={coffeeIdPath} config={coffeeSelectConfig} />

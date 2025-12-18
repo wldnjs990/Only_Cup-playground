@@ -14,9 +14,19 @@ import type {
 // ============================================
 
 /**
+ * 빈 카테고리 상사 평가 값 생성
+ */
+export const createEmptyDetailValue = (categoryValue: string) => ({
+  categoryValue,
+  intensity: 'medium',
+  affectiveScore: 4,
+  affectiveNote: '',
+});
+
+/**
  * 빈 평가 값 생성
  */
-const createEmptyEvaluationValue = (categoryName: CategoryName): EvaluationValue => ({
+export const createEmptyEvaluationValue = (categoryName: CategoryName): EvaluationValue => ({
   categoryName,
   selectedCategories: [],
   details: [],
@@ -40,7 +50,7 @@ export const createEmptyCuppingFormValue = (): CuppingFormValue => ({
  * 루트 폼 기본값 생성
  */
 const createDefaultRootFormValue = (): RootCuppingFormValue => ({
-  purposeValue: '',
+  purposeValue: 'basic',
   cuppings: [createEmptyCuppingFormValue()],
 });
 

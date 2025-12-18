@@ -54,6 +54,8 @@ function SliderCn({
             ),
             clsx(
               canChangeTrackColor &&
+                trackColorIndex >= 0 &&
+                trackColorIndex < affectiveExplainList.length &&
                 `transition duration-300 ${affectiveExplainList[trackColorIndex].bgClass}`,
             ),
           )}

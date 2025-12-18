@@ -1,214 +1,284 @@
-import createDetailEvaluations from '@/constants/new/category_detail_evaluations';
-import { categoryTree } from '@/constants/new/category_tree';
+import { createEmptyDetailValue } from '@/constants/new/form_values_mock';
+import { SERVER_FORM_CONFIG } from '@/constants/new/server_config_mock';
 import type { RootCuppingFormValue } from '@/types/new/form_values_schema';
-import type { TRootCuppingFormSchema } from '@/types/new/new_form_schema';
+import type { CategoryFirstNode, CategoryTree } from '@/types/new/server_config_schema';
 import { useEffect, useState } from 'react';
-import { useFieldArray, useFormContext, useWatch } from 'react-hook-form';
+import { useFieldArray, useFormContext } from 'react-hook-form';
 
-// 1뎁스 노드
-type StNodeListPath = `cuppings.${number}.evaluationList.${number}.category.cascaderTree`;
-// 1뎁스 selected 핸들러 타입
-export type HandleStNodeClick = (
-  selectedPath: `cuppings.${number}.evaluationList.${number}.category.cascaderTree.${number}.selected`,
-  childrenPath: `cuppings.${number}.evaluationList.${number}.category.cascaderTree.${number}.children`,
-  selected: boolean,
-) => void;
+// 상수 정의
+const MIN_CASCADER_DEPTH = 1;
+const MAX_CASCADER_DEPTH = 3;
+const MAX_LEAF_NODES = 5;
 
-// 2뎁스 노드
-type NdNodeListPath =
-  | `cuppings.${number}.evaluationList.${number}.category.cascaderTree.${number}.children`
-  | null;
-// 2뎁스 selected 핸들러 타입
-export type HandleNdNodeClick = (
-  selectedPath: `cuppings.${number}.evaluationList.${number}.category.cascaderTree.${number}.children.${number}.selected`,
-  childrenPath: `cuppings.${number}.evaluationList.${number}.category.cascaderTree.${number}.children.${number}.children`,
-  selected: boolean,
-) => void;
+// 타입 정의
+export type HandleStNodeClick = (selectedIdx: number) => void;
+export type HandleNdNodeClick = (selectedIdx: number) => void;
+export type HandleLeafNodeClick = (selectedIdx: number, selectedValue: string) => void;
+export type HandleEvaluationsIdx = (selectedIdx: number) => void;
+export type EvaluationSequence = 'category' | 'detail';
 
-// 3뎁스 노드
-type LeafNodeListPath =
-  | `cuppings.${number}.evaluationList.${number}.category.cascaderTree.${number}.children.${number}.children`
-  | null;
-// 리프 selected 핸들러 타입
-export type HandleLeafNodeClick = (
-  selected: boolean,
-  label: string,
-  value: string,
-  selectedPath: `cuppings.${number}.evaluationList.${number}.category.cascaderTree.${number}.children.${number}.children.${number}.selected`,
-) => void;
+// 선택된 카테고리 값으로 부모 노드 역추적하는 유틸리티 함수
+export const restoreNodeSelectionFromCategories = (
+  cascaderTree: CategoryFirstNode[],
+  selectedCategories: string[],
+) => {
+  if (selectedCategories.length === 0) {
+    return {
+      stNodeIdx: null,
+      ndNodeIdx: null,
+      leafNodeSelected: new Array(MAX_LEAF_NODES).fill(false),
+      cascaderDepth: MIN_CASCADER_DEPTH,
+    };
+  }
 
-export default function useCuppingEvaluation(cuppingsIdx: number) {
+  // 첫 번째 선택된 카테고리를 기준으로 역추적
+  const firstCategory = selectedCategories[0];
+
+  // 1뎁스 순회
+  for (let stIdx = 0; stIdx < cascaderTree.length; stIdx++) {
+    const stNode = cascaderTree[stIdx];
+
+    // 2뎁스 순회
+    for (let ndIdx = 0; ndIdx < stNode.children.length; ndIdx++) {
+      const ndNode = stNode.children[ndIdx];
+
+      // 3뎁스(리프) 순회
+      for (let leafIdx = 0; leafIdx < ndNode.children.length; leafIdx++) {
+        const leafNode = ndNode.children[leafIdx];
+
+        // 선택된 카테고리를 찾았을 때
+        if (leafNode.value === firstCategory) {
+          // 모든 선택된 리프 노드 찾기 (같은 2뎁스 내에서)
+          const leafSelection = new Array(MAX_LEAF_NODES).fill(false);
+          // set 자료형 사용해서 아이템 여부 O(1)로 탐색
+          const selectedSet = new Set(selectedCategories);
+          ndNode.children.forEach((leaf, idx) => {
+            if (selectedSet.has(leaf.value)) {
+              // O(1) 조회
+              leafSelection[idx] = true;
+            }
+          });
+
+          return {
+            stNodeIdx: stIdx,
+            ndNodeIdx: ndIdx,
+            leafNodeSelected: leafSelection,
+            cascaderDepth: MAX_CASCADER_DEPTH, // 리프까지 선택된 상태
+          };
+        }
+      }
+    }
+  }
+
+  // 못 찾은 경우 초기화
+  return {
+    stNodeIdx: null,
+    ndNodeIdx: null,
+    leafNodeSelected: new Array(MAX_LEAF_NODES).fill(false),
+    cascaderDepth: MIN_CASCADER_DEPTH,
+  };
+};
+
+interface UseCuppingEvaluationProps {
+  cuppingsIdx: number;
+  cascaderTrees: CategoryTree;
+}
+
+export default function useCuppingEvaluation({
+  cuppingsIdx,
+  cascaderTrees,
+}: UseCuppingEvaluationProps) {
   const { getValues, setValue, control } = useFormContext<RootCuppingFormValue>();
 
-  // 내비게이션 영역 -----------------------------------------------------------------------------------------
-
-  // 선택된 내비게이션 인덱스
+  // 선택된 평가 내비게이션 인덱스 -----------------------------------------------------------------------------------------
   const [evaluationsIdx, setEvaluationsIdx] = useState<number>(0);
 
-  // 현재 평가 경로
-  const [evaluationPath, setEvaluationPath] =
-    useState<`cuppings.${number}.evaluationList.${number}`>(
-      `cuppings.${cuppingsIdx}.evaluationList.${evaluationsIdx}`,
-    );
+  // 내비게이션 인덱스 핸들러
+  const handleEvaluationsIdx: HandleEvaluationsIdx = (selectedIdx) => {
+    setEvaluationsIdx(selectedIdx);
+  };
 
-  // 1뎁스 노드 ----------------------------------------------------------------------------------------
+  // 평가 시퀸스 ----------------------------------------------------------------------
+  const [evaluationSequence, setEvaluationSequence] = useState<EvaluationSequence>('category');
 
-  // 노드 선택 여부
+  // 평가 시퀸스 업데이트 함수
+  const updateEvaluationSequence = () => {
+    //selectedCategories 선택 여부
+    const isCategorySelected =
+      getValues(`cuppings.${cuppingsIdx}.evaluations.${evaluationsIdx}.selectedCategories`).length >
+      0;
+
+    if (isCategorySelected) setEvaluationSequence('detail');
+    else setEvaluationSequence('category');
+  };
+
+  // detail에서 category로 가는 함수
+  const goToCategortSelect = () => {
+    setEvaluationSequence('category');
+  };
+
+  // 카테고리 cascader 뎁스 ------------------------------------------------------------------------------
+  const [cascaderDepth, setCascaderDepth] = useState(1);
+
+  // 다음 뎁스
+  const nextCascaderDepth = () => {
+    setCascaderDepth((cur) => Math.min(cur + 1, MAX_CASCADER_DEPTH));
+  };
+
+  // 이전 뎁스
+  const prevCascaderDepth = () => {
+    setCascaderDepth((cur) => Math.max(cur - 1, MIN_CASCADER_DEPTH));
+  };
+
+  // cascader 노드 선택여부 ------------------------------------------------------------------
+  // 1뎁스
   const [stNodeIdx, setStNodeIdx] = useState<number | null>(null);
+  // 2뎁스
+  const [ndNodeIdx, setNdNodeIdx] = useState<number | null>(null);
+  // 3뎁스(리프) - 복수 선택 가능
+  const leafNodeIdxConfig: boolean[] = new Array(MAX_LEAF_NODES).fill(false);
+  const [leafNodeIdx, setLeafNodeIdx] = useState<boolean[]>(leafNodeIdxConfig);
 
-  // 1뎁스 selected 핸들러
-  const handleStNodeClick: HandleStNodeClick = (nowIdx) => {
-    // 초기화용 categoryTree 상수
-    const initialCategory = categoryTree[categoryName];
+  // 1뎁스 selected 핸들러 ----------------------------------------------------------------------------------------
+  const handleStNodeClick: HandleStNodeClick = (selectedIdx) => {
+    // 이미 선택된 노드인지 체크
+    const isSelected = stNodeIdx === selectedIdx;
 
     // 이미 선택된 노드면 다음 뎁스 이동
-    if (selected) {
-      setNowDepth((cur) => cur + 1);
+    if (isSelected) {
+      setCascaderDepth((cur) => cur + 1);
       return;
     }
 
-    // valueList 필드 초기화
-    setValue(`${categoryPath}.valueList`, []);
-    // CategoryEvaluationList 필드 초기화
-    setValue(`${detailPath}.categoryEvaluationList`, []);
+    // selectedCategories 필드 초기화
+    setValue(`cuppings.${cuppingsIdx}.evaluations.${evaluationsIdx}.selectedCategories`, []);
+    // evaluation details 필드 초기화
+    setValue(`cuppings.${cuppingsIdx}.evaluations.${evaluationsIdx}.details`, []);
+    // 하위 노드 선택 초기화
+    setNdNodeIdx(null);
+    setLeafNodeIdx(leafNodeIdxConfig);
 
-    // 선택된 노드 외에 활성화된 노드가 있으면 있으면 해당 노드 리셋하고 현재 노드 선택
-    setValue(stNodeListPath, initialCategory);
-    setValue(selectedPath, !selected);
-    setNdNodeListPath(childrenPath);
-    setNowDepth((cur) => cur + 1);
+    // 선택된 노드 업데이트해주고, cascader depth 증가
+    setStNodeIdx(selectedIdx);
+    setCascaderDepth((cur) => cur + 1);
   };
 
-  // 2뎁스 노드 ------------------------------------------------------------------------------------------
-  const [ndNodeListPath, setNdNodeListPath] = useState<NdNodeListPath>(null);
-  // 2뎁스 selected 핸들러
-  const handleNdNodeClick: HandleNdNodeClick = (selectedPath, childrenPath, selected) => {
-    // 초기화용 categoryTree 상수
-    const initialCategory = categoryTree[categoryName][stNodnavIdx].children;
+  // 2뎁스 selected 핸들러 ------------------------------------------------------------------------------------------
+  const handleNdNodeClick: HandleNdNodeClick = (selectedIdx) => {
+    // 이미 선택된 노드인지 체크
+    const isSelected = ndNodeIdx === selectedIdx;
 
     // 이미 선택된 노드면 다음 노드 이동
-    if (selected) {
-      setNowDepth((cur) => cur + 1);
+    if (isSelected) {
+      setCascaderDepth((cur) => cur + 1);
       return;
     }
 
-    // valueList 필드 초기화
-    setValue(`${categoryPath}.valueList`, []);
-    // CategoryEvaluationList 필드 초기화
-    setValue(`${detailPath}.categoryEvaluationList`, []);
+    // selectedCategories 필드 초기화
+    setValue(`cuppings.${cuppingsIdx}.evaluations.${evaluationsIdx}.selectedCategories`, []);
+    // evaluation details 필드 초기화
+    setValue(`cuppings.${cuppingsIdx}.evaluations.${evaluationsIdx}.details`, []);
+    // 하위 노드 선택 초기화
+    setLeafNodeIdx(leafNodeIdxConfig);
 
-    // 선택된 노드 외에 활성화된 노드가 있으면 있으면 해당 노드 리셋하고 현재 노드 선택
-
-    // 2뎁스 노드 초기화
-    if (ndNodeListPath) setValue(ndNodeListPath, initialCategory);
-    // 선택 해제
-    setValue(selectedPath, !selected);
-    // 리프 노드 경로 등록
-    setLeafNodeListPath(childrenPath);
-    setNowDepth((cur) => cur + 1);
+    // 선택된 노드 업데이트해주고, cascader depth 증가
+    setNdNodeIdx(selectedIdx);
+    setCascaderDepth((cur) => cur + 1);
   };
-  // 3뎁스 노드 ----------------------------------------------------------------------------------------------
-  const [leafNodeListPath, setLeafNodeListPath] = useState<LeafNodeListPath>(null);
 
-  // 카테고리 상세평가 업데이트용 필드
-  const { append, remove } = useFieldArray({
+  // 리프 selected 핸들러 ----------------------------------------------------------------------------------------------
+
+  // details 업데이트용 필드
+  const { append: detailsAppend, remove: detailsRemove } = useFieldArray({
     control,
-    name: `${detailPath}.categoryEvaluationList`,
+    name: `cuppings.${cuppingsIdx}.evaluations.${evaluationsIdx}.details`,
   });
-  // valueList 업데이트용 필드
-  const valueList = useWatch({ name: `${categoryPath}.valueList`, control });
 
-  // 리프 selected 핸들러
-  const handleLeafNodeClick: HandleLeafNodeClick = (selected, value, label, selectedPath) => {
-    // 선택
-    if (!selected) {
-      // 카테고리 상세 평가 목록 추가
-      const newCreateDetailEvaluations = createDetailEvaluations(value, label);
-      append(newCreateDetailEvaluations);
-      // 카테고리 추가
-      setValue(`${categoryPath}.valueList`, [...valueList, value]);
-    }
+  // 핸들러
+  const handleLeafNodeClick: HandleLeafNodeClick = (selectedIdx, selectedValue) => {
+    // 이미 선택된 노드인지 체크
+    const isSelected = leafNodeIdx[selectedIdx];
 
-    // 선택 취소
-    if (selected) {
-      // 카테고리 상세 평가 목록 제거
-      const removnavIdx = valueList.findIndex((cur) => value === cur);
-      remove(removnavIdx);
-      // 카테고리 제거
+    // 이미 선택된 노드라면 선택 해제
+    if (isSelected) {
+      //selectedCategories 값 제거
+      const removeUpdateCategories = getValues(
+        `cuppings.${cuppingsIdx}.evaluations.${evaluationsIdx}.selectedCategories`,
+      ).filter((categoryValue) => categoryValue !== selectedValue);
+
+      // selectedCategories 업데이트
       setValue(
-        `${categoryPath}.valueList`,
-        valueList.filter((_, idx) => idx !== removnavIdx),
+        `cuppings.${cuppingsIdx}.evaluations.${evaluationsIdx}.selectedCategories`,
+        removeUpdateCategories,
       );
+
+      // 제거할 details 인덱스 찾기
+      const removeDetailIdx = getValues(
+        `cuppings.${cuppingsIdx}.evaluations.${evaluationsIdx}.details`,
+      ).findIndex((detail) => detail.categoryValue === selectedValue);
+
+      // details 객체 제거
+      detailsRemove(removeDetailIdx);
+    }
+    // 선택되지 않은 노드라면 선택
+    else {
+      //selectedCategories 값
+      const appendUpdateCategories = getValues(
+        `cuppings.${cuppingsIdx}.evaluations.${evaluationsIdx}.selectedCategories`,
+      );
+
+      // selectedCategories 추가
+      setValue(`cuppings.${cuppingsIdx}.evaluations.${evaluationsIdx}.selectedCategories`, [
+        ...appendUpdateCategories,
+        selectedValue,
+      ]);
+
+      // details 객체 추가
+      detailsAppend(createEmptyDetailValue(selectedValue));
     }
 
-    // 클릭한 노드 selected 업데이트
-    setValue(selectedPath, !selected);
+    // 리프 노드 선택 업데이트
+    setLeafNodeIdx(leafNodeIdx.map((value, idx) => (idx === selectedIdx ? !value : value)));
   };
 
-  // 평가 뎁스 ------------------------------------------------------------------------------
-  const [nowDepth, setNowDepth] = useState(1);
-
-  const handlePrevButtonClick = () => {
-    setNowDepth((cur) => Math.max(cur - 1, 1));
-  };
-  const handleDetailEvaluateButtonClick = () => {
-    setNowDepth(4);
-  };
-  // 평가 뎁스 ------------------------------------------------------------------------------
-
+  // evaluationsIdx 변경 시 선택 상태 복원 -----------------------------------------------
   useEffect(() => {
-    const nowCategoryPath = `${evaluationListPath}.${navIdx}.category` as const;
-    setEvaluationPath(`${evaluationListPath}.${navIdx}`);
-    setCategoryPath(`${evaluationListPath}.${navIdx}.category`);
-    setDetailPath(`${evaluationListPath}.${navIdx}.detailEvaluation`);
+    // 평가 시퀸스 업데이트
+    updateEvaluationSequence();
 
-    const stNodeListPath = `${nowCategoryPath}.cascaderTree` as const;
-    // selected 확인용 1뎁스 노드
-    const stNodeList = getValues(stNodeListPath);
-    // 1뎁스 선택됐는지 확인
-    const stSelectedIndex = stNodeList.findIndex((NodeList) => NodeList.selected);
-    // 선택된 체크박스 있으면 업데이트 해주기
-    if (stSelectedIndex !== -1) {
-      setNdNodeListPath(`${stNodeListPath}.${stSelectedIndex}.children`);
-      setNowDepth(2);
-      setStNodnavIdx(stSelectedIndex);
+    const cascaderTree =
+      SERVER_FORM_CONFIG.cuppingForm.evaluations[evaluationsIdx].category.cascaderTree;
 
-      // useEffect 안에서 다른 훅 사용이 가능하나..? 왜 되는거지? 시점이 안 겹치나?
-      // 생각해보니 커스텀훅 반환값이라서 그냥 메서드일 뿐이겠다.
-      const ndNodeList = getValues(`${stNodeListPath}.${stSelectedIndex}.children`);
-      // 2뎁스 선택됐는지 확인
-      const ndSelectedIndex = ndNodeList.findIndex((NodeList) => NodeList.selected);
-      // 선택된 체크박스 있으면 업데이트 해주기
-      if (ndSelectedIndex !== -1) {
-        setLeafNodeListPath(
-          `${stNodeListPath}.${stSelectedIndex}.children.${ndSelectedIndex}.children`,
-        );
-        setNowDepth(3);
+    const selectedCategories = getValues(
+      `cuppings.${cuppingsIdx}.evaluations.${evaluationsIdx}.selectedCategories`,
+    );
 
-        const isCategorySelected = getValues(`${nowCategoryPath}.valueList`).length > 0;
-        // 리프노드까지 선택됐는지 확인
-        if (isCategorySelected) setNowDepth(4);
-      }
-    } else {
-      setStNodeListPath(stNodeListPath);
-      setNowDepth(1);
-    }
-  }, [navIdx]);
+    // 사용자 카테고리 선택 상태 복원
+    const restoredState = restoreNodeSelectionFromCategories(cascaderTree, selectedCategories);
+
+    setStNodeIdx(restoredState.stNodeIdx);
+    setNdNodeIdx(restoredState.ndNodeIdx);
+    setLeafNodeIdx(restoredState.leafNodeSelected);
+    setCascaderDepth(restoredState.cascaderDepth);
+  }, [evaluationsIdx, cascaderTrees]);
 
   return {
-    evaluationListPath,
+    cuppingsIdx,
+    // evaluationSequence
+    evaluationSequence,
+    updateEvaluationSequence,
+    goToCategortSelect,
+    // evaluationsIdx
     evaluationsIdx,
-    evaluationPath,
-    categoryPath,
-    detailPath,
-    stNodeListPath,
-    ndNodeListPath,
-    leafNodeListPath,
-    categoryName,
-    nowDepth,
-    setEvaluationsIdx,
-    handlePrevButtonClick,
-    handleDetailEvaluateButtonClick,
+    handleEvaluationsIdx,
+    // cascader depth
+    cascaderDepth,
+    nextCascaderDepth,
+    prevCascaderDepth,
+    // cascader
+    stNodeIdx,
+    ndNodeIdx,
+    leafNodeIdx,
     handleStNodeClick,
     handleNdNodeClick,
     handleLeafNodeClick,

@@ -139,23 +139,9 @@ const DetailEvaluationConfig = z.object({
   title: z.string().optional(), // 섹션 제목 (선택)
   label: z.string(), // 섹션 설명
   // 강도 평가 설정
-  intensity: z.object({
-    title: z.string().optional(),
-    label: z.string(),
-    inputType: z.literal('radio'),
-    optionList: z.array(Option),
-    tooltip: z.string().optional(),
-  }),
+  intensity: RadioInputConfig,
   // 정동 평가 설정
-  affectiveScore: z.object({
-    title: z.string().optional(),
-    label: z.string(),
-    inputType: z.literal('slider'),
-    min: z.number(),
-    max: z.number(),
-    step: z.number().optional().default(1),
-    tooltip: z.string().optional(),
-  }),
+  affectiveScore: SliderInputConfig,
   // 정동 평가 서술 설정
   affectiveNote: z.object({
     title: z.string().optional(),

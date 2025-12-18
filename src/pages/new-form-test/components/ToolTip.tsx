@@ -1,13 +1,13 @@
 import { ButtonCn } from '@/components/ui/button_cn';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import type { TRootCuppingFormSchema } from '@/types/new/new_form_schema';
-import { useFormContext, useWatch } from 'react-hook-form';
+import type { RootCuppingFormValue } from '@/types/new/form_values_schema';
+import { useFormContext } from 'react-hook-form';
 import { twMerge } from 'tailwind-merge';
 
 export function ToolTip({ tooltipText, className }: { tooltipText: string; className?: string }) {
-  const { control } = useFormContext<TRootCuppingFormSchema>();
+  const { getValues } = useFormContext<RootCuppingFormValue>();
   // 툴팁 표시 / 제거 트리거
-  const purpose = useWatch({ name: 'purpose.value', control });
+  const purpose = getValues('purposeValue');
   return (
     <Popover>
       <PopoverTrigger asChild>
