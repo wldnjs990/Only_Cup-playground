@@ -21,7 +21,7 @@ export default function CategoryLeaf() {
           <CategoryButton
             key={node.id + node.label}
             selected={isSelected}
-            onClick={() => handleLeafNodeClick(idx, node.value)}
+            onClick={() => handleLeafNodeClick(idx, node.value, node.label)}
           >
             {node.label}
           </CategoryButton>

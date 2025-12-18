@@ -16,8 +16,10 @@ const CategoryName = z.enum(['aroma', 'taste', 'acidity', 'sweetness', 'mouthfee
  * - 사용자가 선택한 각 카테고리에 대한 평가 데이터
  */
 const CategoryDetailValue = z.object({
-  categoryValue: z.string(), // 선택한 카테고리 값 (예: "sweet", "chocolate")
+  categoryValue: z.string(), // 선택한 카테고리 값 (예: "aroma_floral_white_jasmine")
+  categoryLabel: z.string(), // 사용자가 볼 수 있는 레이블 (예: "자스민")
   intensity: z.string().min(1, '강도를 선택해주세요'),
+  intensityLabel: z.string(), // 강도 레이블 (예: "강함")
   affectiveScore: z.number().min(0).max(9),
   affectiveNote: z.string().optional().default(''),
 });
@@ -39,6 +41,7 @@ const EvaluationValue = z.object({
 const CuppingFormValue = z.object({
   // 기본 정보: 선택한 커피 ID
   coffeeId: z.string().min(1, '원두를 선택해주세요'),
+  coffeeLabel: z.string(), // 커피 이름 레이블 (예: "에티오피아 예가체프")
 
   // 평가 목록 (향, 맛, 산미, 단맛, 마우스필)
   evaluations: z.array(EvaluationValue),
@@ -50,6 +53,7 @@ const CuppingFormValue = z.object({
 const RootCuppingFormValue = z.object({
   // 커핑 목적
   purposeValue: z.string().min(1, '목적을 선택해주세요'),
+  purposeLabel: z.string(), // 목적 레이블 (예: "전문가")
 
   // 커핑 목록 (최대 15개)
   cuppings: z.array(CuppingFormValue).max(15, '최대 15개까지 추가 가능합니다'),

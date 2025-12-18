@@ -13,7 +13,7 @@ const MAX_LEAF_NODES = 5;
 // 타입 정의
 export type HandleStNodeClick = (selectedIdx: number) => void;
 export type HandleNdNodeClick = (selectedIdx: number) => void;
-export type HandleLeafNodeClick = (selectedIdx: number, selectedValue: string) => void;
+export type HandleLeafNodeClick = (selectedIdx: number, selectedValue: string, selectedLabel: string) => void;
 export type HandleEvaluationsIdx = (selectedIdx: number) => void;
 export type EvaluationSequence = 'category' | 'detail';
 
@@ -195,7 +195,7 @@ export default function useCuppingEvaluation({
   });
 
   // 핸들러
-  const handleLeafNodeClick: HandleLeafNodeClick = (selectedIdx, selectedValue) => {
+  const handleLeafNodeClick: HandleLeafNodeClick = (selectedIdx, selectedValue, selectedLabel) => {
     // 이미 선택된 노드인지 체크
     const isSelected = leafNodeIdx[selectedIdx];
 
@@ -233,8 +233,8 @@ export default function useCuppingEvaluation({
         selectedValue,
       ]);
 
-      // details 객체 추가
-      detailsAppend(createEmptyDetailValue(selectedValue));
+      // details 객체 추가 (value와 label 함께 저장)
+      detailsAppend(createEmptyDetailValue(selectedValue, selectedLabel));
     }
 
     // 리프 노드 선택 업데이트

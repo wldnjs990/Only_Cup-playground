@@ -14,11 +14,13 @@ import type {
 // ============================================
 
 /**
- * 빈 카테고리 상사 평가 값 생성
+ * 빈 카테고리 상세 평가 값 생성
  */
-export const createEmptyDetailValue = (categoryValue: string) => ({
+export const createEmptyDetailValue = (categoryValue: string, categoryLabel: string) => ({
   categoryValue,
-  intensity: 'medium',
+  categoryLabel,
+  intensity: 'mid',
+  intensityLabel: '중간',
   affectiveScore: 4,
   affectiveNote: '',
 });
@@ -37,6 +39,7 @@ export const createEmptyEvaluationValue = (categoryName: CategoryName): Evaluati
  */
 export const createEmptyCuppingFormValue = (): CuppingFormValue => ({
   coffeeId: '',
+  coffeeLabel: '',
   evaluations: [
     createEmptyEvaluationValue('aroma'),
     createEmptyEvaluationValue('taste'),
@@ -51,6 +54,7 @@ export const createEmptyCuppingFormValue = (): CuppingFormValue => ({
  */
 const createDefaultRootFormValue = (): RootCuppingFormValue => ({
   purposeValue: 'basic',
+  purposeLabel: '입문자',
   cuppings: [createEmptyCuppingFormValue()],
 });
 
@@ -64,9 +68,11 @@ export const EMPTY_FORM_VALUES: RootCuppingFormValue = createDefaultRootFormValu
  */
 export const EXAMPLE_FORM_VALUES: RootCuppingFormValue = {
   purposeValue: 'basic',
+  purposeLabel: '입문자',
   cuppings: [
     {
       coffeeId: 'ethiopia_yirgacheffe',
+      coffeeLabel: '에티오피아 예가체프',
       evaluations: [
         // 향
         {
@@ -75,13 +81,17 @@ export const EXAMPLE_FORM_VALUES: RootCuppingFormValue = {
           details: [
             {
               categoryValue: 'aroma_floral_white_jasmine',
+              categoryLabel: '자스민',
               intensity: 'high',
+              intensityLabel: '높음',
               affectiveScore: 8,
               affectiveNote: '자스민 향이 강하게 느껴집니다',
             },
             {
               categoryValue: 'aroma_fruit_citrus_lemon',
-              intensity: 'medium',
+              categoryLabel: '레몬',
+              intensity: 'mid',
+              intensityLabel: '중간',
               affectiveScore: 7,
               affectiveNote: '은은한 레몬 향',
             },
@@ -94,7 +104,9 @@ export const EXAMPLE_FORM_VALUES: RootCuppingFormValue = {
           details: [
             {
               categoryValue: 'taste_sweet_chocolate',
-              intensity: 'medium',
+              categoryLabel: '초콜릿',
+              intensity: 'mid',
+              intensityLabel: '중간',
               affectiveScore: 9,
               affectiveNote: '다크 초콜릿의 깊은 맛',
             },

@@ -32,6 +32,13 @@ export function SelectInput<TFieldValues extends FieldValues>({
 
   const handleValueChange = (value: string) => {
     setValue(path, value as PathValue<TFieldValues, typeof path>);
+
+    // label도 함께 저장 (path가 "xxx"이면 "xxxLabel"에 저장)
+    const selectedOption = optionList.find(opt => opt.value === value);
+    if (selectedOption) {
+      const labelPath = `${path}Label` as any;
+      setValue(labelPath, selectedOption.label as PathValue<TFieldValues, typeof labelPath>);
+    }
   };
 
   return (
